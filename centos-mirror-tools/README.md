@@ -1,5 +1,5 @@
 
-# Create mirror for Akraino
+# Create mirror for StarlingX
 
 ## Step 0 - Build the container
 
@@ -14,7 +14,7 @@ $ docker build -t <your_docker_image_name>:<your_image_version> -f Dockerfile .
 The container shall be run from the same directory where the other scripts are stored.
 
 ```
-$ docker run -v $(pwd):/localdisk <your_docker_image_name>:<your_image_version> bash
+$ docker run -it -v $(pwd):/localdisk <your_docker_image_name>:<your_image_version> bash
 ```
 
 As `/localdisk` is defined as the workdir of the container, the same folder name should be used to define the volume. The container will start to run and populate a `logs` and `output` folders in this directory.
@@ -25,7 +25,6 @@ The container shall be run from the same directory where the other scripts are s
 Once inside the container run the downloader script
 
 ```
-$ cd /localdisk
 $ ./download_mirror.sh
 ```
 
@@ -39,20 +38,20 @@ After all downloading complete, copy the download files to mirror.
 ```
 $ find ./output -name "*.i686.rpm" | xargs rm -f
 $ chown  751:751 -R ./output
-$ cp -rf  output/akraino-r1/ <your_mirror_folder>/CentOS/
+$ cp -rf  output/stx-r1/ <your_mirror_folder>/
 ```
 
 In this case `<your_mirror_folder>` can be whatever folder you want to use as mirror.
 
-## step 4 - Tweaks in the Akraino build system.
+## step 4 - Tweaks in the StarlingX build system.
 
 NOTE: step below is not needed if you've synced the latest codebase.
 
-Go into Akraino build system (*another* container which hosts cgcs build system), and follow up below steps:
+Go into StarlingX build system (*another* container which hosts cgcs build system), and follow up below steps:
 
 ## Debugging issues
 
-The `download_mirro.sh` script will create log files in the form of `centos_rpms_*.txt`. After the download is complete, it's recommended to check the content of these files to see if everything was downloaded correctly.
+The `download_mirror.sh` script will create log files in the form of `centos_rpms_*.txt`. After the download is complete, it's recommended to check the content of these files to see if everything was downloaded correctly.
 
 A quick look into these files could be:
 

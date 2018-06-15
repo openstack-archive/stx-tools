@@ -312,14 +312,14 @@ enabled=1
 
 [Starlingx-epel-7]
 name=Starlingx-Epel-7
-baseurl=http://linux-ftp.jf.intel.com/pub/mirrors/fedora-epel/7/x86_64/
+baseurl=https://dl.fedoraproject.org/pub/epel/7/x86_64/
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
 enabled=1
 
 [Starlingx-epel-7-debug]
 name=Starlingx-Epel-7-debug
-baseurl=http://linux-ftp.jf.intel.com/pub/mirrors/fedora-epel/7/x86_64/debug
+baseurl=https://dl.fedoraproject.org/pub/epel/7/x86_64/debug
 gpgcheck=0
 #gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 enabled=1
@@ -327,7 +327,7 @@ enabled=1
 
 [Starlingx-epel-7-source]
 name=Starlingx-Epel-7-source
-baseurl=http://linux-ftp.jf.intel.com/pub/mirrors/fedora-epel/7/SRPMS/
+baseurl=https://dl.fedoraproject.org/pub/epel/7/SRPMS/
 gpgcheck=0
 #gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 enabled=1
@@ -335,21 +335,21 @@ enabled=1
 
 [Starlingx-epel-7-testing]
 name=Starlingx-Epel-7
-baseurl=http://linux-ftp.jf.intel.com/pub/mirrors/fedora-epel/testing/7/x86_64/
+baseurl=https://dl.fedoraproject.org/pub/epel/testing/7/x86_64/
 gpgcheck=0
 #gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 enabled=1
 
 [Starlingx-epel-7-testing-debug]
 name=Starlingx-Epel-7
-baseurl=http://linux-ftp.jf.intel.com/pub/mirrors/fedora-epel/testing/7/x86_64/debug/
+baseurl=https://dl.fedoraproject.org/pub/epel/testing/7/x86_64/debug/
 gpgcheck=0
 #gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 enabled=1
 
 [Starlingx-epel-7-testing-source]
 name=Starlingx-Epel-7-source
-baseurl=http://linux-ftp.jf.intel.com/pub/mirrors/fedora-epel/testing/7/SRPMS/
+baseurl=https://dl.fedoraproject.org/pub/epel/testing/7/SRPMS/
 gpgcheck=0
 #gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 enabled=1
