@@ -14,7 +14,13 @@ $ docker build -t <your_docker_image_name>:<your_image_version> -f Dockerfile .
 The container shall be run from the same directory where the other scripts are stored.
 
 ```
-$ docker run -it -v $(pwd):/localdisk <your_docker_image_name>:<your_image_version> bash
+$ docker run -it -v $(pwd):/localdisk <your_docker_image_name>:<your_image_version>
+```
+
+The container can also be run the following way, so the `download_mirror.sh` runs automatically without having to enter the container and the step 2can be simplified.
+
+```
+$ docker run -it -v $(pwd):/localdisk <your_docker_image_name>:<your_image_version> download_mirror.sh
 ```
 
 As `/localdisk` is defined as the workdir of the container, the same folder name should be used to define the volume. The container will start to run and populate a `logs` and `output` folders in this directory.
