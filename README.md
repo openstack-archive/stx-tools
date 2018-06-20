@@ -180,6 +180,11 @@ $ cd $MY_REPO
 $ build-pkgs or build-pkgs --clean <pkglist>; build-pkgs <pkglist>
 ```
 
+### To generate cgcs-tis-repo:
+```
+$ generate-cgcs-tis-repo
+```
+
 ### To make an iso:
 ```
 $ build-iso
