@@ -180,6 +180,15 @@ $ cd $MY_REPO
 $ build-pkgs or build-pkgs --clean <pkglist>; build-pkgs <pkglist>
 ```
 
+### To generate cgcs-tis-repo:
+
+The cgcs-tis-repo has the dependency information that sequences the build
+order; To generate or update the information the following command needs
+to be executed after building modified or new packages.
+```
+$ generate-cgcs-tis-repo
+```
+
 ### To make an iso:
 ```
 $ build-iso
