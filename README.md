@@ -1,6 +1,6 @@
 # stx-tools
 
-StarlilngX Build Tools
+StarlingX Build Tools
 
 The StarlingX build process is tightly tied to CentOS in a number of ways,
 doing the build inside a Docker container makes this much easier on other
