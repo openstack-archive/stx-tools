@@ -18,6 +18,7 @@ RUN yum install -y epel-release sudo vim-enhanced net-tools \
         /etc/yum.repos.d/epel.repo
 
 COPY StarlingX.repo /etc/yum.repos.d
+COPY StarlingX_3rd.repo /etc/yum.repos.d
 COPY rpm-gpg-keys/* /etc/pki/rpm-gpg/
 
 RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY*
