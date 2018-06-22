@@ -3,3 +3,5 @@
 .tox
 localrc
 toCOPY/.gitconfig
+centos-mirror-tools/logs/
+centos-mirror-tools/output/
