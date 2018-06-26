@@ -12,6 +12,7 @@ device-mapper-event-1.02.140-8.el7.x86_64.rpm#http://vault.centos.org/7.4.1708/o
 device-mapper-event-libs-1.02.140-8.el7.x86_64.rpm#http://vault.centos.org/7.4.1708/os/x86_64/Packages/device-mapper-event-libs-1.02.140-8.el7.x86_64.rpm
 device-mapper-libs-1.02.140-8.el7.x86_64.rpm#http://vault.centos.org/7.4.1708/os/x86_64/Packages/device-mapper-libs-1.02.140-8.el7.x86_64.rpm
 device-mapper-persistent-data-0.7.0-0.1.rc6.el7.x86_64.rpm#http://vault.centos.org/7.4.1708/os/x86_64/Packages/device-mapper-persistent-data-0.7.0-0.1.rc6.el7.x86_64.rpm
+docker-ce-18.03.1.ce-1.el7.centos.src.rpm#https://download.docker.com/linux/centos/7/source/stable/Packages/docker-ce-18.03.1.ce-1.el7.centos.src.rpm
 elfutils-0.168-8.el7.x86_64.rpm#http://vault.centos.org/7.4.1708/os/x86_64/Packages/elfutils-0.168-8.el7.x86_64.rpm
 elfutils-default-yama-scope-0.168-8.el7.noarch.rpm#http://vault.centos.org/7.4.1708/os/x86_64/Packages/elfutils-default-yama-scope-0.168-8.el7.noarch.rpm
 elfutils-devel-0.168-8.el7.x86_64.rpm#http://vault.centos.org/7.4.1708/os/x86_64/Packages/elfutils-devel-0.168-8.el7.x86_64.rpm
@@ -43,6 +44,7 @@ java-1.8.0-openjdk-1.8.0.144-0.b01.el7_4.x86_64.rpm#http://vault.centos.org/7.4.
 java-1.8.0-openjdk-devel-1.8.0.144-0.b01.el7_4.x86_64.rpm#http://vault.centos.org/7.4.1708/updates/x86_64/Packages/java-1.8.0-openjdk-devel-1.8.0.144-0.b01.el7_4.x86_64.rpm
 java-1.8.0-openjdk-headless-1.8.0.144-0.b01.el7_4.x86_64.rpm#http://vault.centos.org/7.4.1708/updates/x86_64/Packages/java-1.8.0-openjdk-headless-1.8.0.144-0.b01.el7_4.x86_64.rpm
 kexec-tools-2.0.14-17.el7.x86_64.rpm#http://vault.centos.org/7.4.1708/os/x86_64/Packages/kexec-tools-2.0.14-17.el7.x86_64.rpm
+kubernetes-1.10.0-1.el7.src.rpm#http://cbs.centos.org/kojifiles/packages/kubernetes/1.10.0/1.el7/src/kubernetes-1.10.0-1.el7.src.rpm
 libblkid-2.23.2-43.el7.x86_64.rpm#http://vault.centos.org/7.4.1708/os/x86_64/Packages/libblkid-2.23.2-43.el7.x86_64.rpm
 libcom_err-1.42.9-10.el7.x86_64.rpm#http://vault.centos.org/7.4.1708/os/x86_64/Packages/libcom_err-1.42.9-10.el7.x86_64.rpm
 libcom_err-devel-1.42.9-10.el7.x86_64.rpm#http://vault.centos.org/7.4.1708/os/x86_64/Packages/libcom_err-devel-1.42.9-10.el7.x86_64.rpm
