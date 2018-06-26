@@ -676,6 +676,7 @@ maven-wagon-2.4-3.el7.noarch.rpm
 mdadm-4.0-13.el7.x86_64.rpm
 mdi-common-1.4.57.0-4.el7.noarch.rpm
 mdi-fonts-1.4.57.0-4.el7.noarch.rpm
+memcached-1.4.39-1.el7.src.rpm
 mesa-libGLU-9.0.0-4.el7.x86_64.rpm
 mesa-libGLU-devel-9.0.0-4.el7.x86_64.rpm
 microcode_ctl-2.1-29.el7.x86_64.rpm
@@ -875,12 +876,14 @@ puppet-glance-11.3.0-1.el7.src.rpm
 puppet-haproxy-1.5.0-2.6ee8180git.el7.src.rpm
 puppet-heat-11.3.0-1.el7.src.rpm
 puppet-horizon-9.5.0-1.el7.noarch.rpm
+puppet-horizon-9.5.0-1.el7.src.rpm
 puppet-inifile-1.6.0-2.c1f1d1egit.el7.noarch.rpm
 puppet-ironic-11.3.0-1.el7.src.rpm
 puppet-keystone-11.3.0-1.el7.src.rpm
 puppet-kmod-2.1.1-2.0d69a96git.el7.noarch.rpm
 puppet-magnum-11.3.0-1.el7.src.rpm
 puppet-memcached-2.8.1-2.7671b5fgit.el7.noarch.rpm
+puppet-memcached-3.0.2-1.adf8b63git.el7.src.rpm
 puppet-murano-11.3.0-1.el7.src.rpm
 puppet-mysql-3.11.0-1.920dd76git.el7.noarch.rpm
 puppet-neutron-11.3.0-1.el7.src.rpm
@@ -894,6 +897,7 @@ puppet-rsync-0.4.0-1.8cc3c6fgit.el7.noarch.rpm
 puppet-staging-1.0.4-1.b466d93git.el7.src.rpm
 puppet-stdlib-4.13.1-2.dcef77agit.el7.src.rpm
 puppet-swift-11.3.0-1.el7.noarch.rpm
+puppet-swift-11.3.0-1.el7.src.rpm
 puppet-sysctl-0.0.11-1.el7.noarch.rpm
 puppet-tempest-11.3.0-1.el7.noarch.rpm
 puppet-vcsrepo-1.4.0-2.6c88fb3git.el7.noarch.rpm
