@@ -32,7 +32,7 @@ function exec_container {
 }
 
 function run_container {
-	# create localdisk
+    # create localdisk
     mkdir -p ${LOCALDISK}/designer/${USER}/${PROJECT}
 
     docker run -it --rm \
@@ -73,9 +73,9 @@ case $CMD in
         echo "MY_TC_RELEASE=${MY_TC_RELEASE}"
         echo "MY_REPO_ROOT_DIR=${MY_REPO_ROOT_DIR}"
         ;;
-	exec)
-		exec_container
-		;;
+    exec)
+        exec_container
+        ;;
     run)
         run_container
         ;;
@@ -87,7 +87,7 @@ case $CMD in
         ;;
     *)
         echo "Unknown command: $CMD"
-	usage
+    usage
         exit 1
         ;;
 esac
