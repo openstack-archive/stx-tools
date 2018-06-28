@@ -2,7 +2,7 @@
 
 # Load tbuilder configuration
 if [[ -r ${HOME}/buildrc ]]; then
-	source ${HOME}/buildrc
+    source ${HOME}/buildrc
 fi
 
 # start the web server
