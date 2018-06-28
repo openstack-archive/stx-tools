@@ -1312,9 +1312,9 @@ rsync-3.0.9-17.el7.x86_64.rpm
 rsync-3.0.9-18.el7.src.rpm
 rtctl-1.13-2.el7.noarch.rpm
 rt-setup-1.59-5.el7.noarch.rpm
-ruby-2.0.0.648-29.el7.x86_64.rpm
+ruby-2.0.0.648-33.el7_4.x86_64.rpm
 ruby-augeas-0.5.0-1.el7.x86_64.rpm
-ruby-devel-2.0.0.648-29.el7.x86_64.rpm
+ruby-devel-2.0.0.648-33.el7_4.x86_64.rpm
 rubygem-bigdecimal-1.2.0-29.el7.x86_64.rpm
 rubygem-io-console-0.4.2-29.el7.x86_64.rpm
 rubygem-json-1.7.7-29.el7.x86_64.rpm
@@ -1322,8 +1322,8 @@ rubygem-psych-2.0.0-29.el7.x86_64.rpm
 rubygem-rdoc-4.0.0-29.el7.noarch.rpm
 rubygem-rgen-0.6.6-2.el7.noarch.rpm
 rubygems-2.0.14.1-29.el7.noarch.rpm
-ruby-irb-2.0.0.648-29.el7.noarch.rpm
-ruby-libs-2.0.0.648-29.el7.x86_64.rpm
+ruby-irb-2.0.0.648-33.el7_4.noarch.rpm
+ruby-libs-2.0.0.648-33.el7_4.x86_64.rpm
 ruby-shadow-1.4.1-23.el7.x86_64.rpm
 sanlock-3.5.0-1.el7.src.rpm
 scrub-2.5.2-7.el7.x86_64.rpm
