@@ -12,7 +12,7 @@ if [ ! -e $rpm_downloader ];then
     exit -1
 fi
 
-#download RPMs/SRPMs from 3rd_party websites (not CentOS repos) by "wget".
+#download RPMs/SRPMs from 3rd_party websites (not CentOS repos) by "wget"
 echo "step #1: start downloading RPMs/SRPMs from 3rd-party websites..."
 if [ ! -e ./rpms_from_3rd_parties.lst ];then
     echo "ERROR: ./rpms_from_3rd_parties.lst does NOT exist!!"
@@ -23,13 +23,18 @@ if [ $? != 0 ];then
     echo "ERROR: something wrong with downloading, please check the log!!"
 fi
 
+# download RPMs/SRPMs from 3rd_party repos by "yumdownloader"
+$rpm_downloader ./rpms_from_centos_3rd_parties.lst L1 3rd-centos | tee ./logs/log_download_rpms_from_centos_3rd_parties_L1.txt
+# deleting the StarlingX_3rd to avoid pull centos packages from the 3rd Repo.
+rm -f /etc/yum.repos.d/StarlingX_3rd.repo
+
+echo "step #2: start 1st round of downloading RPMs and SRPMs with L1 match criteria..."
 #download RPMs/SRPMs from CentOS repos by "yumdownloader"
 if [ ! -e ./rpms_from_centos_repo.lst ];then
     echo "ERROR: ./rpms_from_centos_repo.lst does NOT exist!!"
     exit -1
 fi
 
-echo "step #2: start 1st round of downloading RPMs and SRPMs with L1 match criteria..."
 $rpm_downloader ./rpms_from_centos_repo.lst L1 centos | tee ./logs/log_download_rpms_from_centos_L1.txt 
 if [ $? == 0 ]; then
     echo "finish 1st round of RPM downloading successfully!"
