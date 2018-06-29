@@ -94,10 +94,7 @@ By default `LOCALDISK` will be placed under the directory pointed to by `HOST_PR
 which defaults to `$HOME/starlingx`.
 
 The `tb.sh` script uses sub-commands to select the operation:
-* `run` - Runs the container in a shell.  This does not return to a shell prompt while
-  the container is running, you will need another shell window to work inside the
-  container.  This allows systemd and thus mock,  to work from within the container.
-  It will also create `LOCALDISK` if it does not exist.
+* `run` - Runs the container in a shell. It will also create `LOCALDISK` if it does not exist.
 * `stop` - Kills the running shell.
 * `exec` - Starts a shell inside the container.
 
@@ -121,6 +118,7 @@ or by hand:
 ```
 docker run -it --rm \
     --name ${TC_CONTAINER_NAME} \
+    -detach \
     -v ${LOCALDISK}:${GUEST_LOCALDISK} \
     -v ${HOST_MIRROR_DIR}:/import/mirrors:ro \
     -v /sys/fs/cgroup:/sys/fs/cgroup:ro \

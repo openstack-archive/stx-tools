@@ -37,6 +37,7 @@ function run_container {
 
     docker run -it --rm \
         --name ${TC_CONTAINER_NAME} \
+	-detach \
         -v ${LOCALDISK}:/${GUEST_LOCALDISK} \
         -v ${HOST_MIRROR_DIR}:/import/mirrors:ro \
         -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
