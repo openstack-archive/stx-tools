@@ -180,6 +180,19 @@ $ cd $MY_REPO
 $ build-pkgs or build-pkgs --clean <pkglist>; build-pkgs <pkglist>
 ```
 
+### To generate cgcs-centos-repo
+
+The cgcs-centos-repo is a set of symbolic links to the packages in the mirror
+and the mock configuration file. It is needed to create these links if this is
+the first build or the mirror has been updated.
+
+```
+cd $MY_REPO_ROOT_DIR/stx-tools/scripts
+./generate-cgcs-centos-repo.sh /import/mirror/CentOS/pike
+```
+
+Where the argument to the script is the path of the mirror.
+
 ### To generate cgcs-tis-repo:
 
 The cgcs-tis-repo has the dependency information that sequences the build
