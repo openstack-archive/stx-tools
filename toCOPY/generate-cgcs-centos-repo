@@ -45,13 +45,15 @@ for t in "Binary" "Source" ; do
 
     pushd "$mirror_dir/$t"|| exit 1
     find . -type d -exec mkdir -p "${target_dir}"/{} \;
+    all_files=$(find . -type f -name "*")
     popd || exit 1
 
-    all_files=$(find "$mirror_dir/$t" -type f -name "*")
+
     for ff in $all_files; do
         f_name=$(basename "$ff")
-        ln -sf "$ff" "$target_dir/$f_name"
-        echo "Creating symlink for $target_dir/$f_name"
+        sub_dir=$(dirname "$ff")
+        ln -sf "$mirror_dir/$t/$ff" "$target_dir/$sub_dir"
+        echo "Creating symlink for $target_dir/$sub_dir/$f_name"
         echo "------------------------------"
     done
 done
