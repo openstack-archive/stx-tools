@@ -915,6 +915,7 @@ pyparted-3.9-13.el7.x86_64.rpm
 PyQt4-4.12-1.el7.x86_64.rpm
 pysendfile-2.0.0-5.el7.x86_64.rpm
 pyserial-2.6-6.el7.noarch.rpm
+python-2.7.5-58.el7.src.rpm
 python2-amqp-2.1.4-1.el7.noarch.rpm
 python2-aodhclient-0.9.0-1.el7.noarch.rpm
 python2-appdirs-1.4.0-4.el7.noarch.rpm
@@ -1380,6 +1381,7 @@ tar-1.26-34.el7.x86_64.rpm
 targetcli-2.1.fb46-1.el7.noarch.rpm
 tboot-1.9.5-1.el7.src.rpm
 tcl-8.5.13-8.el7.x86_64.rpm
+tcl-devel-8.5.13-8.el7.x86_64.rpm
 tcp_wrappers-7.6-77.el7.x86_64.rpm
 tcp_wrappers-devel-7.6-77.el7.x86_64.rpm
 tcp_wrappers-libs-7.6-77.el7.x86_64.rpm
@@ -1602,7 +1604,9 @@ texlive-zapfding-svn28614.0-38.el7.noarch.rpm
 time-1.7-45.el7.x86_64.rpm
 tinyxml2-2.1.0-2.20140406git6ee53e7.el7.x86_64.rpm
 tix-8.4.3-12.el7.x86_64.rpm
+tix-devel-8.4.3-12.el7.x86_64.rpm
 tk-8.5.13-6.el7.x86_64.rpm
+tk-devel-8.5.13-6.el7.x86_64.rpm
 tomcat-servlet-3.0-api-7.0.76-6.el7.noarch.rpm
 tpm2-tools-1.1.0-7.el7.src.rpm
 tpm2-tss-1.0-2.el7.x86_64.rpm
