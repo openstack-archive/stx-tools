@@ -225,6 +225,7 @@ erlang-stdlib-18.3.4.4-2.el7.x86_64.rpm
 erlang-syntax_tools-18.3.4.4-2.el7.x86_64.rpm
 erlang-tools-18.3.4.4-2.el7.x86_64.rpm
 erlang-xmerl-18.3.4.4-2.el7.x86_64.rpm
+etcd-3.2.18-1.el7.x86_64.rpm
 ethtool-4.8-7.el7.x86_64.rpm
 eventlog-0.2.13-4.el7.x86_64.rpm
 eventlog-devel-0.2.13-4.el7.x86_64.rpm
