@@ -75,6 +75,9 @@ mesa-libGL-devel-17.0.1-6.20170307.el7.x86_64.rpm
 mokutil-12-1.el7.centos.x86_64.rpm
 NetworkManager-glib-1.8.0-9.el7.x86_64.rpm
 NetworkManager-glib-devel-1.8.0-9.el7.x86_64.rpm
+ntfs-3g-2017.3.23-1.el7.x86_64.rpm
+ntfs-3g-devel-2017.3.23-1.el7.x86_64.rpm
+ntfsprogs-2017.3.23-1.el7.x86_64.rpm
 nss-softokn-3.28.3-8.el7_4.x86_64.rpm
 nss-softokn-devel-3.28.3-8.el7_4.x86_64.rpm
 nss-softokn-freebl-3.28.3-8.el7_4.x86_64.rpm
