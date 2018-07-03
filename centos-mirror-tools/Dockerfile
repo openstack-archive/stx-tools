@@ -12,7 +12,7 @@ WORKDIR /localdisk
 #    echo -e "export http_proxy=$http_proxy\nexport https_proxy=$https_proxy\n\
 #export ftp_proxy=$ftp_proxy" >> /root/.bashrc
 
-RUN yum install -y epel-release sudo vim-enhanced net-tools \
+RUN yum install -y epel-release sudo vim-enhanced net-tools git \
         /usr/bin/yumdownloader rpm-build rpm-sign deltarpm wget bind \
         bind-utils && rm /etc/yum.repos.d/CentOS-Sources.repo \
         /etc/yum.repos.d/epel.repo
