@@ -168,7 +168,7 @@ $ ssh-add
 # Initialize the source tree.
 ```
 cd $MY_REPO_ROOT_DIR
-repo init -u git@git.openstack.org:openstack/stx-manifest.git -m stx-manifest.xml
+repo init -u git://git.openstack.org/openstack/stx-manifest.git -m default.xml
 repo sync
 ```
 
