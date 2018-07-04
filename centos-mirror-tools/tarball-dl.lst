@@ -31,6 +31,7 @@ rpm-4.14.0.tar.bz2#rpm-4.14.0#https://ftp.osuosl.org/pub/rpm/releases/rpm-4.14.x
 swtpm-0.1.0-253eac5.tar.gz#swtpm-0.1.0#https://github.com/stefanberger/swtpm/tarball/1303be7d03294fb02204cb8242f366cbf0da076d
 !tpm-kmod-668a8270.tar.gz#tpm#http://git.infradead.org/users/jjs/linux-tpmdd.git/snapshot/fd5c78694f3f1c875e293de7a641ba8a3d60d00d.tar.gz
 !tss2-930.tar.gz#tss2-930#https://sourceforge.net/code-snapshots/git/i/ib/ibmtpm20tss/tss.git/ibmtpm20tss-tss-52539cb81c811c973b26ed23fafd28a700b7cc78.zip
+spectre-meltdown-checker-0.37+-5cc77741.tar.gz#spectre-meltdown-checker#https://github.com/speed47/spectre-meltdown-checker/tarball/5cc77741af1d2f52140aa9f89339f56b6c4b6783
 puppet-boolean-22b726dd78b0a60a224cc7054aebbf28e9306f62.tar.gz#puppet-boolean#https://github.com/voxpupuli/puppet-boolean/tarball/22b726dd78b0a60a224cc7054aebbf28e9306f62
 puppet-dnsmasq-cff07e90890662972c97684a2baee964f68ff3ed.tar.gz#packstack/puppet/modules/dnsmasq/#https://github.com/procore/puppet-dnsmasq/tarball/cff07e90890662972c97684a2baee964f68ff3ed
 puppet-filemapper-9b53310278e76827bbe12a36cc6470d77071abb2.tar.gz#packstack/puppet/modules/filemapper#https://github.com/voxpupuli/puppet-filemapper/tarball/9b53310278e76827bbe12a36cc6470d77071abb2
