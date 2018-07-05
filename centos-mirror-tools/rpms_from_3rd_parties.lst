@@ -6,6 +6,4 @@ python2-pytest-mock-1.6.0-2.el7.noarch.rpm#http://cbs.centos.org/kojifiles/packa
 python2-storops-0.4.7-2.el7.noarch.rpm#http://cbs.centos.org/kojifiles/packages/python-storops/0.4.7/2.el7/noarch/python2-storops-0.4.7-2.el7.noarch.rpm
 python-gunicorn-19.7.1-1.fc27.src.rpm#https://kojipkgs.fedoraproject.org/packages/python-gunicorn/19.7.1/1.fc27/src/python-gunicorn-19.7.1-1.fc27.src.rpm
 kubernetes-1.10.0-1.el7.src.rpm#http://cbs.centos.org/kojifiles/packages/kubernetes/1.10.0/1.el7/src/kubernetes-1.10.0-1.el7.src.rpm
-# influxdb:  From https://github.com/influxdata/influxdb.com/blob/master/content/site/download.md
-#            See also https://s3.amazonaws.com/influxdb/influxdb_0.9.5.1_x86_64.tar.gz
 influxdb-0.9.5.1-1.x86_64.rpm#https://s3.amazonaws.com/influxdb/influxdb-0.9.5.1-1.x86_64.rpm
