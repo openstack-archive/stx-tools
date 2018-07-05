@@ -1,0 +1,9 @@
+Code-Review+2: Jack Ding <Jack.Ding@windriver.com>
+Code-Review+2: Erich Cordoba <erich.cordoba.malibran@intel.com>
+Workflow+1: Erich Cordoba <erich.cordoba.malibran@intel.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Thu, 05 Jul 2018 21:06:40 +0000
+Reviewed-on: https://review.openstack.org/580483
+Project: openstack/stx-tools
+Branch: refs/heads/master
