@@ -7,3 +7,4 @@ python2-storops-0.4.7-2.el7.noarch.rpm#http://cbs.centos.org/kojifiles/packages/
 python-gunicorn-19.7.1-1.fc27.src.rpm#https://kojipkgs.fedoraproject.org/packages/python-gunicorn/19.7.1/1.fc27/src/python-gunicorn-19.7.1-1.fc27.src.rpm
 kubernetes-1.10.0-1.el7.src.rpm#http://cbs.centos.org/kojifiles/packages/kubernetes/1.10.0/1.el7/src/kubernetes-1.10.0-1.el7.src.rpm
 influxdb-0.9.5.1-1.x86_64.rpm#https://s3.amazonaws.com/influxdb/influxdb-0.9.5.1-1.x86_64.rpm
+kernel-rt-3.10.0-862.6.3.rt56.811.el7.src.rpm#http://ftp.riken.jp/Linux/cern/centos/7/rt/Sources/SPackages/kernel-rt-3.10.0-862.6.3.rt56.811.el7.src.rpm
