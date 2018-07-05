@@ -9,3 +9,4 @@ kubernetes-1.10.0-1.el7.src.rpm#http://cbs.centos.org/kojifiles/packages/kuberne
 # influxdb:  From https://github.com/influxdata/influxdb.com/blob/master/content/site/download.md
 #            See also https://s3.amazonaws.com/influxdb/influxdb_0.9.5.1_x86_64.tar.gz
 influxdb-0.9.5.1-1.x86_64.rpm#https://s3.amazonaws.com/influxdb/influxdb-0.9.5.1-1.x86_64.rpm
+kernel-rt-3.10.0-862.6.3.rt56.811.el7.src.rpm#http://ftp.riken.jp/Linux/cern/centos/7/rt/Sources/SPackages/kernel-rt-3.10.0-862.6.3.rt56.811.el7.src.rpm
