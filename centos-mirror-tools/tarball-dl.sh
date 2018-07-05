@@ -112,12 +112,15 @@ for line in $(cat $tarball_file); do
             tar -zcvf "$tarball_name" -C "$directory_name"/ .
             rm  -rf "$directory_name"
             mv "$tarball_name" "$download_path"
-        elif [[ "$tarball_name" =~ ^'MLNX_OFED_LINUX' ]]; then
-            pkg_version=$(echo "$tarball_name" | cut -d "-" -f2-3)
+        elif [[ "$tarball_name" =~ ^'MLNX_OFED_' ]]; then
+            pkg_name=$(echo "$tarball_name" | rev | cut -d"." -f2- | rev)
+            pkg_version=$(echo "$pkg_name" | cut -d"-" -f2-3)
             srpm_path="MLNX_OFED_SRC-${pkg_version}/SRPMS/"
             download_package "$tarball_url"
             tar -xf "$tarball_name"
-            tar -xf "$directory_name/src/MLNX_OFED_SRC-${pkg_version}.tgz"
+            if [ -d "$directory_name/src" ]; then
+                tar -xf "$directory_name/src/MLNX_OFED_SRC-${pkg_version}.tgz"
+            fi
             # This section of code gets specific SRPMs versions according
             # to the OFED tarbal version,
             if [ "$pkg_version" = "4.2-1.2.0.0" ]; then
@@ -125,12 +128,17 @@ for line in $(cat $tarball_file); do
             elif [ "$pkg_version" = "4.3-1.0.1.0" ]; then
                 cp "$srpm_path/mlnx-ofa_kernel-4.3-OFED.4.3.1.0.1.1.g8509e41.src.rpm" .
                 cp "$srpm_path/rdma-core-43mlnx1-1.43101.src.rpm" .
+            elif [ "$pkg_version" = "4.3-3.0.2.1" ]; then
+                cp "$srpm_path/mlnx-ofa_kernel-4.3-OFED.4.3.3.0.2.1.gcf60532.src.rpm" .
+                cp "$srpm_path/rdma-core-43mlnx1-1.43302.src.rpm" .
             else
                 echo "$pkg_version : unknown version"
             fi
             rm -f "$tarball_name"
             rm -rf "MLNX_OFED_SRC-${pkg_version}"
-            rm -rf "$directory_name"
+            if [ -d "$directory_name" ]; then
+                rm -rf "$directory_name"
+            fi
         elif [ "$tarball_name" = "qat1.7.upstream.l.1.0.3-42.tar.gz" ]; then
             download_package $tarball_url
         elif [ "$tarball_name" = "tpm-kmod-668a8270.tar.gz" ]; then
