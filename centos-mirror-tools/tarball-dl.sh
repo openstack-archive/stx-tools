@@ -24,22 +24,30 @@ fi
 # - Puppet hosted under "downloads/puppet" output directory.
 # to be populated under $MY_REPO/addons/wr-cgcs/layers/cgcs/downloads/puppet
 
+logs_dir="logs"
 output_main="output"
+output_log="$script_path/$logs_dir/log_download_tarball_missing.txt"
 output_path=$output_main/stx-r1/CentOS/pike
 output_tarball=$output_path/downloads
 output_puppet=$output_tarball/puppet
 
 mkdir -p $output_tarball
 mkdir -p $output_puppet
+if [ ! -d "$logs_dir" ]; then
+    mkdir "$logs_dir"
+fi
 
 # Download function using wget command
 
 download_package() {
     wget --spider $1
-    if [[ $? != 0 ]]; then
+    if [ $? != 0 ]; then
         echo "$1 is broken"
     else
         wget -t 5 --wait=15 $1
+        if [ $? != 0 ]; then
+            echo "$1" > "$output_log"
+        fi
     fi
 }
 
