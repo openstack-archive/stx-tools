@@ -315,6 +315,59 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 enabled=1
 
 ########
+# 7.5.1804
+#
+[Starlingx-C7.5.1804-cloud-pike-source]
+name=Starlingx-CentOS-7.5.1804 - Cloud-pike-source
+baseurl=http://vault.centos.org/7.5.1804/cloud/Source/openstack-pike/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+enabled=1
+
+[Starlingx-C7.5.1804-extras-source]
+name=Starlingx-CentOS-7.5.1804 - extras-source
+baseurl=http://vault.centos.org/7.5.1804/extras/Source/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+enabled=1
+
+[Starlingx-C7.5.1804-os-source]
+name=Starlingx-CentOS-7.5.1804 - os-source
+baseurl=http://vault.centos.org/7.5.1804/os/Source/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+enabled=1
+
+# not available, might be updated later
+# [Starlingx-C7.5.1804-rt-source]
+# name=Starlingx-CentOS-7.5.1804 - rt-source
+# baseurl=http://vault.centos.org/7.5.1804/rt/Source/
+# gpgcheck=1
+# gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+# enabled=1
+
+[Starlingx-C7.5.1804-updates-source]
+name=Starlingx-CentOS-7.5.1804 - updates-source
+baseurl=http://vault.centos.org/7.5.1804/updates/Source/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+enabled=1
+
+[Starlingx-C7.5.1804-virt-kvm-source]
+name=Starlingx-CentOS-7.5.1804 - virt-kvm-source
+baseurl=http://vault.centos.org/7.5.1804/virt/Source/kvm-common
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+enabled=1
+
+[Starlingx-C7.5.1804-virt-libvirt-source]
+name=Starlingx-CentOS-7.5.1804 - virt-libvirt-source
+baseurl=http://vault.centos.org/7.5.1804/virt/Source/libvirt-latest
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+enabled=1
+
+########
 #### EPEL - 
 
 [Starlingx-epel-7]
