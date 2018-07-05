@@ -24,6 +24,7 @@ include .makeenv
 base-build:
 	docker build \
 		--ulimit core=0 \
+		--network host \
 		-t $(BASE_CONTAINER_TAG) \
 		-f $(BASE_DOCKERFILE) \
 		.
@@ -38,6 +39,7 @@ build:
 		--build-arg MYUID=$(UID) \
 		--build-arg MYUNAME=$(MYUNAME) \
 		--ulimit core=0 \
+		--network host \
 		-t $(TC_CONTAINER_TAG) \
 		-f $(TC_DOCKERFILE) \
 		.
