@@ -46,7 +46,7 @@ iptables-1.4.21-18.0.1.el7.centos.x86_64.rpm
 java-1.8.0-openjdk-1.8.0.144-0.b01.el7_4.x86_64.rpm
 java-1.8.0-openjdk-devel-1.8.0.144-0.b01.el7_4.x86_64.rpm
 java-1.8.0-openjdk-headless-1.8.0.144-0.b01.el7_4.x86_64.rpm
-kernel-rt-3.10.0-693.21.1.rt56.639.el7.src.rpm
+kernel-rt-3.10.0-862.3.2.rt56.808.el7.src.rpm
 kexec-tools-2.0.14-17.el7.x86_64.rpm
 libblkid-2.23.2-43.el7.x86_64.rpm
 libcom_err-1.42.9-10.el7.x86_64.rpm
