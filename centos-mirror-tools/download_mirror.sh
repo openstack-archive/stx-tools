@@ -12,6 +12,11 @@ if [ ! -e $rpm_downloader ];then
     exit -1
 fi
 
+# download the source.repo for centos mirror
+if [ ! -e /etc/yum.repos.d/docker-ce.repo ]; then
+	wget https://download.docker.com/linux/centos/docker-ce.repo -O /etc/yum.repos.d/docker-ce.repo
+fi
+
 #download RPMs/SRPMs from 3rd_party websites (not CentOS repos) by "wget"
 echo "step #1: start downloading RPMs/SRPMs from 3rd-party websites..."
 if [ ! -e ./rpms_from_3rd_parties.lst ];then

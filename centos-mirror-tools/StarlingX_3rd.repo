@@ -43,13 +43,6 @@ name=Starlingx-buildlogs.centos.org_c7.1708.u.i386 - buildlogs.centos.org_c7.170
 baseurl=https://buildlogs.centos.org/c7.1708.u.i386
 enabled=1
 
-[Starlingx-download.docker.com_linux_centos_7_source_stable]
-name=Starlingx-download.docker.com_linux_centos_7_source_stable - download.docker.com_linux_centos_7_source_stable
-baseurl=https://download.docker.com/linux/centos/7/source/stable
-gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-DOCKER
-enabled=1
-
 [Starlingx-www.rpmfind.net_linux_epel_7_x86_64]
 name=Starlingx-www.rpmfind.net_linux_epel_7_x86_64 - www.rpmfind.net_linux_epel_7_x86_64
 baseurl=https://www.rpmfind.net/linux/epel/7/x86_64
