@@ -1,3 +1,8 @@
+[Starlingx-vault]
+name=Starlingx-vault.centos.org.centos.7.updates.Source - vault.centos.org.centos.7.updates.Source
+baseurl=http://vault.centos.org/centos/7/updates/Source
+enabled=1
+
 [Starlingx-buildlogs-seed.centos.org_c7.1708.00]
 name=Starlingx-buildlogs-seed.centos.org_c7.1708.00 - buildlogs-seed.centos.org_c7.1708.00
 baseurl=http://buildlogs-seed.centos.org/c7.1708.00
