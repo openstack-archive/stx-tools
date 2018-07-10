@@ -46,7 +46,7 @@ To ease checkout do:
     ssh-add
 To start a fresh source tree:
     cd \$MY_REPO_ROOT_DIR
-    repo init -u git@github.com:starlingx-staging/stx-manifest.git stx-manifest.xml
+    repo init -u git://git.openstack.org/openstack/stx-manifest.git -m default.xml
 To build all packages:
     cd \$MY_REPO
     build-pkgs or build-pkgs <pkglist>
