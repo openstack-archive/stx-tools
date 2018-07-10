@@ -179,8 +179,7 @@ and the mock configuration file. It is needed to create these links if this is
 the first build or the mirror has been updated.
 
 ```
-cd $MY_REPO_ROOT_DIR/stx-tools/scripts
-./generate-cgcs-centos-repo.sh /import/mirror/CentOS/pike
+generate-cgcs-centos-repo.sh /import/mirror/CentOS/pike
 ```
 
 Where the argument to the script is the path of the mirror.
