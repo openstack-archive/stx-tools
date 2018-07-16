@@ -83,13 +83,13 @@ for line in $(cat $tarball_file); do
         tarball_name="${tarball_name//!/}"
         echo $tarball_name
         pushd $output_tarball
-        if [ "$tarball_name" = "integrity-kmod-668a8270.tar.gz" ]; then
+        if [ "$tarball_name" = "integrity-kmod-e6aef069.tar.gz" ]; then
             download_package $tarball_url
-            tar xf fd5c78694f3f1c875e293de7a641ba8a3d60d00d.tar.gz
-            mv linux-tpmdd-fd5c786/security/integrity/ $directory_name
+            tar xf e6aef069b6e97790cb127d5eeb86ae9ff0b7b0e3.tar.gz
+            mv linux-tpmdd-e6aef06/security/integrity/ $directory_name
             tar czvf $tarball_name $directory_name
-            rm -rf linux-tpmdd-fd5c786
-            rm fd5c78694f3f1c875e293de7a641ba8a3d60d00d.tar.gz
+            rm -rf linux-tpmdd-e6aef06
+            rm e6aef069b6e97790cb127d5eeb86ae9ff0b7b0e3.tar.gz
         elif [ "$tarball_name" = "mariadb-10.1.28.tar.gz" ]; then
             download_package $tarball_url
             mkdir $directory_name
