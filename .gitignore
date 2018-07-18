@@ -5,3 +5,5 @@ localrc
 toCOPY/.gitconfig
 centos-mirror-tools/logs/
 centos-mirror-tools/output/
+centos-mirror-tools./package_auto_downloader/downloads/
+centos-mirror-tools./package_auto_downloader/node_modules/
