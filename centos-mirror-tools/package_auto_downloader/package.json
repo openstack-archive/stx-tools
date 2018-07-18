@@ -1,0 +1,21 @@
+{
+  "name": "package_auto_downloader",
+  "version": "1.0.0",
+  "description": "Script to search for files using Google and download them",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.intel.com:gaponcec/package_auto_downloader.git"
+  },
+  "author": "Guillermo Ponce",
+  "license": "MIT",
+  "dependencies": {
+    "argparse": "^1.0.10",
+    "fs-extra": "^6.0.1",
+    "google": "^2.1.0",
+    "request": "^2.87.0"
+  }
+}
