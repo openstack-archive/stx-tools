@@ -144,14 +144,14 @@ for line in $(cat $tarball_file); do
             rm -rf "$directory_name"
         elif [ "$tarball_name" = "qat1.7.upstream.l.1.0.3-42.tar.gz" ]; then
             download_package $tarball_url
-        elif [ "$tarball_name" = "tpm-kmod-668a8270.tar.gz" ]; then
+        elif [ "$tarball_name" = "tpm-kmod-e6aef069.tar.gz" ]; then
             download_package $tarball_url
-            tar xf fd5c78694f3f1c875e293de7a641ba8a3d60d00d.tar.gz
-            mv linux-tpmdd-fd5c786/drivers/char/tpm $directory_name
+            tar xf e6aef069b6e97790cb127d5eeb86ae9ff0b7b0e3.tar.gz
+            mv linux-tpmdd-e6aef06/drivers/char/tpm $directory_name
             tar czvf $tarball_name $directory_name
-            rm -rf linux-tpmdd-fd5c786
+            rm -rf linux-tpmdd-e6aef06
             rm -rf $directory_name
-            rm fd5c78694f3f1c875e293de7a641ba8a3d60d00d.tar.gz
+            rm e6aef069b6e97790cb127d5eeb86ae9ff0b7b0e3.tar.gz
         elif [ "$tarball_name" = "tss2-930.tar.gz" ]; then
             git clone https://git.code.sf.net/p/ibmtpm20tss/tss ibmtpm20tss-tss
             pushd ibmtpm20tss-tss
