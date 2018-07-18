@@ -23,6 +23,7 @@ mirror_dir=$1
 dest_dir=$MY_REPO/cgcs-centos-repo
 timestamp="$(date +%F_%H%M)"
 mock_cfg_file=$dest_dir/mock.cfg.proto
+comps_xml_file=$dest_dir/Binary/comps.xml
 
 if [[ ( ! -d $mirror_dir/Binary ) || ( ! -d $mirror_dir/Source ) ]]; then
     echo "The mirror $mirror_dir doesn't has the Binary and Source"
@@ -119,3 +120,47 @@ fi
 
 echo "Creating mock config file"
 echo "$MOCK_CFG" >> "$mock_cfg_file"
+
+read -r -d '' COMPS_XML <<-EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE comps PUBLIC "-//Red Hat, Inc.//DTD Comps info//EN" "comps.dtd">
+<comps>
+  <group>
+    <id>buildsys-build</id>
+    <name>Buildsystem building group</name>
+    <description/>
+    <default>false</default>
+    <uservisible>false</uservisible>
+    <packagelist>
+      <packagereq type="mandatory">bash</packagereq>
+      <packagereq type="mandatory">bzip2</packagereq>
+      <packagereq type="mandatory">coreutils</packagereq>
+      <packagereq type="mandatory">cpio</packagereq>
+      <packagereq type="mandatory">diffutils</packagereq>
+      <packagereq type="mandatory">epel-release</packagereq>
+      <packagereq type="mandatory">epel-rpm-macros</packagereq>
+      <packagereq type="mandatory">findutils</packagereq>
+      <packagereq type="mandatory">gawk</packagereq>
+      <packagereq type="mandatory">gcc</packagereq>
+      <packagereq type="mandatory">gcc-c++</packagereq>
+      <packagereq type="mandatory">grep</packagereq>
+      <packagereq type="mandatory">gzip</packagereq>
+      <packagereq type="mandatory">info</packagereq>
+      <packagereq type="mandatory">make</packagereq>
+      <packagereq type="mandatory">patch</packagereq>
+      <packagereq type="mandatory">redhat-rpm-config</packagereq>
+      <packagereq type="mandatory">rpm-build</packagereq>
+      <packagereq type="mandatory">sed</packagereq>
+      <packagereq type="mandatory">shadow-utils</packagereq>
+      <packagereq type="mandatory">tar</packagereq>
+      <packagereq type="mandatory">unzip</packagereq>
+      <packagereq type="mandatory">util-linux-ng</packagereq>
+      <packagereq type="mandatory">which</packagereq>
+      <packagereq type="mandatory">xz</packagereq>
+    </packagelist>
+  </group>
+</comps>
+EOF
+
+echo "Creating comps.xml"
+echo "$COMPS_XML" > "$comps_xml_file"
