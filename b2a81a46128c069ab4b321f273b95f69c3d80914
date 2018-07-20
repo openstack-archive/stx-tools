@@ -1,0 +1,9 @@
+Code-Review+2: Dean Troyer <dtroyer@gmail.com>
+Code-Review+2: Erich Cordoba <erich.cordoba.malibran@intel.com>
+Workflow+1: Erich Cordoba <erich.cordoba.malibran@intel.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Fri, 20 Jul 2018 04:14:52 +0000
+Reviewed-on: https://review.openstack.org/582347
+Project: openstack/stx-tools
+Branch: refs/heads/master
