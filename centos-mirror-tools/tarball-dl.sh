@@ -75,6 +75,18 @@ for line in $(cat $tarball_file); do
     directory_name=$(echo $line | cut -d"#" -f2-2)
     tarball_url=$(echo $line | cut -d"#" -f3-3)
 
+    # - For the General category and the Puppet category:
+    #   - Packages have a common process: download, decompressed,
+    #     change the directory path and compressed.
+
+    if [[ "$line" =~ ^pupp* ]]; then
+        download_path=$output_puppet/$tarball_name
+        download_directory=$output_puppet
+    else
+        download_path=$output_tarball/$tarball_name
+        download_directory=$output_tarball
+    fi
+
     # We have 6 packages from the text file starting with the character "!":
     # they require special handling besides the common process: remove directory,
     # remove text from some files, clone a git repository, etc.
@@ -119,7 +131,7 @@ for line in $(cat $tarball_file); do
             # Create tarball
             tar -zcvf "$tarball_name" -C "$directory_name"/ .
             rm  -rf "$directory_name"
-            mv "$tarball_name" "$download_path"
+            mv "$tarball_name" "$download_directory"
         elif [[ "$tarball_name" =~ ^'MLNX_OFED_LINUX' ]]; then
             pkg_version=$(echo "$tarball_name" | cut -d "-" -f2-3)
             srpm_path="MLNX_OFED_SRC-${pkg_version}/SRPMS/"
@@ -164,18 +176,6 @@ for line in $(cat $tarball_file); do
         fi
         popd
         continue
-    fi
-
-    # - For the General category and the Puppet category:
-    #   - Packages have a common process: download, decompressed,
-    #     change the directory path and compressed.
-
-    if [[ "$line" =~ ^pupp* ]]; then
-        download_path=$output_puppet/$tarball_name
-        download_directory=$output_puppet
-    else
-        download_path=$output_tarball/$tarball_name
-        download_directory=$output_tarball
     fi
 
     download_cmd="wget -t 5 --wait=15 $tarball_url -O $download_path"
