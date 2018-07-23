@@ -1,0 +1,10 @@
+Code-Review+2: Jesus Ornelas Aguayo <jesus.ornelas.aguayo@intel.com>
+Code-Review+2: Saul Wold <sgw@linux.intel.com>
+Code-Review+2: Scott Little <scott.little@windriver.com>
+Workflow+1: Scott Little <scott.little@windriver.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Mon, 23 Jul 2018 18:50:07 +0000
+Reviewed-on: https://review.openstack.org/584538
+Project: openstack/stx-tools
+Branch: refs/heads/master
