@@ -93,6 +93,7 @@ osinfo-db-20170423-2.el7.noarch.rpm
 OVMF-20150414-2.gitc9e5618.el7.noarch.rpm
 policycoreutils-2.5-22.el7.x86_64.rpm
 policycoreutils-devel-2.5-22.el7.x86_64.rpm
+policycoreutils-newrole-2.5-22.el7.x86_64.rpm
 policycoreutils-python-2.5-22.el7.x86_64.rpm
 pulseaudio-libs-10.0-3.el7.x86_64.rpm
 pulseaudio-libs-devel-10.0-3.el7.x86_64.rpm
