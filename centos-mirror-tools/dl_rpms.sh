@@ -180,8 +180,8 @@ download () {
     local _file=$1
     local _level=$2
 
-    local _list=$(cat $_file)
-    local _from=$(get_from $_file)
+    local _list
+    local _from
     local _type=""
 
     local rc=0
@@ -190,6 +190,9 @@ download () {
     local rpm_name=""
     local rpm_url=""
     local SFILE=""
+
+    _list=$(cat $_file)
+    _from=$(get_from $_file)
 
     echo "now the rpm will come from: $_from"
     for ff in $_list; do
