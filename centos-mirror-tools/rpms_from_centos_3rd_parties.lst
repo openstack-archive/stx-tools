@@ -90,9 +90,9 @@ openscap-scanner-1.2.14-2.el7.x86_64.rpm
 openstack-tempest-17.0.0-1.el7.noarch.rpm
 osinfo-db-20170423-2.el7.noarch.rpm
 OVMF-20150414-2.gitc9e5618.el7.noarch.rpm
-policycoreutils-2.5-17.1.el7.x86_64.rpm
-policycoreutils-devel-2.5-17.1.el7.x86_64.rpm
-policycoreutils-python-2.5-17.1.el7.x86_64.rpm
+policycoreutils-2.5-22.el7.x86_64.rpm
+policycoreutils-devel-2.5-22.el7.x86_64.rpm
+policycoreutils-python-2.5-22.el7.x86_64.rpm
 pulseaudio-libs-10.0-3.el7.x86_64.rpm
 pulseaudio-libs-devel-10.0-3.el7.x86_64.rpm
 pulseaudio-libs-glib2-10.0-3.el7.x86_64.rpm
