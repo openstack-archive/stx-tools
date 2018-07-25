@@ -1,0 +1,10 @@
+Code-Review+1: Abraham Arce <abraham.arce.moreno@intel.com>
+Code-Review+2: Saul Wold <sgw@linux.intel.com>
+Code-Review+2: Dean Troyer <dtroyer@gmail.com>
+Workflow+1: Dean Troyer <dtroyer@gmail.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Wed, 25 Jul 2018 22:01:26 +0000
+Reviewed-on: https://review.openstack.org/585558
+Project: openstack/stx-tools
+Branch: refs/heads/m/2018.07
