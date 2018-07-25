@@ -559,8 +559,8 @@ libselinux-devel-2.5-12.el7.x86_64.rpm
 libselinux-python-2.5-12.el7.x86_64.rpm
 libselinux-ruby-2.5-12.el7.x86_64.rpm
 libselinux-utils-2.5-12.el7.x86_64.rpm
-libsepol-2.5-6.el7.x86_64.rpm
-libsepol-devel-2.5-6.el7.x86_64.rpm
+libsepol-2.5-8.1.el7.x86_64.rpm
+libsepol-devel-2.5-8.1.el7.x86_64.rpm
 libshout-2.2.2-11.el7.x86_64.rpm
 libSM-1.2.2-2.el7.x86_64.rpm
 libSM-devel-1.2.2-2.el7.x86_64.rpm
@@ -681,6 +681,7 @@ make-3.82-23.el7.x86_64.rpm
 man-db-2.6.3-9.el7.x86_64.rpm
 maven-3.0.5-17.el7.noarch.rpm
 maven-wagon-2.4-3.el7.noarch.rpm
+mcstrans-0.3.4-5.el7.x86_64.rpm
 mdadm-4.0-13.el7.x86_64.rpm
 mdi-common-1.4.57.0-4.el7.noarch.rpm
 mdi-fonts-1.4.57.0-4.el7.noarch.rpm
@@ -1345,7 +1346,7 @@ SDL-1.2.15-14.el7.x86_64.rpm
 SDL-devel-1.2.15-14.el7.x86_64.rpm
 seabios-1.10.2-3.el7_4.1.src.rpm
 sed-4.2.2-5.el7.x86_64.rpm
-setools-libs-3.3.8-1.1.el7.x86_64.rpm
+setools-libs-3.3.8-2.el7.x86_64.rpm
 setup-2.8.71-7.el7.noarch.rpm
 setup-2.8.71-7.el7.src.rpm
 sg3_utils-1.37-12.el7.x86_64.rpm
