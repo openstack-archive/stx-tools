@@ -18,6 +18,14 @@ if [ ! -e ./rpms_from_3rd_parties.lst ];then
     echo "ERROR: ./rpms_from_3rd_parties.lst does NOT exist!!"
     exit -1
 fi
+
+# Restore StarlingX_3rd repos from backup
+REPO_SOURCE_DIR=/localdisk/yum.repos.d
+REPO_DIR=/etc/yum.repos.d
+if [ -d $REPO_SOURCE_DIR ] && [ -d $REPO_DIR ]; then
+    \cp -f $REPO_SOURCE_DIR/*.repo $REPO_DIR/
+fi
+
 $rpm_downloader ./rpms_from_3rd_parties.lst L1 3rd | tee ./logs/log_download_rpms_from_3rd_party.txt
 if [ $? != 0 ];then
     echo "ERROR: something wrong with downloading, please check the log!!"
@@ -25,8 +33,9 @@ fi
 
 # download RPMs/SRPMs from 3rd_party repos by "yumdownloader"
 $rpm_downloader ./rpms_from_centos_3rd_parties.lst L1 3rd-centos | tee ./logs/log_download_rpms_from_centos_3rd_parties_L1.txt
+
 # deleting the StarlingX_3rd to avoid pull centos packages from the 3rd Repo.
-rm -f /etc/yum.repos.d/StarlingX_3rd.repo
+\rm -f $REPO_DIR/StarlingX_3rd*.repo
 
 echo "step #2: start 1st round of downloading RPMs and SRPMs with L1 match criteria..."
 #download RPMs/SRPMs from CentOS repos by "yumdownloader"
