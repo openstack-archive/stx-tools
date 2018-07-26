@@ -45,18 +45,22 @@ mkdir -p $MDIR_BIN
 FAIL_MOVE_SRPMS="$DESTDIR/${from}_srpms_fail_move_${match_level}.txt"
 FOUND_SRPMS="$DESTDIR/${from}_srpms_found_${match_level}.txt"
 MISSING_SRPMS="$DESTDIR/${from}_srpms_missing_${match_level}.txt"
+URL_SRPMS="$DESTDIR/${from}_srpms_urls_${match_level}.txt"
 
 cat /dev/null > $FAIL_MOVE_SRPMS
 cat /dev/null > $FOUND_SRPMS
 cat /dev/null > $MISSING_SRPMS
+cat /dev/null > $URL_SRPMS
 
 FAIL_MOVE_RPMS="$DESTDIR/${from}_rpms_fail_move_${match_level}.txt"
 FOUND_RPMS="$DESTDIR/${from}_rpms_found_${match_level}.txt"
 MISSING_RPMS="$DESTDIR/${from}_rpms_missing_${match_level}.txt"
+URL_RPMS="$DESTDIR/${from}_rpms_urls_${match_level}.txt"
 
 cat /dev/null > $FAIL_MOVE_RPMS
 cat /dev/null > $FOUND_RPMS
 cat /dev/null > $MISSING_RPMS
+cat /dev/null > $URL_RPMS
 
 #function to download different type of RPMs in different ways
 download () {
@@ -80,8 +84,10 @@ download () {
             echo " ------ using $SFILE to search $rpm_name ------"
             if [ "$_type" == "src" ];then
                 download_cmd="sudo -E yumdownloader -q -C --source $SFILE"
+                download_url_cmd="sudo -E yumdownloader --urls -q -C --source $SFILE"
             else
                 download_cmd="sudo -E yumdownloader -q -C $SFILE --archlist=noarch,x86_64"
+                download_url_cmd="sudo -E yumdownloader --urls -q -C $SFILE --archlist=noarch,x86_64"
             fi
         else
             rpm_name=`echo $ff | cut -d"#" -f1-1`
@@ -94,6 +100,11 @@ download () {
             if [ ! -e $MDIR_SRC/$rpm_name ]; then
                 echo "Looking for $rpm_name"
                 if $download_cmd ; then
+                    # Success!   Record download URL.
+                    # Use 'sort --unique' because sometimes 
+                    # yumdownloader reports the url twice
+                    $download_url_cmd | sort --unique >> $URL_SRPMS
+
                     if ! mv -f $SFILE* $MDIR_SRC ; then
                         echo "FAILED to move $rpm_name"
                         echo $rpm_name >> $FAIL_MOVE_SRPMS
@@ -110,6 +121,11 @@ download () {
             if [ ! -e ${MDIR_BIN}/${_type}/$rpm_name ]; then
                 echo "Looking for $rpm_name..."
                 if $download_cmd ; then
+                    # Success!   Record download URL.
+                    # Use 'sort --unique' because sometimes 
+                    # yumdownloader reports the url twice
+                    $download_url_cmd | sort --unique >> $URL_RPMS
+
                     mkdir -p $MDIR_BIN/${_type}
                     if ! mv -f $SFILE* $MDIR_BIN/${_type}/ ; then
                         echo "FAILED to move $rpm_name"
