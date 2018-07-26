@@ -81,8 +81,9 @@ if [ -z "$MY_REPO_ROOT_DIR" ]; then
 fi
 
 STXTOOLS=${MY_REPO_ROOT_DIR}/stx-tools
-REPOCFG_STD_FILES=$(ls ${STXTOOLS}/centos-mirror-tools/StarlingX*.repo | grep -v StarlingX_3rd)
-REPOCFG_3RD_FILES=${STXTOOLS}/centos-mirror-tools/StarlingX_3rd*.repo
+REPO_DIR=${STXTOOLS}/centos-mirror-tools/yum.repos.d
+REPOCFG_STD_FILES=$(ls ${REPO_DIR}/StarlingX*.repo | grep -v StarlingX_3rd)
+REPOCFG_3RD_FILES=${REPO_DIR}/StarlingX_3rd*.repo
 REPOCFG_STD_MERGED=$(mktemp /tmp/REPOCFG_STD_MERGED_XXXXXX)
 cat $REPOCFG_STD_FILES > $REPOCFG_STD_MERGED
 REPOCFG_3RD_MERGED=$(mktemp /tmp/REPOCFG_3RD_MERGED_XXXXXX)
