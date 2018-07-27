@@ -1,8 +1,16 @@
 ---
+- job:
+    name: stx-dependency-checker
+    description: |
+      Verifies that all references to src.rpm already exists in the
+      stx-tool repository
+    run: playbooks/stx-dependency-checker/run.yaml
+
 - project:
     check:
       jobs:
         - openstack-tox-linters
+        - stx-dependency-checker
     gate:
       jobs:
         - openstack-tox-linters
