@@ -3,6 +3,7 @@
     check:
       jobs:
         - openstack-tox-linters
+        - stx-dependency-checker
     gate:
       jobs:
         - openstack-tox-linters

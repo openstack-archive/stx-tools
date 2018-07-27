@@ -1,0 +1,20 @@
+- hosts: all
+  tasks:
+    - name: Verify for missing link to src.rpms
+      command: python DependenciesReviewer.py
+      required-projects:
+        - openstack/stx-clients
+        - openstack/stx-config
+        - openstack/stx-docs
+        - openstack/stx-gplv2
+        - openstack/stx-gplv3
+        - openstack/stx-gui
+        - openstack/stx-ha
+        - openstack/stx-integ
+        - openstack/stx-metal
+        - openstack/stx-nfv
+        - openstack/stx-root
+        - openstack/stx-tools
+        - openstack/stx-update
+        - openstack/stx-upstream
+        - openstack/stx-utils
