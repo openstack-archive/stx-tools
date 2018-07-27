@@ -3,6 +3,8 @@
     check:
       jobs:
         - openstack-tox-linters
+        - run-test-command:
+          test_command: "centos-mirror-tools/testing-zuul.sh"
     gate:
       jobs:
         - openstack-tox-linters
