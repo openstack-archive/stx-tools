@@ -1,0 +1,17 @@
+- hosts: all
+  tasks:
+    - name: Print info.
+      shell: |
+        ls src/
+        ls src/git.openstack.org/openstack/
+        ls src/git.openstack.org/openstack/stx-tools
+        pwd
+        whoami
+
+    - name: Run reviewer
+      shell: |
+        cd /home/zuul/src/git.openstack.org/openstack/
+        python3 stx-tools/DependenciesReviewer.py
+
+    - name: Verify for missing link to src.rpms
+      command: python3 DependenciesReviewer.py
