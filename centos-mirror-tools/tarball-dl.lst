@@ -44,3 +44,6 @@ puppet-ldap-480f13af6d17d1d3fcf0dc7b4bd04b49fa4099e1.tar.gz#puppet-ldap-master#h
 puppet-network-7deacd5fdc22c0543455878a8d1872f2f5417c1d.tar.gz#packstack/puppet/modules/network#https://github.com/voxpupuli/puppet-network/tarball/7deacd5fdc22c0543455878a8d1872f2f5417c1d
 puppet-nslcd-b8c19b1ada89865f2e50758e054583798ad8011a.tar.gz#packstack/puppet/modules/nslcd#https://github.com/jlyheden/puppet-nslcd/tarball/b8c19b1ada89865f2e50758e054583798ad8011a
 puppi-c1c47f4edfd761d1bbde32a75da0c3fa7cc93a81.tar.gz#puppi-master#https://github.com/example42/puppi/tarball/c1c47f4edfd761d1bbde32a75da0c3fa7cc93a81
+helm-v2.9.1-linux-amd64.tar.gz#linux-amd64#https://storage.googleapis.com/kubernetes-helm/helm-v2.9.1-linux-amd64.tar.gz
+gnocchi-4.2.5.tar.gz#gnocchi-4.2.5#https://pypi.io/packages/source/g/gnocchi/gnocchi-4.2.5.tar.gz
+gnocchiclient-7.0.1.tar.gz#gnocchiclient-7.0.1#https://pypi.io/packages/source/g/gnocchiclient/gnocchiclient-7.0.1.tar.gz
