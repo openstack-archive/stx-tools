@@ -80,13 +80,13 @@ find ./output -name "*.i686.rpm" | xargs rm -f
 
 line1=`wc -l rpms_from_3rd_parties.lst | cut -d " " -f1-1`
 line2=`wc -l rpms_from_centos_repo.lst | cut -d " " -f1-1`
-
-let total_line=$line1+$line2
-echo "We expect to download $total_line RPMs!"
+line3=`wc -l rpms_from_centos_3rd_parties.lst | cut -d " " -f1-1`
+let total_line=$line1+$line2+$line3
+echo "We expect to download $total_line RPMs."
 num_of_downloaded_rpms=`find ./output -type f -name "*.rpm" | wc -l | cut -d" " -f1-1`
-echo "Actually we downloaded $num_of_downloaded_rpms RPMs."
-if [ "$total_line" != "$num_of_downloaded_rpms" ];then
-    echo "ERROR: some RPM downloading failed, need to check outputs and logs"
+echo "There are $num_of_downloaded_rpms RPMs in output directory."
+if [ "$total_line" != "$num_of_downloaded_rpms" ]; then
+    echo "WARNING: Not the same number of RPMs in output as RPMs expected to be downloaded, need to check outputs and logs."
 fi
 
 # change "./output" and sub-folders to 751 (cgcs) group
