@@ -1,5 +1,9 @@
 #!/bin/bash
 #
+# Copyright (c) 2018 Wind River Systems, Inc.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
 # This utility is a workflow aid for designers adding packages to StarlingX.
 # It will identify and download dependencies, as needed.
 #
