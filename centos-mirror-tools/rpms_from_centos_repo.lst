@@ -830,9 +830,12 @@ nekohtml-1.9.14-13.el7.noarch.rpm
 netcf-devel-0.2.8-4.el7.x86_64.rpm
 netcf-libs-0.2.8-4.el7.x86_64.rpm
 netpbm-10.61.02-9.el7.src.rpm
-net-snmp-5.7.2-28.el7.src.rpm
 nettle-2.7.1-8.el7.x86_64.rpm
 nettle-devel-2.7.1-8.el7.x86_64.rpm
+net-snmp-5.7.2-33.el7_5.2.x86_64.rpm
+net-snmp-agent-libs-5.7.2-33.el7_5.2.x86_64.rpm
+net-snmp-devel-5.7.2-33.el7_5.2.x86_64.rpm
+net-snmp-libs-5.7.2-33.el7_5.2.x86_64.rpm
 net-tools-2.0-0.22.20131004git.el7.src.rpm
 net-tools-2.0-0.22.20131004git.el7.x86_64.rpm
 newt-0.52.15-4.el7.x86_64.rpm
@@ -1487,6 +1490,7 @@ rpcbind-0.2.0-44.el7.x86_64.rpm
 rpm-4.11.3-32.el7.x86_64.rpm
 rpm-build-4.11.3-32.el7.x86_64.rpm
 rpm-build-libs-4.11.3-32.el7.x86_64.rpm
+rpm-devel-4.11.3-32.el7.x86_64.rpm
 rpm-libs-4.11.3-32.el7.x86_64.rpm
 rpm-python-4.11.3-32.el7.x86_64.rpm
 rsync-3.0.9-17.el7.x86_64.rpm
