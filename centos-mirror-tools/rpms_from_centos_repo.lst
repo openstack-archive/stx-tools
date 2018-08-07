@@ -1514,7 +1514,8 @@ scrub-2.5.2-7.el7.x86_64.rpm
 scsi-target-utils-1.0.55-4.el7.src.rpm
 SDL-1.2.15-14.el7.x86_64.rpm
 SDL-devel-1.2.15-14.el7.x86_64.rpm
-seabios-1.10.2-3.el7_4.1.src.rpm
+seabios-bin-1.11.0-2.el7.noarch.rpm
+seavgabios-bin-1.11.0-2.el7.noarch.rpm
 sed-4.2.2-5.el7.x86_64.rpm
 setools-libs-3.3.8-2.el7.x86_64.rpm
 setup-2.8.71-7.el7.noarch.rpm
