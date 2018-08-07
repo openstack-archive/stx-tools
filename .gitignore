@@ -5,3 +5,6 @@ localrc
 toCOPY/.gitconfig
 centos-mirror-tools/logs/
 centos-mirror-tools/output/
+
+# Files created by releasenotes build
+releasenotes/build
