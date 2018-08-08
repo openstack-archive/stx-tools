@@ -6,7 +6,7 @@
 # this script was originated by Brian Avery, and later updated by Yong Hu
 
 usage() {
-    echo "$0 [-n] [-c <yum.conf>] <rpms_list> <match_level> <from_where>"
+    echo "$0 [-n] [-c <yum.conf>] <rpms_list> <match_level> "
     echo ""
     echo "Options:"
     echo "  -n: Do not use sudo when performing operations"
@@ -19,9 +19,14 @@ usage() {
     echo "        using vim-7.4.160 to search vim-7.4.160-2.el7.src.rpm"
     echo "    L3: use name:"
     echo "        using vim to search vim-7.4.160-2.el7.src.rpm"
-    echo "  from_where: where to download the RPMs: 'centos'from CentOS Repos,"
-    echo "              otherwise from 3rd-party websets"
     echo ""
+}
+
+get_from() {
+    list=$1
+    base=$(basename $list .lst)
+    from=$(echo $base | cut -d'_' -f2-2)
+    echo $from
 }
 
 # By default, we use "sudo" and we don't use a local yum.conf. These can
@@ -53,7 +58,7 @@ while getopts "c:nh" o; do
 done
 shift $((OPTIND-1))
 
-if [ $# -lt 3 ]; then
+if [ $# -lt 2 ]; then
     usage
     exit -1
 fi
@@ -72,7 +77,6 @@ if [ ! -z "$2" -a "$2" != " " ];then
     match_level=$2
 fi
 
-from=$3
 
 timestamp=$(date +%F_%H%M)
 echo $timestamp
@@ -83,6 +87,8 @@ mkdir -p $MDIR_SRC
 MDIR_BIN=$DESTDIR/stx-r1/CentOS/pike/Binary
 mkdir -p $MDIR_BIN
 
+
+from=$(get_from $rpms_list)
 FAIL_MOVE_SRPMS="$DESTDIR/${from}_srpms_fail_move_${match_level}.txt"
 FOUND_SRPMS="$DESTDIR/${from}_srpms_found_${match_level}.txt"
 MISSING_SRPMS="$DESTDIR/${from}_srpms_missing_${match_level}.txt"
@@ -105,15 +111,15 @@ cat /dev/null > $URL_RPMS
 
 #function to download different type of RPMs in different ways
 download () {
-    _list=$1
+    _file=$1
     _level=$2
-    _from=$3
-    _type=$4
-
+    _list=$(cat $_file)
+    _from=$(get_from $_file)
     echo "now the rpm will come from: $_from"
     for ff in $_list; do
+        _type=$(echo $ff | rev | cut -d'.' -f2-2 | rev)
         ## download RPM from CentOS repos
-        if [ "$_from" == "centos" -o "$_from" == "3rd-centos" ]; then
+        if [ "$_from" == "centos" -o "$_from" == "centos3rdparties" ]; then
             rpm_name=$ff
             if [ $_level == "L1" ]; then
                 SFILE=`echo $rpm_name | rev | cut -d'.' -f3- | rev`
@@ -187,25 +193,10 @@ download () {
 # prime the cache
 ${SUDOCMD} yum ${YUMCONFOPT} makecache
 
-#go to download *.noarch.rpm files
-noarch_rpms=`echo "$(cat $rpms_list | grep '.noarch.rpm')"`
-if [ ! -z "$noarch_rpms" ];then
-    echo "--> start searching noarch RPMs ....."
-    download "$noarch_rpms" $match_level $from "noarch"
-fi
-
-#go to download *.x86_64.rpm files
-x86_64_rpms=`echo "$(cat $rpms_list | grep '.x86_64.rpm')"`
-if [ ! -z "$x86_64_rpms" ];then
-    echo "--> start searching x86_64 RPMs ....."
-    download "$x86_64_rpms" $match_level $from "x86_64"
-fi
-
-#go to download *.src.rpm files
-src_rpms=`echo "$(cat $rpms_list | grep '.src.rpm')"`
-if [ ! -z "$src_rpms" ];then
-    echo "--> start searching source RPMs ....."
-    download "$src_rpms" $match_level $from "src"
+# download files
+if [ -s "$rpms_list" ];then
+    echo "--> start searching "$rpms_list
+    download $rpms_list $match_level
 fi
 
 echo "done!!"
