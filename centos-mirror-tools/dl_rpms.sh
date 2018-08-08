@@ -2,8 +2,16 @@
 # download RPMs/SRPMs from different sources.
 # this script was originated by Brian Avery, and later updated by Yong Hu
 
-if [ $# -lt 3 ]; then
-    echo "$0 <rpms_list> <match_level> <from_where>"
+
+get_from() {
+    list=$1
+    base=$(basename $list .lst)
+    from=$(echo $base | cut -d'_' -f2-2)
+    echo $from
+}
+
+if [ $# -lt 2 ]; then
+    echo "$0 <rpms_list> <match_level>"
     echo "rpm_list: a list of RPM files to be downloaded."
     echo "match_level: value could be L1, L2 or L3:"
     echo "  L1: use name, major version and minor version:"
@@ -12,8 +20,6 @@ if [ $# -lt 3 ]; then
     echo "      using vim-7.4.160 to search vim-7.4.160-2.el7.src.rpm"
     echo "  L3: use name:"
     echo "      using vim to search vim-7.4.160-2.el7.src.rpm"
-    echo "from_where: where to download the RPMs: 'centos'from CentOS Repos,"
-    echo "otherwise from 3rd-party websets"
     exit -1
 fi
 
@@ -31,7 +37,6 @@ if [ ! -z "$2" -a "$2" != " " ];then
     match_level=$2
 fi
 
-from=$3
 
 timestamp=$(date +%F_%H%M)
 echo $timestamp
@@ -42,6 +47,8 @@ mkdir -p $MDIR_SRC
 MDIR_BIN=$DESTDIR/stx-r1/CentOS/pike/Binary
 mkdir -p $MDIR_BIN
 
+
+from=$(get_from $rpms_list)
 FAIL_MOVE_SRPMS="$DESTDIR/${from}_srpms_fail_move_${match_level}.txt"
 FOUND_SRPMS="$DESTDIR/${from}_srpms_found_${match_level}.txt"
 MISSING_SRPMS="$DESTDIR/${from}_srpms_missing_${match_level}.txt"
@@ -66,13 +73,13 @@ cat /dev/null > $URL_RPMS
 download () {
     _list=$1
     _level=$2
-    _from=$3
-    _type=$4
+    _from=$(get_from $_list)
+    _type=$3
 
     echo "now the rpm will come from: $_from"
     for ff in $_list; do
         ## download RPM from CentOS repos
-        if [ "$_from" == "centos" -o "$_from" == "3rd-centos" ]; then
+        if [ "$_from" == "centos" -o "$_from" == "centos3rd" ]; then
             rpm_name=$ff
             if [ $_level == "L1" ]; then
                 SFILE=`echo $rpm_name | rev | cut -d'.' -f3- | rev`
@@ -150,21 +157,21 @@ sudo -E yum makecache
 noarch_rpms=`echo "$(cat $rpms_list | grep '.noarch.rpm')"`
 if [ ! -z "$noarch_rpms" ];then
     echo "--> start searching noarch RPMs ....."
-    download "$noarch_rpms" $match_level $from "noarch"
+    download "$noarch_rpms" $match_level "noarch"
 fi
 
 #go to download *.x86_64.rpm files
 x86_64_rpms=`echo "$(cat $rpms_list | grep '.x86_64.rpm')"`
 if [ ! -z "$x86_64_rpms" ];then
     echo "--> start searching x86_64 RPMs ....."
-    download "$x86_64_rpms" $match_level $from "x86_64"
+    download "$x86_64_rpms" $match_level "x86_64"
 fi
 
 #go to download *.src.rpm files
 src_rpms=`echo "$(cat $rpms_list | grep '.src.rpm')"`
 if [ ! -z "$src_rpms" ];then
     echo "--> start searching source RPMs ....."
-    download "$src_rpms" $match_level $from "src"
+    download "$src_rpms" $match_level "src"
 fi
 
 echo "done!!"
