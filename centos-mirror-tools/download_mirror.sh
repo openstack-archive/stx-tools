@@ -16,9 +16,9 @@ need_file(){
 }
 
 # Check extistence of prerequisites files
-need_file dl_rpms.sh dl_other_from_centos_repo.sh tarball-dl.sh
+need_file dl_rpms.sh dl_other_from_centos_repo.sh dl_tarball.sh
 need_file rpms_from_3rd_parties.lst
-need_file rpms_from_centos_3rd_parties.lst
+need_file rpms_from_centos3rd_parties.lst
 need_file rpms_from_centos_repo.lst
 need_file other_downloads.lst
 need_file tarball-dl.lst mvn-artifacts.lst
@@ -34,13 +34,13 @@ if [ -d $REPO_SOURCE_DIR ] && [ -d $REPO_DIR ]; then
 fi
 
 rpm_downloader="./dl_rpms.sh"
-$rpm_downloader ./rpms_from_3rd_parties.lst L1 3rd | tee ./logs/log_download_rpms_from_3rd_party.txt
+$rpm_downloader ./rpms_from_3rd_parties.lst L1 | tee ./logs/log_download_rpms_from_3rd_party.txt
 if [ $? != 0 ];then
     echo "ERROR: something wrong with downloading, please check the log!!"
 fi
 
 # download RPMs/SRPMs from 3rd_party repos by "yumdownloader"
-$rpm_downloader ./rpms_from_centos_3rd_parties.lst L1 3rd-centos | tee ./logs/log_download_rpms_from_centos_3rd_parties_L1.txt
+$rpm_downloader ./rpms_from_centos3rd_parties.lst L1 | tee ./logs/log_download_rpms_from_centos3rd_parties_L1.txt
 
 # deleting the StarlingX_3rd to avoid pull centos packages from the 3rd Repo.
 \rm -f $REPO_DIR/StarlingX_3rd*.repo
@@ -48,7 +48,7 @@ $rpm_downloader ./rpms_from_centos_3rd_parties.lst L1 3rd-centos | tee ./logs/lo
 echo "step #2: start 1st round of downloading RPMs and SRPMs with L1 match criteria..."
 #download RPMs/SRPMs from CentOS repos by "yumdownloader"
 
-$rpm_downloader ./rpms_from_centos_repo.lst L1 centos | tee ./logs/log_download_rpms_from_centos_L1.txt
+$rpm_downloader ./rpms_from_centos_repo.lst L1 | tee ./logs/log_download_rpms_from_centos_L1.txt
 
 if [ $? == 0 ]; then
     echo "finish 1st round of RPM downloading successfully!"
@@ -94,7 +94,7 @@ find ./output -name "*.i686.rpm" | xargs rm -f
 
 line1=`wc -l rpms_from_3rd_parties.lst | cut -d " " -f1-1`
 line2=`wc -l rpms_from_centos_repo.lst | cut -d " " -f1-1`
-line3=`wc -l rpms_from_centos_3rd_parties.lst | cut -d " " -f1-1`
+line3=`wc -l rpms_from_centos3rd_parties.lst | cut -d " " -f1-1`
 let total_line=$line1+$line2+$line3
 echo "We expect to download $total_line RPMs."
 num_of_downloaded_rpms=`find ./output -type f -name "*.rpm" | wc -l | cut -d" " -f1-1`
