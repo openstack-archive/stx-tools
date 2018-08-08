@@ -72,7 +72,7 @@ download () {
     echo "now the rpm will come from: $_from"
     for ff in $_list; do
         ## download RPM from CentOS repos
-        if [ "$_from" == "centos" -o "$_from" == "3rd-centos" ]; then
+        if [ "$_from" == "centos" -o "$_from" == "centos3rd" ]; then
             rpm_name=$ff
             if [ $_level == "L1" ]; then
                 SFILE=`echo $rpm_name | rev | cut -d'.' -f3- | rev`
