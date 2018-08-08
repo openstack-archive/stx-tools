@@ -58,7 +58,7 @@ avahi-libs-0.6.31-17.el7.x86_64.rpm
 avalon-framework-4.3-10.el7.noarch.rpm
 avalon-logkit-2.1-14.el7.noarch.rpm
 basesystem-10.0-7.el7.centos.noarch.rpm
-bash-4.2.46-29.el7_4.src.rpm
+bash-4.2.46-30.el7.src.rpm
 bash-4.2.46-30.el7.x86_64.rpm
 bash-completion-2.1-6.el7.noarch.rpm
 bc-1.06.95-13.el7.x86_64.rpm
@@ -1066,7 +1066,7 @@ pyparted-3.9-13.el7.x86_64.rpm
 PyQt4-4.12-1.el7.x86_64.rpm
 pysendfile-2.0.0-5.el7.x86_64.rpm
 pyserial-2.6-6.el7.noarch.rpm
-python-2.7.5-58.el7.src.rpm
+python-2.7.5-69.el7_5.src.rpm
 python2-amqp-2.1.4-1.el7.noarch.rpm
 python2-aodhclient-0.9.0-1.el7.noarch.rpm
 python2-appdirs-1.4.0-4.el7.noarch.rpm
