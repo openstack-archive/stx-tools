@@ -17,9 +17,9 @@ need_file(){
 
 # Check extistence of prerequisites files
 need_file dl_rpms.sh dl_other_from_centos_repo.sh dl_tarball.sh
-need_file rpms_from_3rd_parties.lst
-need_file rpms_from_centos_3rd_parties.lst
-need_file rpms_from_centos_repo.lst
+need_file rpms_3rdparties.lst
+need_file rpms_centos3rdparties.lst
+need_file rpms_centosrepo.lst
 need_file other_downloads.lst
 need_file tarball-dl.lst mvn-artifacts.lst
 
@@ -34,27 +34,30 @@ if [ -d $REPO_SOURCE_DIR ] && [ -d $REPO_DIR ]; then
 fi
 
 rpm_downloader="./dl_rpms.sh"
-$rpm_downloader ./rpms_from_3rd_parties.lst L1 3rd | tee ./logs/log_download_rpms_from_3rd_party.txt
+
+logfile="log_download_3rdparties_L1.txt"
+$rpm_downloader ./rpms_3rdparties.lst L1 | tee ./logs/$logfile
 retcode=${PIPESTATUS[0]}
-if [ $retcode -ne 0 ];then
+if [ $retcode -ne 0 ]; then
     echo "ERROR: something wrong with downloading, please check the log!!"
 fi
 
 # download RPMs/SRPMs from 3rd_party repos by "yumdownloader"
-$rpm_downloader ./rpms_from_centos_3rd_parties.lst L1 3rd-centos | tee ./logs/log_download_rpms_from_centos_3rd_parties_L1.txt
+logfile="log_download_centos3rdparties_L1.txt"
+$rpm_downloader ./rpms_centos3rdparties.lst L1 | tee ./logs/$logfile
 
 # deleting the StarlingX_3rd to avoid pull centos packages from the 3rd Repo.
 \rm -f $REPO_DIR/StarlingX_3rd*.repo
 
 echo "step #2: start 1st round of downloading RPMs and SRPMs with L1 match criteria..."
 #download RPMs/SRPMs from CentOS repos by "yumdownloader"
-
-$rpm_downloader ./rpms_from_centos_repo.lst L1 centos | tee ./logs/log_download_rpms_from_centos_L1.txt
+logfile="log_download_centosrepo_L1.txt"
+$rpm_downloader ./rpms_centosrepo.lst L1 | tee ./logs/$logfile
 retcode=${PIPESTATUS[0]}
 if [ $retcode -eq 0 ]; then
     echo "finish 1st round of RPM downloading successfully!"
-    if [ -e "./output/centos_rpms_missing_L1.txt" ]; then
-        missing_num=`wc -l ./output/centos_rpms_missing_L1.txt | cut -d " " -f1-1`
+    if [ -e "./output/centosrepo_rpms_missing_L1.txt" ]; then
+        missing_num=`wc -l ./output/centosrepo_rpms_missing_L1.txt | cut -d " " -f1-1`
         if [ "$missing_num" != "0" ];then
             echo "ERROR:  -------RPMs missing $missing_num in yumdownloader with L1 match ---------------"
         fi
@@ -68,8 +71,8 @@ if [ $retcode -eq 0 ]; then
         #fi
     fi
 
-    if [ -e "./output/centos_srpms_missing_L1.txt" ]; then
-        missing_num=`wc -l ./output/centos_srpms_missing_L1.txt | cut -d " " -f1-1`
+    if [ -e "./output/centosrepo_srpms_missing_L1.txt" ]; then
+        missing_num=`wc -l ./output/centosrepo_srpms_missing_L1.txt | cut -d " " -f1-1`
         if [ "$missing_num" != "0" ];then
             echo "ERROR: --------- SRPMs missing $missing_num in yumdownloader with L1 match ---------------"
         fi
@@ -93,9 +96,9 @@ find ./output -type f -name "*.rpm" | xargs rpm -K | grep -i "MISSING KEYS" > ./
 find ./output -name "*.i686.rpm" | tee ./output/all_i686.txt
 find ./output -name "*.i686.rpm" | xargs rm -f
 
-line1=`wc -l rpms_from_3rd_parties.lst | cut -d " " -f1-1`
-line2=`wc -l rpms_from_centos_repo.lst | cut -d " " -f1-1`
-line3=`wc -l rpms_from_centos_3rd_parties.lst | cut -d " " -f1-1`
+line1=`wc -l rpms_3rdparties.lst | cut -d " " -f1-1`
+line2=`wc -l rpms_centosrepo.lst | cut -d " " -f1-1`
+line3=`wc -l rpms_centos3rdparties.lst | cut -d " " -f1-1`
 let total_line=$line1+$line2+$line3
 echo "We expect to download $total_line RPMs."
 num_of_downloaded_rpms=`find ./output -type f -name "*.rpm" | wc -l | cut -d" " -f1-1`
