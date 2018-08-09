@@ -1,7 +1,7 @@
 #!/bin/bash
 # branch-stx.sh - create STX branches based on today
 #
-# branch-stx.sh [<manifest>]
+# branch-stx.sh [--dry-run] [<manifest>]
 #
 # * get the repo list from stx-manifest in both starlingx and stx-staging remotes
 # * create a new branch
@@ -20,6 +20,12 @@
 # a 'patch' version to SERIES, initially '0'.
 
 set -e
+
+# Grab options
+if [[ "$1" == "--dry-run" ]]; then
+    DRY_RUN=1
+    shift;
+fi
 
 # Where to get the repo list
 MANIFEST=${1:-default.xml}
@@ -53,15 +59,20 @@ defaultbranch=$branch"
     git add .gitreview
     git commit -s -m "Update .gitreview for $branch"
     git show
-    git review -t "create-${branch}"
+    if [[ -z $DRY_RUN ]]; then
+        git review -t "create-${branch}"
+    else
+        echo "### skipping review submission to $branch"
+    fi
 }
 
-# branch_repo <repo-uri> <sha> <branch-base>
+# branch_repo <remote> <repo-uri> <sha> <branch-base>
 function branch_repo {
-    local repo=$1
-    local sha=$2
-    local branch=$3
-    local tag=$4
+    local remote=$1
+    local repo=$2
+    local sha=$3
+    local branch=$4
+    local tag=$5
 
     local repo_dir=${repo##*/}
 
@@ -80,6 +91,31 @@ function branch_repo {
     # tag branch point at $sha
     git tag -f $tag $sha
 
+    # Push the new goodness back up
+    if [[ "$r" == "starlingx" ]]; then
+        # Do the Gerrit way
+
+        # set up gerrit remote
+        git review -s
+
+        # push
+        if [[ -z $DRY_RUN ]]; then
+            git push gerrit $branch
+        else
+            echo "### skipping push to $branch"
+        fi
+
+        update_gitreview $branch
+    else
+        # Do the Github way
+        # push
+        if [[ -z $DRY_RUN ]]; then
+            git push --tags -u origin $branch
+        else
+            echo "### skipping push to $branch"
+        fi
+    fi
+
     cd -
 }
 
@@ -88,24 +124,6 @@ for r in $REMOTES; do
     # crap, convert github URLs to git:
     repos=$(sed -e 's|https://github.com/starlingx-staging|git@github.com:starlingx-staging|g' <<<$repos)
     for i in $repos; do
-        branch_repo $i HEAD $BRANCH $TAG
-        repo_dir=${i##*/}
-        cd $repo_dir
-        if [[ "$r" == "starlingx" ]]; then
-            # Do the Gerrit way
-
-            # set up gerrit remote
-            git review -s
-
-            # push
-            git push gerrit $BRANCH
-
-            update_gitreview $BRANCH
-        else
-            # Do the Github way
-            # push
-            git push --tags -u origin $BRANCH
-        fi
-        cd -
+        branch_repo $r $i HEAD $BRANCH $TAG
     done
 done
