@@ -31,6 +31,9 @@ rpms_from_centos_repo="./rpms_centos.lst"
 rpms_from_centos_3rd_parties="./rpms_centos3rdparties.lst"
 other_downloads="./other_downloads.lst"
 
+# Overall success
+success=1
+
 # Parse out optional -c or -n arguments
 while getopts "c:ngh" o; do
     case "${o}" in
@@ -71,7 +74,7 @@ need_file(){
     for f in $*; do
         if [ ! -e $f ]; then
             echo "ERROR: $f does not exist."
-            exit -1
+            exit 1
         fi
     done
 }
@@ -83,6 +86,7 @@ need_file ${rpms_from_centos_3rd_parties}
 need_file ${rpms_from_centos_repo}
 need_file ${other_downloads}
 need_file tarball-dl.lst mvn-artifacts.lst
+
 
 #download RPMs/SRPMs from 3rd_party websites (not CentOS repos) by "wget"
 echo "step #1: start downloading RPMs/SRPMs from 3rd-party websites..."
@@ -97,43 +101,90 @@ if [ ${use_system_yum_conf} -ne 0 ]; then
 fi
 
 logfile="log_download_3rdparties_L1.txt"
-$rpm_downloader ${rpm_downloader_extra_args} ${rpms_from_3rd_parties} L1 | tee ./logs/$logfile
+$rpm_downloader ${rpm_downloader_extra_args} ${rpms_from_3rd_parties} L1 |& tee ./logs/$logfile
 retcode=${PIPESTATUS[0]}
-if [ $retcode -ne 0 ]; then
-    echo "ERROR: something wrong with downloading, please check the log!!"
+if [ $retcode -ne 0 ];then
+    echo "ERROR: Something wrong with downloading files listed in ${rpms_from_3rd_parties}."
+    echo "   Please check the log at $(pwd)/logs/$logfile !"
+    echo ""
+    success=0
 fi
 
 # download RPMs/SRPMs from 3rd_party repos by "yumdownloader"
 logfile="log_download_centos3rdparties_L1.txt"
-$rpm_downloader ${rpm_downloader_extra_args} ${rpms_from_centos_3rd_parties} L1 | tee ./logs/$logfile
+$rpm_downloader ${rpm_downloader_extra_args} ${rpms_from_centos_3rd_parties} L1 |& tee ./logs/$logfile
+retcode=${PIPESTATUS[0]}
+if [ $retcode -ne 0 ];then
+    echo "ERROR: Something wrong with downloading files listed in ${rpms_from_centos_3rd_parties}."
+    echo "   Please check the log at $(pwd)/logs/$logfile !"
+    echo ""
+    success=0
+fi
 
 if [ ${use_system_yum_conf} -eq 1 ]; then
     # deleting the StarlingX_3rd to avoid pull centos packages from the 3rd Repo.
     \rm -f $REPO_DIR/StarlingX_3rd*.repo
 fi
 
+
 echo "step #2: start 1st round of downloading RPMs and SRPMs with L1 match criteria..."
 #download RPMs/SRPMs from CentOS repos by "yumdownloader"
 logfile="log_download_centos_L1.txt"
-$rpm_downloader ${rpms_from_centos_repo} L1 | tee ./logs/$logfile
+$rpm_downloader ${rpms_from_centos_repo} L1 |& tee ./logs/$logfile
 retcode=${PIPESTATUS[0]}
-if [ $retcode -ne 0 ]; then
+
+K1_logfile="log_download_rpms_from_centos_K1.txt"
+if [ $retcode -ne 1 ]; then
+    # K1 step not needed. Clear any K1 logs from previous download attempts.
+    $rpm_downloader -x ./output/centos_rpms_missing_L1.txt K1 |& tee ./logs/$K1_logfile
+fi
+
+if [ $retcode -eq 0 ]; then
     echo "finish 1st round of RPM downloading successfully!"
+elif [ $retcode -eq 1 ]; then
+    echo "finish 1st round of RPM downloading with missing files!"
     if [ -e "./output/centos_rpms_missing_L1.txt" ]; then
-        missing_num=`wc -l ./output/centos_rpms_missing_L1.txt | cut -d " " -f1-1`
+
+        echo "start 2nd round of downloading Binary RPMs with K1 match criteria..."
+        $rpm_downloader ./output/centos_rpms_missing_L1.txt K1 centos |& tee ./logs/$K1_logfile
+        retcode=${PIPESTATUS[0]}
+        if [ $retcode -eq 0 ]; then
+            echo "finish 2nd round of RPM downloading successfully!"
+        elif [ $retcode -eq 1 ]; then
+            echo "finish 2nd round of RPM downloading with missing files!"
+            if [ -e "./output/rpms_missing_K1.txt" ]; then
+                echo "WARNING: missing RPMs listed in ./output/centos_rpms_missing_K1.txt !"
+            fi
+        fi
+
+        # Remove files found by K1 download from centos_rpms_missing_L1.txt to prevent
+        # false reporting of missing files.
+        grep -v -x -F -f ./output/centos_rpms_found_K1.txt ./output/centos_rpms_missing_L1.txt  > ./output/centos_rpms_missing_L1.tmp
+        mv -f ./output/centos_rpms_missing_L1.tmp ./output/centos_rpms_missing_L1.txt
+
+
+        missing_num=`wc -l ./output/centos_rpms_missing_K1.txt | cut -d " " -f1-1`
         if [ "$missing_num" != "0" ];then
-            echo "ERROR:  -------RPMs missing $missing_num in yumdownloader with L1 match ---------------"
+            echo "ERROR:  -------RPMs missing: $missing_num ---------------"
+            retcode=1
         fi
     fi
 
     if [ -e "./output/centos_srpms_missing_L1.txt" ]; then
         missing_num=`wc -l ./output/centos_srpms_missing_L1.txt | cut -d " " -f1-1`
         if [ "$missing_num" != "0" ];then
-            echo "ERROR: --------- SRPMs missing $missing_num in yumdownloader with L1 match ---------------"
+            echo "ERROR: --------- SRPMs missing: $missing_num ---------------"
+            retcode=1
         fi
     fi
-else
-    echo "finish 1st round with failures!"
+fi
+
+if [ $retcode -ne 0 ]; then
+    echo "ERROR: Something wrong with downloading files listed in ${rpms_from_centos_repo}."
+    echo "   Please check the logs at $(pwd)/logs/$logfile"
+    echo "   and $(pwd)/logs/$K1_logfile !"
+    echo ""
+    success=0
 fi
 
 ## verify all RPMs SRPMs we download for the GPG keys
@@ -147,7 +198,7 @@ line1=`wc -l ${rpms_from_3rd_parties} | cut -d " " -f1-1`
 line2=`wc -l ${rpms_from_centos_repo} | cut -d " " -f1-1`
 line3=`wc -l ${rpms_from_centos_3rd_parties} | cut -d " " -f1-1`
 let total_line=$line1+$line2+$line3
-echo "We expect to download $total_line RPMs."
+echo "We expected to download $total_line RPMs."
 num_of_downloaded_rpms=`find ./output -type f -name "*.rpm" | wc -l | cut -d" " -f1-1`
 echo "There are $num_of_downloaded_rpms RPMs in output directory."
 if [ "$total_line" != "$num_of_downloaded_rpms" ]; then
@@ -162,16 +213,33 @@ fi
 
 echo "step #3: start downloading other files ..."
 
-${other_downloader} ${other_downloads} ./output/stx-r1/CentOS/pike/Binary/ | tee ./logs/log_download_other_files_centos.txt
+${other_downloader} ${other_downloads} ./output/stx-r1/CentOS/pike/Binary/ |& tee ./logs/log_download_other_files_centos.txt
 retcode=${PIPESTATUS[0]}
 if [ $retcode -eq 0 ];then
     echo "step #3: done successfully"
+else
+    echo "step #3: finished with errors"
+    echo "ERROR: Something wrong with downloading from ${other_downloads}."
+    echo "   Please check the log at $(pwd)/logs/log_download_other_files_centos.txt !"
+    echo ""
+    success=0
 fi
+
 
 # StarlingX requires a group of source code pakages, in this section
 # they will be downloaded.
 echo "step #4: start downloading tarball compressed files"
-${tarball_downloader} ${tarball_downloader_extra_args}
+${tarball_downloader} ${tarball_downloader_extra_args}  |& tee ./logs/log_download_tarballs.txt
+retcode=${PIPESTATUS[0]}
+if [ $retcode -eq 0 ];then
+    echo "step #4: done successfully"
+else
+    echo "step #4: finished with errors"
+    echo "ERROR: Something wrong with downloading tarballs."
+    echo "   Please check the log at $(pwd)/logs/log_download_tarballs.txt !"
+    echo ""
+    success=0
+fi
 
 echo "IMPORTANT: The following 3 files are just bootstrap versions. Based"
 echo "on them, the workable images for StarlingX could be generated by"
@@ -179,3 +247,12 @@ echo "running \"update-pxe-network-installer\" command after \"build-iso\""
 echo "    - out/stx-r1/CentOS/pike/Binary/LiveOS/squashfs.img"
 echo "    - out/stx-r1/CentOS/pike/Binary/images/pxeboot/initrd.img"
 echo "    - out/stx-r1/CentOS/pike/Binary/images/pxeboot/vmlinuz"
+
+echo ""
+if [ $success -ne 1 ]; then
+    echo "Warning: Not all download steps succeeded.  You are likely missing files."
+    exit 1
+fi
+
+echo "Success"
+exit 0
