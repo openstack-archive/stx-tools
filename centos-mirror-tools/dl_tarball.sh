@@ -75,6 +75,9 @@ for line in $(cat $tarball_file); do
     directory_name=$(echo $line | cut -d"#" -f2-2)
     tarball_url=$(echo $line | cut -d"#" -f3-3)
 
+    # Remove leading '!' if present
+    tarball_name="${tarball_name//!/}"
+    
     # - For the General category and the Puppet category:
     #   - Packages have a common process: download, decompressed,
     #     change the directory path and compressed.
@@ -87,12 +90,16 @@ for line in $(cat $tarball_file); do
         download_directory=$output_tarball
     fi
 
+    if [ -e $download_path ]; then
+        echo "Already have $download_path"
+        continue
+    fi
+
     # We have 6 packages from the text file starting with the character "!":
     # they require special handling besides the common process: remove directory,
     # remove text from some files, clone a git repository, etc.
 
     if [[ "$line" =~ ^'!' ]]; then
-        tarball_name="${tarball_name//!/}"
         echo $tarball_name
         pushd $output_tarball
         if [ "$tarball_name" = "integrity-kmod-e6aef069.tar.gz" ]; then
@@ -151,7 +158,10 @@ for line in $(cat $tarball_file); do
             else
                 echo "$pkg_version : unknown version"
             fi
-            rm -f "$tarball_name"
+            # Don't delete the original MLNX_OFED_LINUX tarball.
+            # We don't use it, but it will prevent re-downloading this file.
+            #   rm -f "$tarball_name"
+
             rm -rf "MLNX_OFED_SRC-${pkg_version}"
             rm -rf "$directory_name"
         elif [ "$tarball_name" = "qat1.7.upstream.l.1.0.3-42.tar.gz" ]; then

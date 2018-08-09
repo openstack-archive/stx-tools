@@ -12,6 +12,8 @@ if [ $# -lt 3 ]; then
     echo "      using vim-7.4.160 to search vim-7.4.160-2.el7.src.rpm"
     echo "  L3: use name:"
     echo "      using vim to search vim-7.4.160-2.el7.src.rpm"
+    echo "  K1: Use Koji rather than yum repos as a source."
+    echo "      Koji has a longer retention period than epel mirrors."
     echo "from_where: where to download the RPMs: 'centos'from CentOS Repos,"
     echo "otherwise from 3rd-party websets"
     exit -1
@@ -72,33 +74,41 @@ download () {
     echo "now the rpm will come from: $_from"
     for ff in $_list; do
         ## download RPM from CentOS repos
+        download_cmd=""
+        download_url_cmd=""
         if [ "$_from" == "centos" -o "$_from" == "3rd-centos" ]; then
             rpm_name=$ff
-            if [ $_level == "L1" ]; then
+            if [ $_level == "K1" ]; then
                 SFILE=`echo $rpm_name | rev | cut -d'.' -f3- | rev`
-            elif [ $match_level == "L2" ];then
-                SFILE=`echo $rpm_name | rev | cut -d'-' -f2- | rev`
+                download_cmd="wget $(./koji_url.py $rpm_name)"
+                download_url_cmd="echo $(./koji_url.py $rpm_name)"
             else
-                SFILE=`echo $rpm_name | rev | cut -d'-' -f3- | rev`
-            fi
-            echo " ------ using $SFILE to search $rpm_name ------"
-            if [ "$_type" == "src" ];then
-                download_cmd="sudo -E yumdownloader -q -C --source $SFILE"
-                download_url_cmd="sudo -E yumdownloader --urls -q -C --source $SFILE"
-            else
-                download_cmd="sudo -E yumdownloader -q -C $SFILE --archlist=noarch,x86_64"
-                download_url_cmd="sudo -E yumdownloader --urls -q -C $SFILE --archlist=noarch,x86_64"
+                if [ $_level == "L1" ]; then
+                    SFILE=`echo $rpm_name | rev | cut -d'.' -f3- | rev`
+                elif [ $match_level == "L2" ];then
+                    SFILE=`echo $rpm_name | rev | cut -d'-' -f2- | rev`
+                else
+                    SFILE=`echo $rpm_name | rev | cut -d'-' -f3- | rev`
+                fi
+                echo " ------ using $SFILE to search $rpm_name ------"
+                if [ "$_type" == "src" ];then
+                    download_cmd="sudo -E yumdownloader -q -C --source $SFILE"
+                    download_url_cmd="sudo -E yumdownloader --urls -q -C --source $SFILE"
+                else
+                    download_cmd="sudo -E yumdownloader -q -C $SFILE --archlist=noarch,x86_64"
+                    download_url_cmd="sudo -E yumdownloader --urls -q -C $SFILE --archlist=noarch,x86_64"
+                fi
             fi
         else
             rpm_name=`echo $ff | cut -d"#" -f1-1`
             rpm_url=`echo $ff | cut -d"#" -f2-2`
-            download_cmd="wget $rpm_url"
+            shell_download_cmd="wget $rpm_url"
             SFILE=$rpm_name
         fi
-            echo "--> run: $download_cmd"
         if [ "$_type" == "src" ]; then
             if [ ! -e $MDIR_SRC/$rpm_name ]; then
                 echo "Looking for $rpm_name"
+                echo "--> run: $download_cmd"
                 if $download_cmd ; then
                     # Success!   Record download URL.
                     # Use 'sort --unique' because sometimes 
@@ -114,7 +124,7 @@ download () {
                     echo $rpm_name >> $MISSING_SRPMS
                 fi
             else
-                echo "Already have ${MDIR_BIN}/${_type}/$rpm_name"
+                echo "Already have ${MDIR_SRC}/${_type}/$rpm_name"
                 echo $rpm_name >> $FOUND_SRPMS
             fi
         else  ## noarch or x86_64
