@@ -53,9 +53,26 @@ $rpm_downloader ./rpms_from_centos_repo.lst L1 centos | tee ./logs/log_download_
 if [ $? == 0 ]; then
     echo "finish 1st round of RPM downloading successfully!"
     if [ -e "./output/centos_rpms_missing_L1.txt" ]; then
-        missing_num=`wc -l ./output/centos_rpms_missing_L1.txt | cut -d " " -f1-1`
+
+        echo "start 2nd round of downloading Binary RPMs with K1 match criteria..."
+        $rpm_downloader ./output/centos_rpms_missing_L1.txt K1 centos | tee ./logs/log_download_rpms_from_centos_K1.txt
+        if [ $? == 0 ]; then
+            echo "finish 2nd round of RPM downloading successfully!"
+            if [ -e "./output/rpms_missing_K1.txt" ]; then
+                echo "WARNING: we're still missing RPMs listed in ./rpms_missing_K1.txt !"
+            fi
+        fi
+
+        # Remove files found by K1 download from centos_rpms_missing_L1.txt to prevent
+        # false reporting of missing files.
+        grep -v -x -F -f ./output/centos_rpms_found_K1.txt ./output/centos_rpms_missing_L1.txt  > ./output/centos_rpms_missing_L1.tmp
+        mv -f ./output/centos_rpms_missing_L1.tmp ./output/centos_rpms_missing_L1.txt
+
+
+        missing_num=`wc -l ./output/centos_rpms_missing_K1.txt | cut -d " " -f1-1`
         if [ "$missing_num" != "0" ];then
-            echo "ERROR:  -------RPMs missing $missing_num in yumdownloader with L1 match ---------------"
+            echo "ERROR:  -------RPMs missing: $missing_num ---------------"
+            exit 1
         fi
         #echo "start 2nd round of downloading Binary RPMs with L2 match criteria..."
         #$rpm_downloader ./output/centos_rpms_missing_L1.txt L2 centos | tee ./logs/log_download_rpms_from_centos_L2.txt
@@ -70,7 +87,8 @@ if [ $? == 0 ]; then
     if [ -e "./output/centos_srpms_missing_L1.txt" ]; then
         missing_num=`wc -l ./output/centos_srpms_missing_L1.txt | cut -d " " -f1-1`
         if [ "$missing_num" != "0" ];then
-            echo "ERROR: --------- SRPMs missing $missing_num in yumdownloader with L1 match ---------------"
+            echo "ERROR: --------- SRPMs missing: $missing_num ---------------"
+            exit 1
         fi
         #echo "start 2nd round of downloading Source RPMs with L2 match criteria..."
         #$rpm_downloader ./output/centos_srpms_missing_L1.txt L2 centos | tee ./logs/log_download_srpms_from_centos_L2.txt

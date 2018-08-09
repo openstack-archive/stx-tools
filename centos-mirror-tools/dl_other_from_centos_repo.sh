@@ -31,6 +31,11 @@ for ff in $all; do
     if [ "$_type" == "folder" ];then
         mkdir -p $save_path/$_name
     else
+        if [ -e "$save_path/$_name" ]; then
+            echo "Already have $save_path/$_name"
+            continue
+        fi
+
         echo "remote path: $url_prefix/$_name"
         echo "local path: $save_path/$_name"
         if wget $url_prefix/$_name; then
