@@ -1,0 +1,10 @@
+Code-Review+2: Saul Wold <sgw@linux.intel.com>
+Code-Review+1: Don Penney <don.penney@windriver.com>
+Code-Review+2: Dean Troyer <dtroyer@gmail.com>
+Workflow+1: Dean Troyer <dtroyer@gmail.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Thu, 09 Aug 2018 20:57:23 +0000
+Reviewed-on: https://review.openstack.org/589327
+Project: openstack/stx-tools
+Branch: refs/heads/master
