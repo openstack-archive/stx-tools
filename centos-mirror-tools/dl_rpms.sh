@@ -1,19 +1,60 @@
 #!/bin/bash -e
+#
+# SPDX-License-Identifier: Apache-2.0
+#
 # download RPMs/SRPMs from different sources.
 # this script was originated by Brian Avery, and later updated by Yong Hu
 
+usage() {
+    echo "$0 [-n] [-c <yum.conf>] <rpms_list> <match_level> <from_where>"
+    echo ""
+    echo "Options:"
+    echo "  -n: Do not use sudo when performing operations"
+    echo "  -c: Use an alternate yum.conf rather than the system file"
+    echo "  rpm_list: a list of RPM files to be downloaded."
+    echo "  match_level: value could be L1, L2 or L3:"
+    echo "    L1: use name, major version and minor version:"
+    echo "        vim-7.4.160-2.el7 to search vim-7.4.160-2.el7.src.rpm"
+    echo "    L2: use name and major version:"
+    echo "        using vim-7.4.160 to search vim-7.4.160-2.el7.src.rpm"
+    echo "    L3: use name:"
+    echo "        using vim to search vim-7.4.160-2.el7.src.rpm"
+    echo "  from_where: where to download the RPMs: 'centos'from CentOS Repos,"
+    echo "              otherwise from 3rd-party websets"
+    echo ""
+}
+
+# By default, we use "sudo" and we don't use a local yum.conf. These can
+# be overridden via flags.
+SUDOCMD="sudo -E"
+YUMCONFOPT=""
+
+# Parse option flags
+while getopts "c:nh" o; do
+    case "${o}" in
+        n)
+            # No-sudo
+            SUDOCMD=""
+            ;;
+        c)
+            # Use an alternate yum.conf
+            YUMCONFOPT="-c $OPTARG"
+            ;;
+        h)
+            # Help
+            usage
+            exit 0
+            ;;
+        *)
+            usage
+            exit 1
+            ;;
+    esac
+done
+shift $((OPTIND-1))
+
 if [ $# -lt 3 ]; then
-    echo "$0 <rpms_list> <match_level> <from_where>"
-    echo "rpm_list: a list of RPM files to be downloaded."
-    echo "match_level: value could be L1, L2 or L3:"
-    echo "  L1: use name, major version and minor version:"
-    echo "      vim-7.4.160-2.el7 to search vim-7.4.160-2.el7.src.rpm"
-    echo "  L2: use name and major version:"
-    echo "      using vim-7.4.160 to search vim-7.4.160-2.el7.src.rpm"
-    echo "  L3: use name:"
-    echo "      using vim to search vim-7.4.160-2.el7.src.rpm"
-    echo "from_where: where to download the RPMs: 'centos'from CentOS Repos,"
-    echo "otherwise from 3rd-party websets"
+    usage
     exit -1
 fi
 
@@ -83,11 +124,11 @@ download () {
             fi
             echo " ------ using $SFILE to search $rpm_name ------"
             if [ "$_type" == "src" ];then
-                download_cmd="sudo -E yumdownloader -q -C --source $SFILE"
-                download_url_cmd="sudo -E yumdownloader --urls -q -C --source $SFILE"
+                download_cmd="${SUDOCMD} yumdownloader -q ${YUMCONFOPT} -C --source $SFILE"
+                download_url_cmd="${SUDOCMD} yumdownloader --urls -q ${YUMCONFOPT}-C --source $SFILE"
             else
-                download_cmd="sudo -E yumdownloader -q -C $SFILE --archlist=noarch,x86_64"
-                download_url_cmd="sudo -E yumdownloader --urls -q -C $SFILE --archlist=noarch,x86_64"
+                download_cmd="${SUDOCMD} yumdownloader -q -C ${YUMCONFOPT} $SFILE --archlist=noarch,x86_64"
+                download_url_cmd="${SUDOCMD} yumdownloader --urls -q -C ${YUMCONFOPT} $SFILE --archlist=noarch,x86_64"
             fi
         else
             rpm_name=`echo $ff | cut -d"#" -f1-1`
@@ -95,7 +136,7 @@ download () {
             download_cmd="wget $rpm_url"
             SFILE=$rpm_name
         fi
-            echo "--> run: $download_cmd"
+        echo "--> run: $download_cmd"
         if [ "$_type" == "src" ]; then
             if [ ! -e $MDIR_SRC/$rpm_name ]; then
                 echo "Looking for $rpm_name"
@@ -144,7 +185,7 @@ download () {
 }
 
 # prime the cache
-sudo -E yum makecache
+${SUDOCMD} yum ${YUMCONFOPT} makecache
 
 #go to download *.noarch.rpm files
 noarch_rpms=`echo "$(cat $rpms_list | grep '.noarch.rpm')"`
