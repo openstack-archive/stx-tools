@@ -102,7 +102,7 @@ function branch_repo {
 
         # push
         if [[ -z $DRY_RUN ]]; then
-            git push gerrit $branch
+            git push --tags gerrit $branch
         else
             echo "### skipping push to $branch"
         fi
