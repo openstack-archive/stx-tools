@@ -16,7 +16,7 @@ need_file(){
 }
 
 # Check extistence of prerequisites files
-need_file dl_rpms.sh dl_other_from_centos_repo.sh tarball-dl.sh
+need_file dl_rpms.sh dl_other_from_centos_repo.sh dl_tarball.sh
 need_file rpms_from_3rd_parties.lst
 need_file rpms_from_centos_3rd_parties.lst
 need_file rpms_from_centos_repo.lst
@@ -35,7 +35,8 @@ fi
 
 rpm_downloader="./dl_rpms.sh"
 $rpm_downloader ./rpms_from_3rd_parties.lst L1 3rd | tee ./logs/log_download_rpms_from_3rd_party.txt
-if [ $? != 0 ];then
+retcode=${PIPESTATUS[0]}
+if [ $retcode -ne 0 ];then
     echo "ERROR: something wrong with downloading, please check the log!!"
 fi
 
@@ -49,8 +50,8 @@ echo "step #2: start 1st round of downloading RPMs and SRPMs with L1 match crite
 #download RPMs/SRPMs from CentOS repos by "yumdownloader"
 
 $rpm_downloader ./rpms_from_centos_repo.lst L1 centos | tee ./logs/log_download_rpms_from_centos_L1.txt
-
-if [ $? == 0 ]; then
+retcode=${PIPESTATUS[0]}
+if [ $retcode -eq 0 ]; then
     echo "finish 1st round of RPM downloading successfully!"
     if [ -e "./output/centos_rpms_missing_L1.txt" ]; then
         missing_num=`wc -l ./output/centos_rpms_missing_L1.txt | cut -d " " -f1-1`
@@ -111,7 +112,8 @@ echo "step #3: start downloading other files ..."
 
 other_downloader="./dl_other_from_centos_repo.sh"
 $other_downloader ./other_downloads.lst ./output/stx-r1/CentOS/pike/Binary/ | tee ./logs/log_download_other_files_centos.txt
-if [ $? == 0 ];then
+retcode=${PIPESTATUS[0]}
+if [ $retcode -eq 0 ];then
     echo "step #3: done successfully"
 fi
 
