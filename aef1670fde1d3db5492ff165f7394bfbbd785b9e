@@ -1,0 +1,10 @@
+Code-Review+1: Don Penney <don.penney@windriver.com>
+Code-Review+2: Jason McKenna <jason.mckenna@windriver.com>
+Code-Review+2: Erich Cordoba <erich.cordoba.malibran@intel.com>
+Workflow+1: Erich Cordoba <erich.cordoba.malibran@intel.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Fri, 10 Aug 2018 23:05:20 +0000
+Reviewed-on: https://review.openstack.org/591024
+Project: openstack/stx-tools
+Branch: refs/heads/master
