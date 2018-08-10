@@ -781,6 +781,7 @@ lua-devel-5.1.4-15.el7.x86_64.rpm
 lynx-2.8.8-0.3.dev15.el7.x86_64.rpm
 lyx-fonts-2.2.3-1.el7.noarch.rpm
 lz4-1.7.5-2.el7.x86_64.rpm
+lz4-devel-1.7.5-2.el7.x86_64.rpm
 lzo-2.06-8.el7.x86_64.rpm
 lzo-devel-2.06-8.el7.x86_64.rpm
 lzo-minilzo-2.06-8.el7.x86_64.rpm
@@ -1560,7 +1561,7 @@ syslinux-4.05-13.el7.x86_64.rpm
 syslinux-extlinux-4.05-13.el7.x86_64.rpm
 syslog-ng-3.5.6-3.el7.src.rpm
 sysstat-10.1.5-13.el7.x86_64.rpm
-systemd-219-42.el7_4.1.src.rpm
+systemd-219-57.el7.src.rpm
 sysvinit-tools-2.88-14.dsf.el7.x86_64.rpm
 t1lib-5.1.2-14.el7.x86_64.rpm
 taglib-1.8-7.20130218git.el7.x86_64.rpm
