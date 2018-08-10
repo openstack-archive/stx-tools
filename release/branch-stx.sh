@@ -91,7 +91,7 @@ function branch_repo {
     fi
 
     # tag branch point at $sha
-    git tag -f $tag $sha
+    git tag -s -m "Branch $branch" -f $tag $sha
 
     # Push the new goodness back up
     if [[ "$r" == "starlingx" ]]; then
@@ -102,7 +102,7 @@ function branch_repo {
 
         # push
         if [[ -z $DRY_RUN ]]; then
-            git push gerrit $branch
+            git push --tags gerrit $branch
         else
             echo "### skipping push to $branch"
         fi
