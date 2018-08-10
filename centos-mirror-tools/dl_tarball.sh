@@ -93,6 +93,10 @@ for line in $(cat $tarball_file); do
 
     if [[ "$line" =~ ^'!' ]]; then
         tarball_name="${tarball_name//!/}"
+        if [ -e "$output_tarball/$tarball_name" ]; then
+            echo "Already have $tarball_name"
+            continue
+        fi
         echo $tarball_name
         pushd $output_tarball
         if [ "$tarball_name" = "integrity-kmod-e6aef069.tar.gz" ]; then

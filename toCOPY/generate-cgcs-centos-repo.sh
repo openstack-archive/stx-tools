@@ -27,37 +27,66 @@ comps_xml_file=$MY_REPO/build-tools/repo_files/comps.xml
 mock_cfg_dest_file=$MY_REPO/cgcs-centos-repo/mock.cfg.proto
 comps_xml_dest_file=$MY_REPO/cgcs-centos-repo/Binary/comps.xml
 
-if [[ ( ! -d $mirror_dir/Binary ) || ( ! -d $mirror_dir/Source ) ]]; then
-    echo "The mirror $mirror_dir doesn't has the Binary and Source"
+lst_file_dir="$MY_REPO_ROOT_DIR/stx-tools/centos-mirror-tools"
+rpm_lst_files="rpms_from_3rd_parties.lst rpms_from_centos_3rd_parties.lst rpms_from_centos_repo.lst"
+other_lst_file="other_downloads.lst"
+missing_rpms_file=missing.txt
+
+rm -f ${missing_rpms_file}
+
+# Strip trailing / from mirror_dir if it was specified...
+mirror_dir=$(echo ${mirror_dir} | sed "s%/$%%")
+
+if [[ ( ! -d ${mirror_dir}/Binary ) || ( ! -d ${mirror_dir}/Source ) ]]; then
+    echo "The mirror ${mirror_dir} doesn't has the Binary and Source"
     echo "folders. Please provide a valid mirror"
     exit -1
 fi
 
-if [ ! -d "$dest_dir" ]; then
-    mkdir -p "$dest_dir"
+if [ ! -d "${dest_dir}" ]; then
+    mkdir -p "${dest_dir}"
 fi
 
 for t in "Binary" "Source" ; do
-    target_dir=$dest_dir/$t
+    target_dir=${dest_dir}/$t
     if [ ! -d "$target_dir" ]; then
         mkdir -p "$target_dir"
     else
         mv -f "$target_dir" "$target_dir-backup-$timestamp"
         mkdir -p "$target_dir"
     fi
+done
 
-    pushd "$mirror_dir/$t"|| exit 1
-    find . -type d -exec mkdir -p "${target_dir}"/{} \;
-    all_files=$(find . -type f -name "*")
-    popd || exit 1
+unsuccessful_file=0
+for lst_file in ${rpm_lst_files} ; do
+    grep -v "^#" ${lst_file_dir}/${lst_file} | while IFS="#" read rpmname extrafields; do
+        if [ -z "${rpmname}" ]; then
+            continue
+        fi
+        mirror_file=$(find ${mirror_dir} -name ${rpmname})
+        if [ -z "${mirror_file}" ]; then
+            echo "Error -- could not find requested ${rpmname} in ${mirror_dir}"
+            echo ${rpmname} >> ${missing_rpms_file}
+            unsuccessful_file=1
+            continue
+        fi
 
-
-    for ff in $all_files; do
+        # Great, we found the file!  Let's strip the mirror_dir prefix from it...
+        ff=$(echo ${mirror_file} | sed "s%^${mirror_dir}/%%")
         f_name=$(basename "$ff")
         sub_dir=$(dirname "$ff")
-        ln -sf "$mirror_dir/$t/$ff" "$target_dir/$sub_dir"
-        echo "Creating symlink for $target_dir/$sub_dir/$f_name"
-        echo "------------------------------"
+
+        # Make sure we have a subdir (so we don't symlink the first file as
+        # the subdir name)
+        mkdir -p ${dest_dir}/${sub_dir}
+
+        # Link it!
+        echo "Creating symlink for ${dest_dir}/${sub_dir}/${f_name}"
+        ln -sf "${mirror_dir}/$ff" "${dest_dir}/${sub_dir}"
+        if [ $? -ne 0 ]; then
+            echo "Failed ${mirror_file}: ln -sf \"${mirror_dir}/$ff\" \"${dest_dir}/${sub_dir}\""
+            unsuccessful_file=1
+        fi
     done
 done
 
@@ -75,13 +104,30 @@ fi
 echo "Copying mock.cfg.proto and comps.xml files."
 
 if [ -f "$mock_cfg_dest_file" ]; then
-    cp "$mock_cfg_dest_file" "$mock_cfg_dest_file-backup-$timestamp"
+    \cp -f "$mock_cfg_dest_file" "$mock_cfg_dest_file-backup-$timestamp"
 fi
 cp "$mock_cfg_file" "$mock_cfg_dest_file"
 
 if [ -f "$comps_xml_dest_file" ]; then
-    cp "$comps_xml_dest_file" "$comps_xml_dest_file-backup-$timestamp"
+    \cp -f "$comps_xml_dest_file" "$comps_xml_dest_file-backup-$timestamp"
 fi
 cp "$comps_xml_file" "$comps_xml_dest_file"
 
-echo "Done"
+# Populate the contents from other list files
+cat ${lst_file_dir}/${other_lst_file} | grep -v "#" | while IFS=":" read targettype item extrafields; do
+    if [ "${targettype}" == "folder" ]; then
+        echo "Creating folder ${item}"
+        mkdir -p $MY_REPO/cgcs-centos-repo/Binary/${item}
+    fi
+
+    if [ "${targettype}" == "file" ]; then
+        mkdir -p $MY_REPO/cgcs-centos-repo/Binary/$(dirname ${item})
+        echo "Creating symlink for $MY_REPO/cgcs-centos-repo/Binary/${item}"
+        ln -sf ${mirror_dir}/Binary/${item} $MY_REPO/cgcs-centos-repo/Binary/${item}
+    fi
+done
+
+echo "Done creating repo directory"
+if [ ${unsuccessful_file} -ne 0 ]; then
+    echo "WARNING: Some targets could not be found.  Your repo may be incomplete."
+fi
