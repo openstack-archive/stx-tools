@@ -100,3 +100,11 @@ gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 enabled=1
 
+[Starlingx-C7.5.1804-virt-kubernetes-source]
+name=Starlingx-CentOS-7.5.1804 - virt-kubernetes-source
+baseurl=http://vault.centos.org/7.5.1804/virt/Source/kubernetes110
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+enabled=1
+
+
