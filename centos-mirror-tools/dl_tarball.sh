@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # The build of StarlingX relies, besides RPM Binaries and Sources, in this
-# repository which is a collection of packages in the form of Tar Compressed
+# repository which is a collection of 3 packages in the form of Tar Compressed
 # files and 3 RPMs obtained from a Tar Compressed file. This script and a text
 # file containing a list of packages enable their download and the creation
 # of the repository based in common and specific requirements dictated
@@ -26,7 +26,6 @@ fi
 
 logs_dir="$script_path/logs"
 output_main="$script_path/output"
-output_log="$logs_dir/log_download_tarball_missing.txt"
 output_path=$output_main/stx-r1/CentOS/pike
 output_tarball=$output_path/downloads
 output_puppet=$output_tarball/puppet
@@ -37,18 +36,37 @@ if [ ! -d "$logs_dir" ]; then
     mkdir "$logs_dir"
 fi
 
-# Download function using wget command
+output_log_download_failed="$logs_dir/log_download_tarball_missing.txt"
+[ -f $output_log_download_failed ] && rm $output_log_download_failed
+
+output_log_checksum_failed="$logs_dir/log_checksum_tarball_failed.txt"
+[ -f $output_log_checksum_failed ] && rm $output_log_checksum_failed
 
 download_package() {
     wget --spider $1
     if [ $? != 0 ]; then
         echo "$1 is broken"
     else
-        wget -t 5 --wait=15 $1
+        wget -t 5 --wait=1 $1 -O $2
         if [ $? != 0 ]; then
-            echo "$1" > "$output_log"
+            echo "Error: Failed to download $1" 1>&2
+            echo "$1" >> "$output_log_download_failed"
         fi
     fi
+}
+
+check_md5_package() {
+    status=0
+    md5=`md5sum ${1} | awk '{ print $1 }'`
+    if [ ${md5} == ${2} ]; then
+        echo "Checksum Ok"
+    elif [ ${2} == "Skip" ]; then
+        echo "Checksum Skipped"
+    else
+        echo "Checksum Failed"
+        status=1
+    fi
+    return $status
 }
 
 # This script will iterate over the tarball.lst text file and execute specific
@@ -71,9 +89,10 @@ for line in $(cat $tarball_file); do
     #   referenced in the build system recipe.
     # - Column 3, the URL for the package download
 
-    tarball_name=$(echo $line | cut -d"#" -f1-1)
-    directory_name=$(echo $line | cut -d"#" -f2-2)
-    tarball_url=$(echo $line | cut -d"#" -f3-3)
+    tarball_name=$(echo $line | cut -d"," -f1-1)
+    directory_name=$(echo $line | cut -d"," -f2-2)
+    tarball_checksum=$(echo $line | cut -d"," -f3-3)
+    tarball_url=$(echo $line | cut -d"," -f4-4)
 
     # - For the General category and the Puppet category:
     #   - Packages have a common process: download, decompressed,
@@ -87,27 +106,27 @@ for line in $(cat $tarball_file); do
         download_directory=$output_tarball
     fi
 
-    # We have 6 packages from the text file starting with the character "!":
-    # they require special handling besides the common process: remove directory,
-    # remove text from some files, clone a git repository, etc.
+    if [[ "$line" =~ ^MLNX_OFED_LINUX ]]; then
+        download_path=$output_tarball/$directory_name
+    fi
 
-    if [[ "$line" =~ ^'!' ]]; then
-        tarball_name="${tarball_name//!/}"
-        if [ -e "$output_tarball/$tarball_name" ]; then
-            echo "Already have $tarball_name"
-            continue
-        fi
-        echo $tarball_name
-        pushd $output_tarball
+    cd $download_directory
+
+    # We have 6 packages from the text file which require special handling
+    # besides the common process: remove directory, remove text from some
+    # files, clone a git repository, etc.
+
+    echo $tarball_name
+
+    if [ ! -e $download_path ]; then
+        download_package $tarball_url $download_path
         if [ "$tarball_name" = "integrity-kmod-e6aef069.tar.gz" ]; then
-            download_package $tarball_url
             tar xf e6aef069b6e97790cb127d5eeb86ae9ff0b7b0e3.tar.gz
             mv linux-tpmdd-e6aef06/security/integrity/ $directory_name
             tar czvf $tarball_name $directory_name
             rm -rf linux-tpmdd-e6aef06
             rm e6aef069b6e97790cb127d5eeb86ae9ff0b7b0e3.tar.gz
         elif [ "$tarball_name" = "mariadb-10.1.28.tar.gz" ]; then
-            download_package $tarball_url
             mkdir $directory_name
             tar xf $tarball_name --strip-components 1 -C $directory_name
             rm $tarball_name
@@ -137,10 +156,11 @@ for line in $(cat $tarball_file); do
             rm  -rf "$directory_name"
             mv "$tarball_name" "$download_directory"
         elif [[ "$tarball_name" =~ ^'MLNX_OFED_LINUX' ]]; then
+            mv $download_path $tarball_name
             pkg_version=$(echo "$tarball_name" | cut -d "-" -f2-3)
             srpm_path="MLNX_OFED_SRC-${pkg_version}/SRPMS/"
-            download_package "$tarball_url"
             tar -xf "$tarball_name"
+            directory_name=`echo $tarball_name | sed 's/.tgz//'`
             tar -xf "$directory_name/src/MLNX_OFED_SRC-${pkg_version}.tgz"
             # This section of code gets specific SRPMs versions according
             # to the OFED tarbal version,
@@ -158,10 +178,7 @@ for line in $(cat $tarball_file); do
             rm -f "$tarball_name"
             rm -rf "MLNX_OFED_SRC-${pkg_version}"
             rm -rf "$directory_name"
-        elif [ "$tarball_name" = "qat1.7.upstream.l.1.0.3-42.tar.gz" ]; then
-            download_package $tarball_url
         elif [ "$tarball_name" = "tpm-kmod-e6aef069.tar.gz" ]; then
-            download_package $tarball_url
             tar xf e6aef069b6e97790cb127d5eeb86ae9ff0b7b0e3.tar.gz
             mv linux-tpmdd-e6aef06/drivers/char/tpm $directory_name
             tar czvf $tarball_name $directory_name
@@ -177,17 +194,7 @@ for line in $(cat $tarball_file); do
             mv ibmtpm20tss-tss $directory_name
             tar czvf $tarball_name $directory_name
             rm -rf $directory_name
-        fi
-        popd
-        continue
-    fi
-
-    download_cmd="wget -t 5 --wait=15 $tarball_url -O $download_path"
-
-    if [ ! -e $download_path ]; then
-        if $download_cmd ; then
-            echo "Ok: $download_path"
-            pushd $download_directory
+        else
             directory_name_original=$(tar -tf $tarball_name | head -1 | cut -f1 -d"/")
             if [ "$directory_name" != "$directory_name_original" ]; then
                 mkdir -p $directory_name
@@ -195,14 +202,15 @@ for line in $(cat $tarball_file); do
                 tar -czf $tarball_name $directory_name
                 rm -r $directory_name
             fi
-            popd
-        else
-            echo "Error: Failed to download $tarball_url" 1>&2
-            echo "$tarball_url" > "$output_log"
         fi
+    fi
 
-    else
-        echo "Already have $download_path"
+    cd $script_path
+
+    check_md5_package $download_path $tarball_checksum
+    if [[ $? != 0 ]]; then
+        echo "Error: Checksum failed $tarball_name" 1>&2
+        echo $line >> $output_log_checksum_failed
     fi
 
 done
