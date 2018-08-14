@@ -1841,8 +1841,10 @@ ustr-devel-1.0.4-16.el7.x86_64.rpm
 util-linux-2.23.2-43.el7.src.rpm
 uuid-1.6.2-26.el7.x86_64.rpm
 uuid-devel-1.6.2-26.el7.x86_64.rpm
-vim-7.4.160-2.el7.src.rpm
+vim-common-7.4.160-4.el7.x86_64.rpm
+vim-enhanced-7.4.160-4.el7.x86_64.rpm
 vim-filesystem-7.4.160-4.el7.x86_64.rpm
+vim-minimal-7.4.160-4.el7.x86_64.rpm
 virt-what-1.13-8.el7.x86_64.rpm
 vlgothic-fonts-20130607-2.el7.noarch.rpm
 vlgothic-p-fonts-20130607-2.el7.noarch.rpm
