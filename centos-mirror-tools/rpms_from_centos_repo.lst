@@ -198,7 +198,7 @@ deltarpm-3.6-3.el7.x86_64.rpm
 desktop-file-utils-0.23-1.el7.x86_64.rpm
 device-mapper-multipath-0.4.9-119.el7.x86_64.rpm
 device-mapper-multipath-libs-0.4.9-119.el7.x86_64.rpm
-dhcp-4.2.5-58.el7.centos.src.rpm
+Source/dhcp-4.2.5-68.el7.centos.1.src.rpm
 dibbler-client-1.0.1-0.RC1.2.el7.x86_64.rpm
 diffutils-3.3-4.el7.x86_64.rpm
 dmidecode-3.0-5.el7.x86_64.rpm
