@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # The build of StarlingX relies, besides RPM Binaries and Sources, in this
 # repository which is a collection of packages in the form of Tar Compressed
 # files and 3 RPMs obtained from a Tar Compressed file. This script and a text
@@ -40,6 +39,10 @@ fi
 # Download function using wget command
 
 download_package() {
+    if [ -e $2 ]; then
+        echo "Already have $2"
+        return 1
+    fi
     wget --spider $1
     if [ $? != 0 ]; then
         echo "$1 is broken"
@@ -94,27 +97,32 @@ for line in $(cat $tarball_file); do
     if [[ "$line" =~ ^'!' ]]; then
         tarball_name="${tarball_name//!/}"
         echo $tarball_name
+        download_path=$output_tarball/$tarball_name
         pushd $output_tarball
         if [ "$tarball_name" = "integrity-kmod-e6aef069.tar.gz" ]; then
-            download_package $tarball_url
-            tar xf e6aef069b6e97790cb127d5eeb86ae9ff0b7b0e3.tar.gz
-            mv linux-tpmdd-e6aef06/security/integrity/ $directory_name
-            tar czvf $tarball_name $directory_name
-            rm -rf linux-tpmdd-e6aef06
-            rm e6aef069b6e97790cb127d5eeb86ae9ff0b7b0e3.tar.gz
+            download_package "$tarball_url" "$download_path"
+            if [ $? != 1 ]; then
+                tar xf e6aef069b6e97790cb127d5eeb86ae9ff0b7b0e3.tar.gz
+                mv linux-tpmdd-e6aef06/security/integrity/ $directory_name
+                tar czvf $tarball_name $directory_name
+                rm -rf linux-tpmdd-e6aef06
+                rm e6aef069b6e97790cb127d5eeb86ae9ff0b7b0e3.tar.gz
+            fi
         elif [ "$tarball_name" = "mariadb-10.1.28.tar.gz" ]; then
-            download_package $tarball_url
-            mkdir $directory_name
-            tar xf $tarball_name --strip-components 1 -C $directory_name
-            rm $tarball_name
-            pushd $directory_name
-            rm -rf storage/tokudb
-            rm ./man/tokuft_logdump.1 ./man/tokuftdump.1
-            sed -e s/tokuft_logdump.1//g -i man/CMakeLists.txt
-            sed -e s/tokuftdump.1//g -i man/CMakeLists.txt
-            popd
-            tar czvf $tarball_name $directory_name
-            rm -rf $directory_name
+            download_package "$tarball_url" "$download_path"
+            if [ $? != 1 ]; then
+                mkdir $directory_name
+                tar xf $tarball_name --strip-components 1 -C $directory_name
+                rm $tarball_name
+                pushd $directory_name
+                rm -rf storage/tokudb
+                rm ./man/tokuft_logdump.1 ./man/tokuftdump.1
+                sed -e s/tokuft_logdump.1//g -i man/CMakeLists.txt
+                sed -e s/tokuftdump.1//g -i man/CMakeLists.txt
+                popd
+                tar czvf $tarball_name $directory_name
+                rm -rf $directory_name
+            fi
         # The mvn.repo.tgz tarball will be created downloading a serie of
         # of maven artifacts described in mvn-artifacts file.
         elif [ "$tarball_name" = "mvn.repo.tgz" ]; then
@@ -122,6 +130,10 @@ for line in $(cat $tarball_file); do
             if [ ! -f "$mvn_artf_file" ]; then
                 echo "$mvn_artf_file no found" 1>&2
                 exit 1
+            fi
+            if [ -e "$download_directory/$tarball_name" ];then
+                echo "Already have $download_directory/$tarball_name"
+                continue
             fi
             while read -r artf; do
                 echo "download: $(basename $artf)"
@@ -135,36 +147,43 @@ for line in $(cat $tarball_file); do
         elif [[ "$tarball_name" =~ ^'MLNX_OFED_LINUX' ]]; then
             pkg_version=$(echo "$tarball_name" | cut -d "-" -f2-3)
             srpm_path="MLNX_OFED_SRC-${pkg_version}/SRPMS/"
-            download_package "$tarball_url"
-            tar -xf "$tarball_name"
-            tar -xf "$directory_name/src/MLNX_OFED_SRC-${pkg_version}.tgz"
-            # This section of code gets specific SRPMs versions according
-            # to the OFED tarbal version,
-            if [ "$pkg_version" = "4.2-1.2.0.0" ]; then
-                cp "$srpm_path/libibverbs-41mlnx1-OFED.4.2.1.0.6.42120.src.rpm" .
-            elif [ "$pkg_version" = "4.3-1.0.1.0" ]; then
-                cp "$srpm_path/mlnx-ofa_kernel-4.3-OFED.4.3.1.0.1.1.g8509e41.src.rpm" .
-                cp "$srpm_path/rdma-core-43mlnx1-1.43101.src.rpm" .
-            elif [ "$pkg_version" = "4.3-3.0.2.1" ]; then
-                cp "$srpm_path/mlnx-ofa_kernel-4.3-OFED.4.3.3.0.2.1.gcf60532.src.rpm" .
-                cp "$srpm_path/rdma-core-43mlnx1-1.43302.src.rpm" .
-            else
-                echo "$pkg_version : unknown version"
+            download_package "$tarball_url" "$download_path"
+            if [ $? != 1 ]; then
+                tar -xf "$tarball_name"
+                tar -xf "$directory_name/src/MLNX_OFED_SRC-${pkg_version}.tgz"
+                # This section of code gets specific SRPMs versions according
+                # to the OFED tarbal version,
+                if [ "$pkg_version" = "4.2-1.2.0.0" ]; then
+                    cp "$srpm_path/libibverbs-41mlnx1-OFED.4.2.1.0.6.42120.src.rpm" .
+                elif [ "$pkg_version" = "4.3-1.0.1.0" ]; then
+                    cp "$srpm_path/mlnx-ofa_kernel-4.3-OFED.4.3.1.0.1.1.g8509e41.src.rpm" .
+                    cp "$srpm_path/rdma-core-43mlnx1-1.43101.src.rpm" .
+                elif [ "$pkg_version" = "4.3-3.0.2.1" ]; then
+                    cp "$srpm_path/mlnx-ofa_kernel-4.3-OFED.4.3.3.0.2.1.gcf60532.src.rpm" .
+                    cp "$srpm_path/rdma-core-43mlnx1-1.43302.src.rpm" .
+                else
+                    echo "$pkg_version : unknown version"
+                fi
+                rm -f "$tarball_name"
+                rm -rf "MLNX_OFED_SRC-${pkg_version}"
+                rm -rf "$directory_name"
             fi
-            rm -f "$tarball_name"
-            rm -rf "MLNX_OFED_SRC-${pkg_version}"
-            rm -rf "$directory_name"
         elif [ "$tarball_name" = "qat1.7.upstream.l.1.0.3-42.tar.gz" ]; then
-            download_package $tarball_url
+            download_package "$tarball_url" "$download_path"
         elif [ "$tarball_name" = "tpm-kmod-e6aef069.tar.gz" ]; then
-            download_package $tarball_url
-            tar xf e6aef069b6e97790cb127d5eeb86ae9ff0b7b0e3.tar.gz
-            mv linux-tpmdd-e6aef06/drivers/char/tpm $directory_name
-            tar czvf $tarball_name $directory_name
-            rm -rf linux-tpmdd-e6aef06
-            rm -rf $directory_name
-            rm e6aef069b6e97790cb127d5eeb86ae9ff0b7b0e3.tar.gz
+            download_package "$tarball_url" "$download_path"
+            if [ $? != 1 ]; then
+                tar xf e6aef069b6e97790cb127d5eeb86ae9ff0b7b0e3.tar.gz
+                mv linux-tpmdd-e6aef06/drivers/char/tpm $directory_name
+                tar czvf $tarball_name $directory_name
+                rm -rf linux-tpmdd-e6aef06
+                rm -rf $directory_name
+                rm e6aef069b6e97790cb127d5eeb86ae9ff0b7b0e3.tar.gz
+            fi
         elif [ "$tarball_name" = "tss2-930.tar.gz" ]; then
+            if [ -e $download_path ]; then
+                continue
+            fi
             git clone https://git.code.sf.net/p/ibmtpm20tss/tss ibmtpm20tss-tss
             pushd ibmtpm20tss-tss
             git checkout v930

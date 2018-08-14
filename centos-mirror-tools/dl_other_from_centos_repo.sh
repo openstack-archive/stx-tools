@@ -30,6 +30,9 @@ for ff in $all; do
     _name=`echo $ff | cut -d":" -f2-2`
     if [ "$_type" == "folder" ];then
         mkdir -p $save_path/$_name
+    elif [ -e "$save_path/$_name" ];then
+        echo "Already have $save_path/$_name"
+        continue
     else
         echo "remote path: $url_prefix/$_name"
         echo "local path: $save_path/$_name"
