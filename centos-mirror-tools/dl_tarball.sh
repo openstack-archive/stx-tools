@@ -152,6 +152,7 @@ for line in $(cat $tarball_file); do
             elif [ "$pkg_version" = "4.3-3.0.2.1" ]; then
                 cp "$srpm_path/mlnx-ofa_kernel-4.3-OFED.4.3.3.0.2.1.gcf60532.src.rpm" .
                 cp "$srpm_path/rdma-core-43mlnx1-1.43302.src.rpm" .
+                cp "$srpm_path/libibverbs-41mlnx1-OFED.4.3.2.1.6.43302.src.rpm" .
             else
                 echo "$pkg_version : unknown version"
             fi
