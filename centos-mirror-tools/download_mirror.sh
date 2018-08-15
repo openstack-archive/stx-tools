@@ -87,7 +87,7 @@ need_file tarball-dl.lst mvn-artifacts.lst
 #download RPMs/SRPMs from 3rd_party websites (not CentOS repos) by "wget"
 echo "step #1: start downloading RPMs/SRPMs from 3rd-party websites..."
 
-if [ ${use_system_yum_conf} -eq 0 ]; then
+if [ ${use_system_yum_conf} -ne 0 ]; then
     # Restore StarlingX_3rd repos from backup
     REPO_SOURCE_DIR=/localdisk/yum.repos.d
     REPO_DIR=/etc/yum.repos.d
