@@ -28,7 +28,7 @@ mock_cfg_dest_file=$MY_REPO/cgcs-centos-repo/mock.cfg.proto
 comps_xml_dest_file=$MY_REPO/cgcs-centos-repo/Binary/comps.xml
 
 lst_file_dir="$MY_REPO_ROOT_DIR/stx-tools/centos-mirror-tools"
-rpm_lst_files="rpms_from_3rd_parties.lst rpms_from_centos_3rd_parties.lst rpms_from_centos_repo.lst"
+rpm_lst_files="rpms_3rdparties.lst rpms_centos3rdparties.lst rpms_centos.lst"
 other_lst_file="other_downloads.lst"
 missing_rpms_file=missing.txt
 
