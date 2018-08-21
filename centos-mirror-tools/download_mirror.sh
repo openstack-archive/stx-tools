@@ -130,13 +130,13 @@ fi
 echo "step #2: start 1st round of downloading RPMs and SRPMs with L1 match criteria..."
 #download RPMs/SRPMs from CentOS repos by "yumdownloader"
 logfile="log_download_centos_L1.txt"
-$rpm_downloader ${rpms_from_centos_repo} L1 |& tee ./logs/$logfile
+$rpm_downloader ${rpm_downloader_extra_args} ${rpms_from_centos_repo} L1 |& tee ./logs/$logfile
 retcode=${PIPESTATUS[0]}
 
 K1_logfile="log_download_rpms_from_centos_K1.txt"
 if [ $retcode -ne 1 ]; then
     # K1 step not needed. Clear any K1 logs from previous download attempts.
-    $rpm_downloader -x ./output/centos_rpms_missing_L1.txt K1 |& tee ./logs/$K1_logfile
+    $rpm_downloader ${rpm_downloader_extra_args} -x ./output/centos_rpms_missing_L1.txt K1 |& tee ./logs/$K1_logfile
 fi
 
 if [ $retcode -eq 0 ]; then
@@ -146,7 +146,7 @@ elif [ $retcode -eq 1 ]; then
     if [ -e "./output/centos_rpms_missing_L1.txt" ]; then
 
         echo "start 2nd round of downloading Binary RPMs with K1 match criteria..."
-        $rpm_downloader ./output/centos_rpms_missing_L1.txt K1 centos |& tee ./logs/$K1_logfile
+        $rpm_downloader ${rpm_downloader_extra_args} ./output/centos_rpms_missing_L1.txt K1 centos |& tee ./logs/$K1_logfile
         retcode=${PIPESTATUS[0]}
         if [ $retcode -eq 0 ]; then
             echo "finish 2nd round of RPM downloading successfully!"
