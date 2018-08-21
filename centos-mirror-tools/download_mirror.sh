@@ -15,6 +15,23 @@ usage() {
     echo ""
 }
 
+generate_log_name() {
+    filename=$1
+    level=$2
+    base=$(basename $filename .lst)
+    echo $LOGSDIR"/"$base"_download_"$level".log"
+}
+
+need_file(){
+    for f in $*; do
+        if [ ! -e $f ]; then
+            echo "ERROR: $f does not exist."
+            exit 1
+        fi
+    done
+}
+
+# Downloader scripts
 rpm_downloader="./dl_rpms.sh"
 tarball_downloader="./dl_tarball.sh"
 other_downloader="./dl_other_from_centos_repo.sh"
@@ -68,16 +85,10 @@ echo "--------------------------------------------------------------"
 echo "WARNING: this script HAS TO access internet (http/https/ftp),"
 echo "so please make sure your network working properly!!"
 
-mkdir -p ./logs
 
-need_file(){
-    for f in $*; do
-        if [ ! -e $f ]; then
-            echo "ERROR: $f does not exist."
-            exit 1
-        fi
-    done
-}
+LOGSDIR="logs"
+mkdir -p $LOGSDIR
+
 
 # Check extistence of prerequisites files
 need_file ${rpm_downloader} ${other_downloader} ${tarball_downloader}
@@ -100,23 +111,27 @@ if [ ${use_system_yum_conf} -ne 0 ]; then
     fi
 fi
 
-logfile="log_download_3rdparties_L1.txt"
-$rpm_downloader ${rpm_downloader_extra_args} ${rpms_from_3rd_parties} L1 |& tee ./logs/$logfile
+list=${rpms_from_3rd_parties}
+level=L1
+logfile=$(generate_log_name $list $level)
+$rpm_downloader ${rpm_downloader_extra_args} $list $level |& tee $logfile
 retcode=${PIPESTATUS[0]}
 if [ $retcode -ne 0 ];then
-    echo "ERROR: Something wrong with downloading files listed in ${rpms_from_3rd_parties}."
-    echo "   Please check the log at $(pwd)/logs/$logfile !"
+    echo "ERROR: Something wrong with downloading files listed in $list."
+    echo "   Please check the log at $(pwd)/$logfile !"
     echo ""
     success=0
 fi
 
 # download RPMs/SRPMs from 3rd_party repos by "yumdownloader"
-logfile="log_download_centos3rdparties_L1.txt"
-$rpm_downloader ${rpm_downloader_extra_args} ${rpms_from_centos_3rd_parties} L1 |& tee ./logs/$logfile
+list=${rpms_from_centos_3rd_parties}
+level=L1
+logfile=$(generate_log_name $list $level)
+$rpm_downloader ${rpm_downloader_extra_args} $list $level |& tee $logfile
 retcode=${PIPESTATUS[0]}
 if [ $retcode -ne 0 ];then
-    echo "ERROR: Something wrong with downloading files listed in ${rpms_from_centos_3rd_parties}."
-    echo "   Please check the log at $(pwd)/logs/$logfile !"
+    echo "ERROR: Something wrong with downloading files listed in $list."
+    echo "   Please check the log at $(pwd)/$logfile !"
     echo ""
     success=0
 fi
@@ -129,49 +144,52 @@ fi
 
 echo "step #2: start 1st round of downloading RPMs and SRPMs with L1 match criteria..."
 #download RPMs/SRPMs from CentOS repos by "yumdownloader"
-logfile="log_download_centos_L1.txt"
-$rpm_downloader ${rpm_downloader_extra_args} ${rpms_from_centos_repo} L1 |& tee ./logs/$logfile
+list=${rpms_from_centos_repo}
+level=L1
+logfile=$(generate_log_name $list $level)
+$rpm_downloader ${rpm_downloader_extra_args} $list $level |& tee $logfile
 retcode=${PIPESTATUS[0]}
 
-K1_logfile="log_download_rpms_from_centos_K1.txt"
+
+K1_logfile=$(generate_log_name ${rpms_from_centos_repo} K1)
 if [ $retcode -ne 1 ]; then
     # K1 step not needed. Clear any K1 logs from previous download attempts.
-    $rpm_downloader ${rpm_downloader_extra_args} -x ./output/centos_rpms_missing_L1.txt K1 |& tee ./logs/$K1_logfile
+    $rpm_downloader -x $LOGSDIR/L1_rpms_missing_centos.log K1 |& tee $K1_logfile
 fi
 
 if [ $retcode -eq 0 ]; then
     echo "finish 1st round of RPM downloading successfully!"
 elif [ $retcode -eq 1 ]; then
     echo "finish 1st round of RPM downloading with missing files!"
-    if [ -e "./output/centos_rpms_missing_L1.txt" ]; then
+    if [ -e "$LOGSDIR/L1_rpms_missing_centos.log" ]; then
 
         echo "start 2nd round of downloading Binary RPMs with K1 match criteria..."
-        $rpm_downloader ${rpm_downloader_extra_args} ./output/centos_rpms_missing_L1.txt K1 centos |& tee ./logs/$K1_logfile
+        $rpm_downloader $LOGSDIR/L1_rpms_missing_centos.log K1 centos |& tee $K1_logfile
         retcode=${PIPESTATUS[0]}
         if [ $retcode -eq 0 ]; then
             echo "finish 2nd round of RPM downloading successfully!"
         elif [ $retcode -eq 1 ]; then
             echo "finish 2nd round of RPM downloading with missing files!"
-            if [ -e "./output/rpms_missing_K1.txt" ]; then
-                echo "WARNING: missing RPMs listed in ./output/centos_rpms_missing_K1.txt !"
+            if [ -e "$LOGSDIR/rpms_missing_K1.log" ]; then
+                echo "WARNING: missing RPMs listed in $LOGSDIR/centos_rpms_missing_K1.log !"
             fi
         fi
 
-        # Remove files found by K1 download from centos_rpms_missing_L1.txt to prevent
+        # Remove files found by K1 download from L1_rpms_missing_centos.txt to prevent
         # false reporting of missing files.
-        grep -v -x -F -f ./output/centos_rpms_found_K1.txt ./output/centos_rpms_missing_L1.txt  > ./output/centos_rpms_missing_L1.tmp
-        mv -f ./output/centos_rpms_missing_L1.tmp ./output/centos_rpms_missing_L1.txt
+        grep -v -x -F -f $LOGSDIR/K1_rpms_found_centos.log $LOGSDIR/L1_rpms_missing_centos.log  > $LOGSDIR/L1_rpms_missing_centos.tmp
+        mv -f $LOGSDIR/L1_rpms_missing_centos.tmp $LOGSDIR/L1_rpms_missing_centos.log
 
 
-        missing_num=`wc -l ./output/centos_rpms_missing_K1.txt | cut -d " " -f1-1`
+        missing_num=`wc -l $LOGSDIR/K1_rpms_missing_centos.log | cut -d " " -f1-1`
         if [ "$missing_num" != "0" ];then
             echo "ERROR:  -------RPMs missing: $missing_num ---------------"
             retcode=1
         fi
     fi
 
-    if [ -e "./output/centos_srpms_missing_L1.txt" ]; then
-        missing_num=`wc -l ./output/centos_srpms_missing_L1.txt | cut -d " " -f1-1`
+    if [ -e "$LOGSDIR/L1_srpms_missing_centos.log" ]; then
+        missing_num=`wc -l $LOGSDIR/L1_srpms_missing_centos.log | cut -d " " -f1-1`
         if [ "$missing_num" != "0" ];then
             echo "ERROR: --------- SRPMs missing: $missing_num ---------------"
             retcode=1
@@ -181,17 +199,17 @@ fi
 
 if [ $retcode -ne 0 ]; then
     echo "ERROR: Something wrong with downloading files listed in ${rpms_from_centos_repo}."
-    echo "   Please check the logs at $(pwd)/logs/$logfile"
+    echo "   Please check the logs at $(pwd)/$logfile"
     echo "   and $(pwd)/logs/$K1_logfile !"
     echo ""
     success=0
 fi
 
 ## verify all RPMs SRPMs we download for the GPG keys
-find ./output -type f -name "*.rpm" | xargs rpm -K | grep -i "MISSING KEYS" > ./rpm-gpg-key-missing.txt
+find ./output -type f -name "*.rpm" | xargs rpm -K | grep -i "MISSING KEYS" > $LOGSDIR/rpm-gpg-key-missing.txt
 
 # remove all i686.rpms to avoid pollute the chroot dep chain
-find ./output -name "*.i686.rpm" | tee ./output/all_i686.txt
+find ./output -name "*.i686.rpm" | tee $LOGSDIR/all_i686.txt
 find ./output -name "*.i686.rpm" | xargs rm -f
 
 line1=`wc -l ${rpms_from_3rd_parties} | cut -d " " -f1-1`
@@ -213,14 +231,15 @@ fi
 
 echo "step #3: start downloading other files ..."
 
-${other_downloader} ${other_downloads} ./output/stx-r1/CentOS/pike/Binary/ |& tee ./logs/log_download_other_files_centos.txt
+logfile=$LOGSDIR"/otherfiles_centos_download.log"
+${other_downloader} ${other_downloads} ./output/stx-r1/CentOS/pike/Binary/ |& tee $logfile
 retcode=${PIPESTATUS[0]}
 if [ $retcode -eq 0 ];then
     echo "step #3: done successfully"
 else
     echo "step #3: finished with errors"
     echo "ERROR: Something wrong with downloading from ${other_downloads}."
-    echo "   Please check the log at $(pwd)/logs/log_download_other_files_centos.txt !"
+    echo "   Please check the log at $(pwd)/$logfile!"
     echo ""
     success=0
 fi
@@ -229,14 +248,15 @@ fi
 # StarlingX requires a group of source code pakages, in this section
 # they will be downloaded.
 echo "step #4: start downloading tarball compressed files"
-${tarball_downloader} ${tarball_downloader_extra_args}  |& tee ./logs/log_download_tarballs.txt
+logfile=$LOGSDIR"/tarballs_download.log"
+${tarball_downloader} ${tarball_downloader_extra_args}  |& tee $logfile
 retcode=${PIPESTATUS[0]}
 if [ $retcode -eq 0 ];then
     echo "step #4: done successfully"
 else
     echo "step #4: finished with errors"
     echo "ERROR: Something wrong with downloading tarballs."
-    echo "   Please check the log at $(pwd)/logs/log_download_tarballs.txt !"
+    echo "   Please check the log at $(pwd)/$logfile !"
     echo ""
     success=0
 fi
