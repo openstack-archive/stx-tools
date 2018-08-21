@@ -95,33 +95,22 @@ fi
 timestamp=$(date +%F_%H%M)
 echo $timestamp
 
+
+
 DESTDIR="output"
 MDIR_SRC=$DESTDIR/stx-r1/CentOS/pike/Source
 mkdir -p $MDIR_SRC
 MDIR_BIN=$DESTDIR/stx-r1/CentOS/pike/Binary
 mkdir -p $MDIR_BIN
 
-
+LOGSDIR="logs"
 from=$(get_from $rpms_list)
-FAIL_MOVE_SRPMS="$DESTDIR/${from}_srpms_fail_move_${match_level}.txt"
-FOUND_SRPMS="$DESTDIR/${from}_srpms_found_${match_level}.txt"
-MISSING_SRPMS="$DESTDIR/${from}_srpms_missing_${match_level}.txt"
-URL_SRPMS="$DESTDIR/${from}_srpms_urls_${match_level}.txt"
-
-cat /dev/null > $FAIL_MOVE_SRPMS
-cat /dev/null > $FOUND_SRPMS
+LOG="$LOGSDIR/${from}_failmoved_url_found_${match_level}.log"
+MISSING_SRPMS="$LOGSDIR/${from}_srpms_missing_${match_level}.txt"
+MISSING_RPMS="$LOGSDIR/${from}_rpms_missing_${match_level}.txt"
+cat /dev/null > $LOG
 cat /dev/null > $MISSING_SRPMS
-cat /dev/null > $URL_SRPMS
-
-FAIL_MOVE_RPMS="$DESTDIR/${from}_rpms_fail_move_${match_level}.txt"
-FOUND_RPMS="$DESTDIR/${from}_rpms_found_${match_level}.txt"
-MISSING_RPMS="$DESTDIR/${from}_rpms_missing_${match_level}.txt"
-URL_RPMS="$DESTDIR/${from}_rpms_urls_${match_level}.txt"
-
-cat /dev/null > $FAIL_MOVE_RPMS
-cat /dev/null > $FOUND_RPMS
 cat /dev/null > $MISSING_RPMS
-cat /dev/null > $URL_RPMS
 
 if [ $CLEAN_LOGS_ONLY -eq 1 ];then
     exit 0
@@ -242,21 +231,24 @@ download () {
                     # Success!   Record download URL.
                     # Use 'sort --unique' because sometimes
                     # yumdownloader reports the url twice
-                    $download_url_cmd | sort --unique >> $URL_SRPMS
+                    URL=$($download_url_cmd | sort --unique)
+                    echo "The url is: "$URL
+                    echo "url_srpm:"$URL >> $LOG
 
                     if ! mv -f $SFILE* $MDIR_SRC ; then
                         echo "FAILED to move $rpm_name"
-                        echo $rpm_name >> $FAIL_MOVE_SRPMS
+                        echo "fail_move_srpm:"$rpm_name >> $LOG
                     fi
-                    echo $rpm_name >> $FOUND_SRPMS
+                    echo "found_srpm:"$rpm_name >> $LOG
                 else
                     echo "Warning: $rpm_name not found"
+                    echo "missing_srpm:"$rpm_name >> $LOG
                     echo $rpm_name >> $MISSING_SRPMS
                     rc=1
                 fi
             else
                 echo "Already have ${MDIR_SRC}/${_type}/$rpm_name"
-                echo $rpm_name >> $FOUND_SRPMS
+                echo "already_there_srpm:"$rpm_name >> $LOG
             fi
         else  ## noarch or x86_64
             if [ ! -e ${MDIR_BIN}/${_type}/$rpm_name ]; then
@@ -266,22 +258,25 @@ download () {
                     # Success!   Record download URL.
                     # Use 'sort --unique' because sometimes
                     # yumdownloader reports the url twice
-                    $download_url_cmd | sort --unique >> $URL_RPMS
+                    URL=$($download_url_cmd | sort --unique)
+                    echo "The url is: "$URL
+                    echo "url_rpm:"$URL >> $LOG
 
                     mkdir -p $MDIR_BIN/${_type}
                     if ! mv -f $SFILE* $MDIR_BIN/${_type}/ ; then
                         echo "FAILED to move $rpm_name"
-                        echo $rpm_name >> $FAIL_MOVE_RPMS
+                        echo "fail_move_rpm:"$rpm_name >> $LOG
                     fi
-                    echo $rpm_name >> $FOUND_RPMS
+                    echo "found_rpm:"$rpm_name >> $LOG
                 else
                     echo "Warning: $rpm_name not found"
+                    echo "missing_rpm:"$rpm_name >> $LOG
                     echo $rpm_name >> $MISSING_RPMS
                     rc=1
                 fi
             else
                 echo "Already have ${MDIR_BIN}/${_type}/$rpm_name"
-                echo $rpm_name >> $FOUND_RPMS
+                echo "already_there_rpm:"$rpm_name >> $LOG
             fi
         fi
     done
@@ -304,3 +299,4 @@ fi
 echo "done!!"
 
 exit $dl_rc
+
