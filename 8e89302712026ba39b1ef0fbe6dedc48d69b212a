@@ -1,0 +1,9 @@
+Code-Review+2: yong hu <yong.hu@intel.com>
+Code-Review+2: Saul Wold <sgw@linux.intel.com>
+Workflow+1: Saul Wold <sgw@linux.intel.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Thu, 23 Aug 2018 01:01:57 +0000
+Reviewed-on: https://review.openstack.org/594878
+Project: openstack/stx-tools
+Branch: refs/heads/f/centos75
