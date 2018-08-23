@@ -570,6 +570,7 @@ libedit-3.0-12.20121213cvs.el7.x86_64.rpm
 libedit-devel-3.0-12.20121213cvs.el7.x86_64.rpm
 libepoxy-1.3.1-1.el7.x86_64.rpm
 libepoxy-devel-1.3.1-1.el7.x86_64.rpm
+liberasurecode-1.5.0-1.el7.x86_64.rpm
 liberation-fonts-common-1.07.2-16.el7.noarch.rpm
 liberation-mono-fonts-1.07.2-16.el7.noarch.rpm
 liberation-narrow-fonts-1.07.2-16.el7.noarch.rpm
@@ -880,6 +881,11 @@ openstack-aodh-3.0.4-1.el7.src.rpm
 openstack-macros-2018.1.0-0.noarch.rpm
 openstack-nova-cert-14.0.8-1.el7.noarch.rpm
 openstack-panko-3.0.0-1.el7.src.rpm
+openstack-swift-account-2.15.1-1.el7.noarch.rpm
+openstack-swift-container-2.15.1-1.el7.noarch.rpm
+openstack-swift-doc-2.15.1-1.el7.noarch.rpm
+openstack-swift-object-2.15.1-1.el7.noarch.rpm
+openstack-swift-proxy-2.15.1-1.el7.noarch.rpm
 openvswitch-2.9.0-3.el7.src.rpm
 orc-0.4.26-1.el7.x86_64.rpm
 osinfo-db-tools-1.1.0-1.el7.x86_64.rpm
@@ -1273,6 +1279,7 @@ python-betamax-0.7.0-1.el7.noarch.rpm
 python-Bottleneck-0.7.0-1.el7.x86_64.rpm
 python-bson-3.0.3-1.el7.x86_64.rpm
 python-cachetools-1.1.6-2.el7.noarch.rpm
+python-ceilometermiddleware-1.1.0-1.el7.noarch.rpm
 python-cffi-1.6.0-5.el7.x86_64.rpm
 python-characteristic-14.3.0-4.el7.noarch.rpm
 python-chardet-2.2.1-1.el7_1.noarch.rpm
@@ -1297,6 +1304,7 @@ python-django-compressor-2.0-1.el7.noarch.rpm
 python-django-nose-1.4.3-1.el7.noarch.rpm
 python-django-openstack-auth-3.5.0-1.el7.src.rpm
 python-django-pyscss-2.0.2-1.el7.noarch.rpm
+python-dns-1.12.0-4.20150617git465785f.el7.noarch.rpm
 python-docker-pycreds-1.10.6-1.el7.noarch.rpm
 python-docutils-0.11-0.2.20130715svn7687.el7.noarch.rpm
 python-dogpile-cache-0.6.2-1.el7.noarch.rpm
@@ -1392,6 +1400,7 @@ python-py-1.4.32-1.el7.noarch.rpm
 python-pycadf-common-2.6.0-1.el7.noarch.rpm
 python-pycparser-2.14-1.el7.noarch.rpm
 python-pycurl-7.19.0-19.el7.x86_64.rpm
+python-pyeclib-1.5.0-1.el7.x86_64.rpm
 python-pyelftools-0.22-0.5.git20130619.a1d9681.el7.noarch.rpm
 python-pymongo-3.0.3-1.el7.x86_64.rpm
 python-pytest-cov-2.5.1-1.el7.noarch.rpm
@@ -1419,6 +1428,8 @@ python-sqlparse-0.1.18-5.el7.noarch.rpm
 python-srpm-macros-3-22.el7.noarch.rpm
 python-subprocess32-3.2.6-4.el7.x86_64.rpm
 python-subunit-1.0.0-1.el7.noarch.rpm
+python-swift-2.15.1-1.el7.noarch.rpm
+python-swift-tests-2.15.1-1.el7.noarch.rpm
 python-sysv_ipc-0.4.2-11.el7.x86_64.rpm
 python-tables-3.2.0-1.el7.x86_64.rpm
 python-tablib-0.10.0-1.el7.noarch.rpm
