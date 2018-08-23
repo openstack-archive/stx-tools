@@ -853,7 +853,7 @@ nss-sysinit-3.28.4-1.2.el7_3.x86_64.rpm
 nss-tools-3.28.4-1.2.el7_3.x86_64.rpm
 nss-util-3.28.4-1.0.el7_3.x86_64.rpm
 nss-util-devel-3.28.4-1.0.el7_3.x86_64.rpm
-ntp-4.2.6p5-25.el7.centos.2.src.rpm
+ntp-4.2.6p5-28.el7.centos.src.rpm
 numactl-devel-2.0.9-6.el7_2.x86_64.rpm
 numactl-libs-2.0.9-6.el7_2.x86_64.rpm
 objectweb-asm-3.3.1-9.el7.noarch.rpm
