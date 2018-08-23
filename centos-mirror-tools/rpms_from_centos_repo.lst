@@ -1490,7 +1490,7 @@ rpm-build-libs-4.11.3-32.el7.x86_64.rpm
 rpm-libs-4.11.3-32.el7.x86_64.rpm
 rpm-python-4.11.3-32.el7.x86_64.rpm
 rsync-3.0.9-17.el7.x86_64.rpm
-rsync-3.0.9-18.el7.src.rpm
+rsync-3.1.2-4.el7.src.rpm
 rtctl-1.13-2.el7.noarch.rpm
 rt-setup-1.59-5.el7.noarch.rpm
 ruby-2.0.0.648-33.el7_4.x86_64.rpm
