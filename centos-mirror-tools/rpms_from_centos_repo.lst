@@ -216,7 +216,9 @@ dracut-network-033-535.el7.x86_64.rpm
 dulwich-core-0.16.1-1.el7.x86_64.rpm
 dwz-0.11-3.el7.x86_64.rpm
 dyninst-9.3.1-1.el7.x86_64.rpm
-e2fsprogs-1.42.9-10.el7.src.rpm
+e2fsprogs-1.42.9-12.el7_5.x86_64.rpm
+e2fsprogs-devel-1.42.9-12.el7_5.x86_64.rpm
+e2fsprogs-libs-1.42.9-12.el7_5.x86_64.rpm
 easymock2-2.5.2-12.el7.noarch.rpm
 ebtables-2.0.10-15.el7.x86_64.rpm
 ed-1.9-4.el7.x86_64.rpm
