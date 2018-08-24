@@ -849,7 +849,7 @@ nspr-devel-4.13.1-1.0.el7_3.x86_64.rpm
 nss-3.28.4-1.2.el7_3.x86_64.rpm
 nss_compat_ossl-0.9.6-8.el7.x86_64.rpm
 nss-devel-3.28.4-1.2.el7_3.x86_64.rpm
-nss-pam-ldapd-0.8.13-8.el7.src.rpm
+nss-pam-ldapd-0.8.13-16.el7.src.rpm
 nss-pem-1.0.3-4.el7.x86_64.rpm
 nss-sysinit-3.28.4-1.2.el7_3.x86_64.rpm
 nss-tools-3.28.4-1.2.el7_3.x86_64.rpm
