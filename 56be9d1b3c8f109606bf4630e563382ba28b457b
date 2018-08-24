@@ -1,0 +1,9 @@
+Code-Review+2: Scott Little <scott.little@windriver.com>
+Code-Review+2: Erich Cordoba <erich.cordoba.malibran@intel.com>
+Workflow+1: Jason McKenna <jason.mckenna@windriver.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Fri, 24 Aug 2018 18:49:52 +0000
+Reviewed-on: https://review.openstack.org/596376
+Project: openstack/stx-tools
+Branch: refs/heads/master
