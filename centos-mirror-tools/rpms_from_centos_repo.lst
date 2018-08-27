@@ -1371,7 +1371,7 @@ python-oslo-messaging-5.30.0-1.el7.src.rpm
 python-oslo-middleware-lang-3.30.0-1.el7.noarch.rpm
 python-oslo-policy-lang-1.25.1-1.el7.noarch.rpm
 python-oslo-privsep-lang-1.22.0-1.el7.noarch.rpm
-python-oslo-service-1.16.1-1.el7.src.rpm
+python-oslo-service-1.25.1-1.el7.src.rpm
 python-oslo-utils-lang-3.28.0-1.el7.noarch.rpm
 python-oslo-versionedobjects-lang-1.26.0-1.el7.noarch.rpm
 python-oslo-vmware-lang-2.23.0-1.el7.noarch.rpm
