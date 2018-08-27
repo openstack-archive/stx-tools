@@ -1,0 +1,10 @@
+Code-Review+1: Marcela Rosales <marcela.a.rosales.jimenez@intel.com>
+Code-Review+2: Dean Troyer <dtroyer@gmail.com>
+Code-Review+2: Jason McKenna <jason.mckenna@windriver.com>
+Workflow+1: Jason McKenna <jason.mckenna@windriver.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Mon, 27 Aug 2018 15:03:40 +0000
+Reviewed-on: https://review.openstack.org/594167
+Project: openstack/stx-tools
+Branch: refs/heads/master
