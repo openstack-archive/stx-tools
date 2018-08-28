@@ -1,0 +1,10 @@
+Code-Review+1: zhipeng liu <zhipengs.liu@intel.com>
+Code-Review+1: Lin Shuicheng <shuicheng.lin@intel.com>
+Code-Review+2: Saul Wold <sgw@linux.intel.com>
+Workflow+1: Yi Wang <yi.c.wang@intel.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Tue, 28 Aug 2018 01:45:34 +0000
+Reviewed-on: https://review.openstack.org/595981
+Project: openstack/stx-tools
+Branch: refs/heads/f/centos75
