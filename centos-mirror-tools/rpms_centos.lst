@@ -1096,6 +1096,7 @@ python2-cursive-0.1.2-1.el7.noarch.rpm
 python2-cycler-0.10.0-2.el7.noarch.rpm
 python2-Cython-0.25.2-3.el7.x86_64.rpm
 python2-daiquiri-1.2.1-1.el7.noarch.rpm
+python2-dateutil-2.6.1-1.el7.noarch.rpm
 python2-ddt-1.1.3-1.el7.noarch.rpm
 python2-debtcollector-1.17.0-1.el7.noarch.rpm
 python2-deprecation-1.0-3.el7.noarch.rpm
@@ -1116,6 +1117,7 @@ python2-gabbi-1.33.0-1.el7.noarch.rpm
 python2-gevent-1.1.2-2.el7.x86_64.rpm
 python2-gflags-2.0-5.el7.noarch.rpm
 python2-gnocchiclient-3.3.1-1.el7.noarch.rpm
+python2-google-auth-1.3.0-1.el7.noarch.rpm
 python2-greenlet-0.4.9-1.el7.x86_64.rpm
 python2-hacking-0.13.0-1.el7.noarch.rpm
 python2-idna-2.5-1.el7.noarch.rpm
@@ -1131,7 +1133,7 @@ python2-jsonschema-2.5.1-3.el7.noarch.rpm
 python2-keystoneauth1-3.1.0-1.el7.noarch.rpm
 python2-keystoneclient-3.13.0-1.el7.noarch.rpm
 python2-kombu-4.0.2-5.el7.noarch.rpm
-python2-kubernetes-1.0.0-0.3.b3.el7.noarch.rpm
+python2-kubernetes-4.0.0-1.el7.noarch.rpm
 python2-lz4-0.9.0-1.el7.x86_64.rpm
 python2-marathon-0.8.8-1.el7.noarch.rpm
 python2-markupsafe-0.23-16.el7.x86_64.rpm
@@ -1204,6 +1206,7 @@ python2-pytest-3.0.6-2.el7.noarch.rpm
 python2-qpid-proton-0.24.0-1.el7.x86_64.rpm
 python2-rcssmin-1.0.6-2.el7.x86_64.rpm
 python2-reno-2.5.0-1.el7.noarch.rpm
+python2-requests-oauthlib-0.8.0-5.el7.noarch.rpm
 python2-requestsexceptions-1.3.0-1.el7.noarch.rpm
 python2-retryz-0.1.8-1.el7.noarch.rpm
 python2-rfc3986-0.3.1-1.el7.noarch.rpm
@@ -1294,6 +1297,7 @@ python-croniter-0.3.4-2.el7.noarch.rpm
 python-d2to1-0.2.11-1.el7.noarch.rpm
 python-daemon-1.6-4.el7.noarch.rpm
 python-dateutil-2.4.2-1.el7.noarch.rpm
+python-dateutil-2.6.1-1.el7.src.rpm
 python-decorator-3.4.0-3.el7.noarch.rpm
 python-deltarpm-3.6-3.el7.x86_64.rpm
 python-django-1.8.14-1.el7.noarch.rpm
@@ -1321,6 +1325,7 @@ python-flake8-2.4.1-2.el7.noarch.rpm
 python-flask-0.10.1-4.el7.noarch.rpm
 python-freezegun-0.3.8-2.el7.noarch.rpm
 python-glance-store-0.22.0-1.el7.src.rpm
+python-google-auth-1.3.0-1.el7.src.rpm
 python-heatclient-1.11.0-1.el7.src.rpm
 python-httplib2-0.9.2-1.el7.noarch.rpm
 python-iniparse-0.4-9.el7.noarch.rpm
@@ -1341,6 +1346,7 @@ python-keystoneclient-3.13.0-1.el7.src.rpm
 python-keystonemiddleware-4.17.0-1.el7.src.rpm
 python-kitchen-1.1.1-5.el7.noarch.rpm
 python-kmod-0.9-4.el7.x86_64.rpm
+python-kubernetes-4.0.0-1.el7.src.rpm
 python-ldap-2.4.15-2.el7.x86_64.rpm
 python-ldappool-1.0-4.el7.noarch.rpm
 python-lesscpy-0.9j-4.el7.noarch.rpm
