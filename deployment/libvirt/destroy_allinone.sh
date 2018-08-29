@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-CONTROLLER=controller-allinone
+BRIDGE_INTERFACE=${BRIDGE_INTERFACE:-stxbr}
+CONTROLLER=${CONTROLLER:-controller-allinone}
 DOMAIN_DIRECTORY=vms
-NETWORK_INTERFACE=virbr
 
 for i in {0..1}; do
     CONTROLLER_NODE=${CONTROLLER}-${i}
@@ -17,13 +17,5 @@ for i in {0..1}; do
         sudo rm -rf /var/lib/libvirt/images/${CONTROLLER_NODE}-0.img
         sudo rm -rf /var/lib/libvirt/images/${CONTROLLER_NODE}-1.img
         [ -e ${DOMAIN_FILE} ] && rm ${DOMAIN_FILE}
-    fi
-done
-
-for i in {1..4}; do
-    NETWORK_INTERFACE_NAME=${NETWORK_INTERFACE}$i
-    if [ -d "/sys/class/net/${NETWORK_INTERFACE_NAME}" ]; then
-        sudo ifconfig ${NETWORK_INTERFACE_NAME} down
-        sudo brctl delbr ${NETWORK_INTERFACE_NAME}
     fi
 done
