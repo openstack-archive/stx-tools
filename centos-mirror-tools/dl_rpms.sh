@@ -40,6 +40,7 @@ get_from() {
 # By default, we use "sudo" and we don't use a local yum.conf. These can
 # be overridden via flags.
 SUDOCMD="sudo -E"
+RELEASEVER="--releasever=7"
 YUMCONFOPT=""
 
 CLEAN_LOGS_ONLY=0
@@ -59,6 +60,7 @@ while getopts "c:nxh" o; do
         c)
             # Use an alternate yum.conf
             YUMCONFOPT="-c $OPTARG"
+            RELEASEVER="--$(grep releasever= ${OPTARG})"
             ;;
         h)
             # Help
@@ -215,11 +217,11 @@ download () {
                 echo " ------ using $SFILE to search $rpm_name ------"
                 # Yumdownloader with the appropriate flag for src, noarch or x86_64
                 if [ "$_type" == "src" ];then
-                    download_cmd="${SUDOCMD} yumdownloader -q ${YUMCONFOPT} -C --source $SFILE"
-                    download_url_cmd="${SUDOCMD} yumdownloader --urls -q ${YUMCONFOPT}-C --source $SFILE"
+                    download_cmd="${SUDOCMD} yumdownloader -q ${YUMCONFOPT} ${RELEASEVER} -C --source $SFILE"
+                    download_url_cmd="${SUDOCMD} yumdownloader --urls -q ${YUMCONFOPT} ${RELEASEVER} -C --source $SFILE"
                 else
-                    download_cmd="${SUDOCMD} yumdownloader -q -C ${YUMCONFOPT} $SFILE --archlist=noarch,x86_64"
-                    download_url_cmd="${SUDOCMD} yumdownloader --urls -q -C ${YUMCONFOPT} $SFILE --archlist=noarch,x86_64"
+                    download_cmd="${SUDOCMD} yumdownloader -q -C ${YUMCONFOPT} ${RELEASEVER} $SFILE --arcgglist=noarch,x86_64"
+                    download_url_cmd="${SUDOCMD} yumdownloader --urls -q -C ${YUMCONFOPT} ${RELEASEVER} $SFILE --archlist=noarch,x86_64"
                 fi
             fi
         else
@@ -296,7 +298,7 @@ download () {
 }
 
 # Prime the cache
-${SUDOCMD} yum ${YUMCONFOPT} makecache
+${SUDOCMD} yum ${YUMCONFOPT} ${RELEASEVER} makecache
 
 # Download files
 if [ -s "$rpms_list" ];then
