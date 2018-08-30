@@ -38,6 +38,8 @@ ERROR_LOG_FILE="mirror-check-failures.log"
 truncate -s 0 $ERROR_LOG_FILE
 retcode=0
 extra_opts=""
+RELEASEVER="--releasever=7"
+
 
 usage() {
     echo "$0 [-c <yum.conf>]"
@@ -76,7 +78,7 @@ get_repoquery_info() {
     else
         repoquery_opts=
     fi
-    repoquery $extra_opts -C --qf '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}' \
+    repoquery $extra_opts ${RELEASEVER} -C --qf '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}' \
               $repoquery_opts "$_package_name"
 }
 
@@ -124,7 +126,7 @@ while getopts "c:" opt; do
 done
 
 info "Getting yum cache"
-if ! yum $extra_opts makecache; then
+if ! yum $extra_opts ${RELEASEVER} makecache; then
     error "There was a problem getting yum cache"
     exit 1
 fi
