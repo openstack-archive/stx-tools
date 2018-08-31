@@ -1029,7 +1029,7 @@ puppet-etcd-1.11.0-1.f43e129git.el7.noarch.rpm
 puppet-firewall-1.8.1-2.46a6119git.el7.noarch.rpm
 puppet-glance-11.3.0-1.el7.src.rpm
 puppet-gnocchi-11.3.0-1.el7.src.rpm
-puppet-haproxy-1.5.0-4.6ffcb07git.el7.src.rpm
+puppet-haproxy-1.5.0-2.6ee8180git.el7.src.rpm
 puppet-heat-11.3.0-1.el7.src.rpm
 puppet-horizon-11.5.0-1.el7.src.rpm
 puppet-inifile-1.6.0-2.c1f1d1egit.el7.noarch.rpm
