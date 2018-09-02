@@ -5,3 +5,9 @@ localrc
 toCOPY/.gitconfig
 centos-mirror-tools/logs/
 centos-mirror-tools/output/
+
+# Sphinx documentation
+docs/build/
+
+# Release Notes documentation
+releasenotes/build
