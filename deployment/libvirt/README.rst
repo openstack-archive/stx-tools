@@ -25,7 +25,7 @@ an interactive shell that configures everything.  Here's an example::
 	export INTERNAL_NETWORK=172.30.20.0/24
 	export INTERNAL_IP=172.30.20.1/24
 	export EXTERNAL_NETWORK=192.168.20.0/24
-    export EXTERNAL_IP=192.168.20.1/24
+	export EXTERNAL_IP=192.168.20.1/24
 
 There is also a script ``cleanup_network.sh`` that will remove networking
 configuration from libvirt.
@@ -46,7 +46,7 @@ Controllers
 
 There are two scripts for creating the controllers: ``setup_allinone.sh`` and
 ``setup_standard_controller.sh``.  They are operated in the same manner but build
-different StarlingX cloud configurations.  Choose wisely.
+different StarlingX cloud configurations. Choose wisely.
 
 You need an ISO file for the installation, these scripts take a name with the
 ``-i`` option::
@@ -55,11 +55,12 @@ You need an ISO file for the installation, these scripts take a name with the
 
 And the setup will begin.  The scripts create one or more VMs and start the boot
 of the first controller, named oddly enough ``controller-0``.  If you have Xwindows
-available you will get virt-manager running.  If not, Ctrl-C out of that attempt if
-it doesn't return to a shell prompt.  Then connect to the serial console::
+available you will get virt-manager running.
+If not, Ctrl-C out of that attempt if it doesn't return to a shell prompt.
+Then connect to the serial console::
 
 	virsh console madcloud-0
 
-Continue the usual SterlingX installation from this point forward.
+Continue the usual StarlingX installation from this point forward.
 
 Tear down the VMs using ``destroy_allinone.sh`` and ``destroy_standard_controller.sh``.
