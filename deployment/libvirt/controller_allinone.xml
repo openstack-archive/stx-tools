@@ -1,5 +1,5 @@
 <domain type='kvm' id='164'>
-  <name>controller-0-allinone</name>
+  <name>NAME</name>
   <memory unit='MiB'>24576</memory>
   <currentMemory unit='MiB'>24576</currentMemory>
   <vcpu placement='static'>4</vcpu>
@@ -43,15 +43,23 @@
       <alias name='sata0-0-1'/>
       <address type='drive' controller='0' bus='0' target='0' unit='1'/>
     </disk>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2'/>
+      <source file='DISK2'/>
+      <backingStore/>
+      <target dev='sdc' bus='sata'/>
+      <alias name='sata0-0-2'/>
+      <address type='drive' controller='0' bus='0' target='0' unit='2'/>
+    </disk>
     <disk type='file' device='cdrom'>
       <driver name='qemu' type='raw'/>
       <source file='ISO'/>
       <backingStore/>
-      <target dev='sdc' bus='sata'/>
+      <target dev='sdd' bus='sata'/>
       <readonly/>
       <boot order='2'/>
-      <alias name='sata0-0-2'/>
-      <address type='drive' controller='0' bus='0' target='0' unit='2'/>
+      <alias name='sata0-0-3'/>
+      <address type='drive' controller='0' bus='0' target='0' unit='3'/>
     </disk>
     <controller type='usb' index='0'>
       <alias name='usb'/>
