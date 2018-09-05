@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source ./functions.sh
+
 BRIDGE_INTERFACE=${BRIDGE_INTERFACE:-stxbr}
 CONTROLLER=${CONTROLLER:-controller}
 COMPUTE=${COMPUTE:-compute}
@@ -15,9 +17,9 @@ for i in {0..1}; do
             sudo virsh destroy ${CONTROLLER_NODE}
         fi
         sudo virsh undefine ${CONTROLLER_NODE}
-        sudo rm -rf /var/lib/libvirt/images/${CONTROLLER_NODE}-0.img
-        sudo rm -rf /var/lib/libvirt/images/${CONTROLLER_NODE}-1.img
-        [ -e ${DOMAIN_FILE} ] && rm ${DOMAIN_FILE}
+        delete_disk /var/lib/libvirt/images/${CONTROLLER_NODE}-0.img
+        delete_disk /var/lib/libvirt/images/${CONTROLLER_NODE}-1.img
+        [ -e ${DOMAIN_FILE} ] && delete_xml ${DOMAIN_FILE}
     fi
 done
 
@@ -31,8 +33,8 @@ for i in {0..1}; do
             sudo virsh destroy ${COMPUTE_NODE}
         fi
         sudo virsh undefine ${COMPUTE_NODE}
-        sudo rm -rf /var/lib/libvirt/images/${COMPUTE_NODE}-0.img
-        sudo rm -rf /var/lib/libvirt/images/${COMPUTE_NODE}-1.img
-        [ -e ${DOMAIN_FILE} ] && rm ${DOMAIN_FILE}
+        delete_disk /var/lib/libvirt/images/${COMPUTE_NODE}-0.img
+        delete_disk /var/lib/libvirt/images/${COMPUTE_NODE}-1.img
+        [ -e ${DOMAIN_FILE} ] && delete_xml ${DOMAIN_FILE}
     fi
 done
