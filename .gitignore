@@ -7,7 +7,7 @@ centos-mirror-tools/logs/
 centos-mirror-tools/output/
 
 # Sphinx documentation
-docs/build/
+doc/build/
 
 # Release Notes documentation
 releasenotes/build
