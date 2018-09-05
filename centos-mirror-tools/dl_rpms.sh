@@ -5,6 +5,18 @@
 # download RPMs/SRPMs from different sources.
 # this script was originated by Brian Avery, and later updated by Yong Hu
 
+set -o errexit
+set -o nounset
+
+# By default, we use "sudo" and we don't use a local yum.conf. These can
+# be overridden via flags.
+
+SUDOCMD="sudo -E"
+RELEASEVER="--releasever=7"
+YUMCONFOPT=""
+
+source utils.sh
+
 usage() {
     echo "$0 [-n] [-c <yum.conf>] <rpms_list> <match_level> "
     echo ""
@@ -29,19 +41,6 @@ usage() {
     echo ""
 }
 
-get_from() {
-    list=$1
-    base=$(basename $list .lst) # removing lst extension 
-    base=$(basename $base .log) # removing log extension
-    from=$(echo $base | rev | cut -d'_' -f1-1 | rev)
-    echo $from
-}
-
-# By default, we use "sudo" and we don't use a local yum.conf. These can
-# be overridden via flags.
-SUDOCMD="sudo -E"
-RELEASEVER="--releasever=7"
-YUMCONFOPT=""
 
 CLEAN_LOGS_ONLY=0
 dl_rc=0
@@ -94,11 +93,8 @@ if [ ! -z "$2" -a "$2" != " " ];then
     match_level=$2
 fi
 
-
 timestamp=$(date +%F_%H%M)
 echo $timestamp
-
-
 
 DESTDIR="output"
 MDIR_SRC=$DESTDIR/stx-r1/CentOS/pike/Source
@@ -124,178 +120,51 @@ if [ $CLEAN_LOGS_ONLY -eq 1 ];then
     exit 0
 fi
 
-# Function to split an rpm filename into parts.
-#
-# Returns a space seperated list containing:
-#    <NAME> <VERSION> <RELEASE> <ARCH> <EPOCH>
-#
-split_filename () {
-    local rpm_filename=$1
-
-    local RPM=""
-    local SFILE=""
-    local ARCH=""
-    local RELEASE=""
-    local VERSION=""
-    local NAME=""
-
-    RPM=$(echo $rpm_filename | rev | cut -d'.' -f-1 | rev)
-    SFILE=$(echo $rpm_filename | rev | cut -d'.' -f2- | rev)
-    ARCH=$(echo $SFILE | rev | cut -d'.' -f-1 | rev)
-    SFILE=$(echo $SFILE | rev | cut -d'.' -f2- | rev)
-    RELEASE=$(echo $SFILE | rev | cut -d'-' -f-1 | rev)
-    SFILE=$(echo $SFILE | rev | cut -d'-' -f2- | rev)
-    VERSION=$(echo $SFILE | rev | cut -d'-' -f-1 | rev)
-    NAME=$(echo $SFILE | rev | cut -d'-' -f2- | rev)
-
-    if [[ $NAME = *":"* ]]; then
-        EPOCH=$(echo $NAME | cut -d':' -f-1)
-        NAME=$(echo $NAME | cut -d':' -f2-)
-    fi
-
-    echo "$NAME" "$VERSION" "$RELEASE" "$ARCH" "$EPOCH"
-}
-
-# Function to predict the URL where a rpm might be found.
-# Assumes the rpm was compile for EPEL by fedora's koji.
-koji_url () {
-    local rpm_filename=$1
-
-    local arr=( $(split_filename $rpm_filename) )
-
-    local n=${arr[0]}
-    local v=${arr[1]}
-    local r=${arr[2]}
-    local a=${arr[3]}
-    local e=${arr[4]}
-
-    echo "https://kojipkgs.fedoraproject.org/packages/$n/$v/$r/$a/$n-$v-$r.$a.rpm"
-}
-
 # Function to download different types of RPMs in different ways
 download () {
     local _file=$1
     local _level=$2
+    local _list=$(cat $_file)
+    local _from=$(get_from $_file)
 
-    local _list
-    local _from
-    local _type=""
+    local _arch=""
 
     local rc=0
     local download_cmd=""
-    local download_url_cmd=""
+    local download_url=""
     local rpm_name=""
-    local rpm_url=""
     local SFILE=""
-
-    _list=$(cat $_file)
-    _from=$(get_from $_file)
 
     echo "now the rpm will come from: $_from"
     for ff in $_list; do
-        download_cmd=""
-        download_url_cmd=""
-        _type=$(echo $ff | rev | cut -d'.' -f2-2 | rev)
+        _arch=$(get_arch_from_rpm $ff)
+        rpm_name="$(get_rpm_name $ff)"
+        download_cmd="$(get_download_cmd $ff $_level)"
+        dest_dir="$(get_dest_directory $_arch)"
 
-        # Decide if the list will be downloaded using yumdownloader or wget
-        if [[ $ff != *"#"* ]]; then
-            rpm_name=$ff
-
-            if [ $_level == "K1" ]; then
-                SFILE=`echo $rpm_name | rev | cut -d'.' -f3- | rev`
-                rpm_url=$(koji_url $rpm_name)
-                download_cmd="wget $rpm_url)"
-                download_url_cmd="echo $rpm_url)"
+        if [ ! -e $dest_dir/$rpm_name ]; then
+            echo "Looking for $rpm_name"
+            echo "--> run: $download_cmd"
+            if $download_cmd ; then
+                download_url="$(get_url $ff $_level)"
+                SFILE="$(get_rpm_level_name $rpm_name $_level)"
+                process_result "$_arch" "$dest_dir" "$download_url" "$SFILE"
             else
-                if [ $_level == "L1" ]; then
-                    SFILE=`echo $rpm_name | rev | cut -d'.' -f3- | rev`
-                elif [ $match_level == "L2" ];then
-                    SFILE=`echo $rpm_name | rev | cut -d'-' -f2- | rev`
-                else
-                    SFILE=`echo $rpm_name | rev | cut -d'-' -f3- | rev`
-                fi
-                echo " ------ using $SFILE to search $rpm_name ------"
-                # Yumdownloader with the appropriate flag for src, noarch or x86_64
-                if [ "$_type" == "src" ];then
-                    download_cmd="${SUDOCMD} yumdownloader -q ${YUMCONFOPT} ${RELEASEVER} -C --source $SFILE"
-                    download_url_cmd="${SUDOCMD} yumdownloader --urls -q ${YUMCONFOPT} ${RELEASEVER} -C --source $SFILE"
-                else
-                    download_cmd="${SUDOCMD} yumdownloader -q -C ${YUMCONFOPT} ${RELEASEVER} $SFILE --arcgglist=noarch,x86_64"
-                    download_url_cmd="${SUDOCMD} yumdownloader --urls -q -C ${YUMCONFOPT} ${RELEASEVER} $SFILE --archlist=noarch,x86_64"
-                fi
+                echo "Warning: $rpm_name not found"
+                echo "missing_srpm:$rpm_name" >> $LOG
+                echo $rpm_name >> $MISSING_SRPMS
+                rc=1
             fi
         else
-            # Buid wget command
-            rpm_name=`echo $ff | cut -d"#" -f1-1`
-            rpm_url=`echo $ff | cut -d"#" -f2-2`
-            download_cmd="wget $rpm_url"
-            download_url_cmd="echo $rpm_url"
-            SFILE=$rpm_name
+            echo "Already have $dest_dir/$rpm_name"
+            echo "already_there_srpm:$rpm_name" >> $LOG
         fi
-
-        # Put the RPM in the Binary or Source directory
-        if [ "$_type" == "src" ]; then
-            if [ ! -e $MDIR_SRC/$rpm_name ]; then
-                echo "Looking for $rpm_name"
-                echo "--> run: $download_cmd"
-                if $download_cmd ; then
-                    # Success!   Record download URL.
-                    # Use 'sort --unique' because sometimes
-                    # yumdownloader reports the url twice
-                    URL=$($download_url_cmd | sort --unique)
-                    echo "The url is: $URL"
-                    echo "url_srpm:$URL" >> $LOG
-
-                    if ! mv -f $SFILE* $MDIR_SRC ; then
-                        echo "FAILED to move $rpm_name"
-                        echo "fail_move_srpm:$rpm_name" >> $LOG
-                    fi
-                    echo "found_srpm:$rpm_name" >> $LOG
-                    echo $rpm_name >> $FOUND_SRPMS
-                else
-                    echo "Warning: $rpm_name not found"
-                    echo "missing_srpm:$rpm_name" >> $LOG
-                    echo $rpm_name >> $MISSING_SRPMS
-                    rc=1
-                fi
-            else
-                echo "Already have ${MDIR_SRC}/${_type}/$rpm_name"
-                echo "already_there_srpm:$rpm_name" >> $LOG
-            fi
-        else  ## noarch or x86_64
-            if [ ! -e ${MDIR_BIN}/${_type}/$rpm_name ]; then
-                echo "Looking for $rpm_name..."
-                echo "--> run: $download_cmd"
-                if $download_cmd ; then
-                    # Success!   Record download URL.
-                    # Use 'sort --unique' because sometimes
-                    # yumdownloader reports the url twice
-                    URL=$($download_url_cmd | sort --unique)
-                    echo "The url is: $URL"
-                    echo "url_rpm:$URL" >> $LOG
-
-                    mkdir -p $MDIR_BIN/${_type}
-                    if ! mv -f $SFILE* $MDIR_BIN/${_type}/ ; then
-                        echo "FAILED to move $rpm_name"
-                        echo "fail_move_rpm:$rpm_name" >> $LOG
-                    fi
-                    echo "found_rpm:$rpm_name" >> $LOG
-                    echo $rpm_name >> $FOUND_RPMS
-                else
-                    echo "Warning: $rpm_name not found"
-                    echo "missing_rpm:$rpm_name" >> $LOG
-                    echo $rpm_name >> $MISSING_RPMS
-                    rc=1
-                fi
-            else
-                echo "Already have ${MDIR_BIN}/${_type}/$rpm_name"
-                echo "already_there_rpm:$rpm_name" >> $LOG
-            fi
-        fi
+        echo
     done
 
     return $rc
 }
+
 
 # Prime the cache
 ${SUDOCMD} yum ${YUMCONFOPT} ${RELEASEVER} makecache
@@ -309,7 +178,6 @@ if [ -s "$rpms_list" ];then
     fi
 fi
 
-echo "done!!"
+echo "Done!"
 
 exit $dl_rc
-
