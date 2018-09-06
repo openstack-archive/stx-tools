@@ -65,7 +65,6 @@
       <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
     </controller>
     <interface type='bridge'>
-      <mac address='52:54:00:da:8c:ad'/>
       <source bridge='%BR1%'/>
       <target dev='vnet0'/>
       <model type='e1000'/>
@@ -73,7 +72,6 @@
       <address type='pci' domain='0x0000' bus='0x00' slot='0x06' function='0x0'/>
     </interface>
     <interface type='bridge'>
-      <mac address='52:54:00:da:48:ff'/>
       <source bridge='%BR2%'/>
       <target dev='vnet1'/>
       <model type='e1000'/>
@@ -82,7 +80,6 @@
       <address type='pci' domain='0x0000' bus='0x00' slot='0x07' function='0x0'/>
     </interface>
     <interface type='bridge'>
-      <mac address='52:54:00:54:e6:c2'/>
       <source bridge='%BR3%'/>
       <target dev='vnet2'/>
       <model type='virtio'/>
@@ -90,7 +87,6 @@
       <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0'/>
     </interface>
     <interface type='bridge'>
-      <mac address='52:54:00:c5:62:6d'/>
       <source bridge='%BR4%'/>
       <target dev='vnet3'/>
       <model type='virtio'/>
