@@ -1040,7 +1040,7 @@ puppet-glance-11.3.0-1.el7.src.rpm
 puppet-gnocchi-11.3.0-1.el7.src.rpm
 python-gobject-3.22.0-1.el7_4.1.x86_64.rpm
 python-gobject-base-3.22.0-1.el7_4.1.x86_64.rpm
-puppet-haproxy-1.5.0-2.6ee8180git.el7.src.rpm
+puppet-haproxy-1.5.0-4.6ffcb07git.el7.src.rpm
 puppet-heat-11.3.0-1.el7.src.rpm
 puppet-horizon-11.5.0-1.el7.src.rpm
 puppet-inifile-1.6.0-2.c1f1d1egit.el7.noarch.rpm
