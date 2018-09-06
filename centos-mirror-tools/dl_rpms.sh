@@ -60,7 +60,7 @@ while getopts "c:nxh" o; do
         c)
             # Use an alternate yum.conf
             YUMCONFOPT="-c $OPTARG"
-            RELEASEVER="--$(grep releasever= ${OPTARG})"
+            grep -q "releasever=" $OPTARG && RELEASEVER="--$(grep releasever= ${OPTARG})"
             ;;
         h)
             # Help

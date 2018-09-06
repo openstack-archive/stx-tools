@@ -115,7 +115,7 @@ while getopts "c:" opt; do
     case $opt in
         c)
             extra_opts="-c ${OPTARG}"
-            RELEASEVER="--$(grep releasever= ${OPTARG})"
+            grep -q "releasever=" $OPTARG && RELEASEVER="--$(grep releasever= ${OPTARG})"
             ;;
         \?)
             echo "Invalid option: -$OPTARG" >&2
