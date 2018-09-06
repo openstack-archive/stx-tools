@@ -220,7 +220,7 @@ download () {
                     download_cmd="${SUDOCMD} yumdownloader -q ${YUMCONFOPT} ${RELEASEVER} -C --source $SFILE"
                     download_url_cmd="${SUDOCMD} yumdownloader --urls -q ${YUMCONFOPT} ${RELEASEVER} -C --source $SFILE"
                 else
-                    download_cmd="${SUDOCMD} yumdownloader -q -C ${YUMCONFOPT} ${RELEASEVER} $SFILE --arcgglist=noarch,x86_64"
+                    download_cmd="${SUDOCMD} yumdownloader -q -C ${YUMCONFOPT} ${RELEASEVER} $SFILE --archlist=noarch,x86_64"
                     download_url_cmd="${SUDOCMD} yumdownloader --urls -q -C ${YUMCONFOPT} ${RELEASEVER} $SFILE --archlist=noarch,x86_64"
                 fi
             fi
