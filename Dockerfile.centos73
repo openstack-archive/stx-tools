@@ -24,7 +24,7 @@ RUN yum install -y vim-enhanced openssl-devel gettext mongodb mongodb-server mar
 
 # pip installs
 RUN pip install python-subunit junitxml --upgrade && \
-    pip install tox --upgrade
+    pip install tox pycryptodome --upgrade
 
 # Install repo tool
 RUN curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo && \
