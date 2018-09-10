@@ -1,0 +1,643 @@
+#!/bin/bash -e
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Summary: This tool includes a group of features for StarlingX ISO
+# creation.
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+# Version control
+VERSION=0.1
+CENTOS_VERSION=7.3
+
+# StarlingX docker image customization
+USER="${USER:-$(id -un)}"
+MYUNAME="${MYUNAME:-builder}"
+STX_CONTAINER_TAG="starlingx/${USER}-stx-builder:${CENTOS_VERSION}"
+STX_CONTAINER_NAME="${USER}-centos-builder-${$}"
+
+# StarlingX docker container execution customization
+WORKSPACE_NAME="starlingx"
+WORK_DIRECTORY="${PWD}/${WORKSPACE_NAME}"
+GUEST_LOCALDISK="localdisk"
+PROJECT="${PROJECT:-test}"
+PROJECT_PATH="/${GUEST_LOCALDISK}/designer/${MYUNAME}/${PROJECT}"
+MIRROR_PATH="$WORK_DIRECTORY"
+DISTRO_NAME="CentOS"
+MIRROR_NAME="mirror"
+MIRROR_DIRECTORY="${MIRROR_PATH}/${MIRROR_NAME}"
+STX_TOOLS_REPO="git://git.openstack.org/openstack/stx-tools"
+BUILD_MIRROR_FLAG="false"
+BUILD_ISO_FLAG="false"
+STARLINGX_RELEASE_NAME="r1"
+OPENSTACK_RELEASE="pike"
+BUILDRC_FILE="${PWD}/buildrc"
+
+# Customization of this tool
+LOG_PATH="${WORKSPACE_NAME}/log/stx"
+LOG_FILE="${LOG_PATH}/stx-$(date +%s).log"
+
+
+function build_mirror()
+{
+    declare OPTIND
+
+    while getopts "n:p:hw:c" opt; do
+        case "${opt}" in
+        c)
+           CLEAN_FLAG="true"
+        ;;
+        n)
+            MIRROR_NAME="${OPTARG}"
+        ;;
+        h)
+            build_mirror_help
+            exit 0
+        ;;
+        p)
+            MIRROR_PATH="${OPTARG}"
+        ;;
+        w)
+            WORK_DIRECTORY="${OPTARG}"
+        ;;
+        *)
+            exit 1
+        ;;
+        esac
+    done
+    shift $((OPTIND-1))
+
+    MIRROR_DIRECTORY="${MIRROR_PATH}/${MIRROR_NAME}"
+    build_docker_image
+    init_work_directory
+    docker_run_mirror
+}
+
+function init_mirror_path()
+{
+    if [ ! -d "${MIRROR_DIRECTORY}" ]; then
+        print -i "Creating mirror path directory"
+        mkdir -p "${MIRROR_DIRECTORY}"
+    else
+        print -i "Using existing mirror path"
+    fi
+}
+
+function init_work_directory()
+{
+    local project_path="${WORK_DIRECTORY}/${PROJECT_PATH}"
+    local repo_path="${project_path}/.repo"
+
+    if [ "${CLEAN_FLAG:-false}" = "true" ]; then
+        if [ "${BUILD_ALL_FLAG}" = "true" ]; then
+            rm -rf "${project_path}"
+            rm -rf "${MIRROR_DIRECTORY}"
+            clean_docker_image
+        else
+            if [ "${BUILD_ISO_FLAG:-false}" = "true" ]; then
+                rm -rf "${project_path}"
+            elif [ "${BUILD_MIRROR_FLAG:-false}" = "true" ]; then
+                rm -rf "${MIRROR_DIRECTORY}"
+            elif [ "${BUILD_DOCKER_IMAGE_FLAG:-false}" = "true" ]; then
+                clean_docker_image
+            fi
+        fi
+    fi
+
+    if [ ! -d "${WORK_DIRECTORY}" ]; then
+        print -i "Creating working directory"
+        mkdir -p "${project_path}"
+    elif [ ! -d "${project_path}" ]; then
+        print -i "Creating project directory"
+        mkdir -p "${project_path}"
+    fi
+    if [ ! -f "${repo_path}" ] && [ "${BUILD_MIRROR_FLAG}" = "false" ]; then
+        print -i "Cloning starlingx repo manifests into workspace"
+        docker_run_repo_sync
+    else
+        stx_tools_path="${project_path}/${STX_TOOLS_REPO/*\//}"
+        if [ -d "$stx_tools_path" ]; then
+            print -i "Git pulling stx-tools repo from ${stx_tools_path}"
+            git pull "$stx_tools_path"
+        else
+            print -i "Cloning stx-tools repository into workspace"
+            git clone "$STX_TOOLS_REPO" "$stx_tools_path"
+        fi
+    fi
+    init_mirror_path
+    print -i "Using work directory: ${WORK_DIRECTORY}"
+}
+
+function docker_run_builder()
+{
+    local id
+    local container_mirror_path="/import/mirrors/CentOS/stx-r1/CentOS/pike/"
+    local work_directory="${PROJECT_PATH}/cgcs-root"
+    local download_container_path="${work_directory}/stx/downloads"
+    local buildrc_container_path="/home/${MYUNAME}/buildrc"
+
+    # This is the group of commands that run inside the
+    # container in order ti build the packages and create the ISO.
+    local cmd_line="
+        generate-cgcs-centos-repo.sh ${container_mirror_path} && \
+        if [ ! -s $download_container_path} ]; then \
+            ln -s ${container_mirror_path}/downloads stx; \
+        fi;  \
+        build-pkgs && \
+        generate-cgcs-tis-repo && \
+        build-iso"
+
+    if docker run -it --rm \
+        --name "${STX_CONTAINER_NAME}" \
+        --detach \
+        --user="${MYUNAME}" \
+        -v "${WORK_DIRECTORY}/${GUEST_LOCALDISK}:/${GUEST_LOCALDISK}" \
+        -v "${MIRROR_PATH}/${MIRROR_NAME}:/import/mirrors:ro" \
+        -v "${BUILDRC_FILE}:${buildrc_container_path}:ro" \
+        -v "/sys/fs/cgroup:/sys/fs/cgroup:ro" \
+        -e "container=docker" \
+        -e "MYUNAME=${MYUNAME}" \
+        -w "${work_directory}" \
+        --privileged=true \
+        --security-opt seccomp=unconfined \
+        "${STX_CONTAINER_TAG}"; then
+        id=$(docker ps | awk '/'"${STX_CONTAINER_NAME}"'/ {print $1}')
+        print -i "Container ${STX_CONTAINER_NAME} runs with id $id"
+    else
+        print -e "Container ${STX_CONTAINER_NAME} failed"
+    fi
+
+    if docker exec -it \
+        "${STX_CONTAINER_NAME}" \
+        bash -c -l  "${cmd_line}"; then
+        print -s "Iso has been generated"
+    else
+        if [ "${INTERACTIVE_MODE_FLAG}" = "true" ]; then
+            print -e "Iso image couldn't be generated"
+            print -t "Do you want to debug the container \
+                ${STX_CONTAINER_NAME} with id ${id} [Y/n]"
+            read -r question_option
+            if [[ "${question_option:-Y}" = "^[y-Y]$" ]]; then
+                print -i "Debugging ${STX_CONTAINER_NAME} with id ${id}"
+                docker exec -it "${STX_CONTAINER_TAG}" bash
+            fi
+        else
+            kill_container "${id}"
+            print -e "Iso image couldn't be generated"
+        fi
+    fi
+    kill_container "${id}"
+}
+
+function kill_container()
+{
+    local id="${1}"
+    if docker kill "${id}"; then
+        print -i "Killed container ${STX_CONTAINER_NAME} with id ${id}"
+    else
+        print -e "Killing container ${STX_CONTAINER_NAME} with id ${id}"
+    fi
+}
+
+function docker_run_repo_sync()
+{
+    local id
+    local repo_threads="8"
+    local cmd_line="  sleep .7; \
+                repo init -u https://git.starlingx.io/stx-manifest.git \
+                --no-clone-bundle; \
+                repo sync --no-clone-bundle -j${repo_threads} --force-sync"
+
+    if docker run -it --rm \
+        --user="${MYUNAME}" \
+        -v "${WORK_DIRECTORY}/${GUEST_LOCALDISK}:/${GUEST_LOCALDISK}" \
+        -w "${PROJECT_PATH}" \
+        "${STX_CONTAINER_TAG}" \
+        bash -c "${cmd_line}"; then
+        id=$(docker ps | awk '/'"${STX_CONTAINER_NAME}"'/ {print $1}')
+        print -i "Container ${STX_CONTAINER_NAME} runs with id $id"
+    else
+        print -e "Container ${STX_CONTAINER_NAME} failed"
+    fi
+}
+
+function docker_run_mirror()
+{
+    local id
+    local script="stx-tools/centos-mirror-tools/download_mirror.sh"
+    local script_path="${WORK_DIRECTORY}/${PROJECT_PATH}/${script%/*}"
+    local mirror_path="$script_path/output/stx-${STARLINGX_RELEASE_NAME}"
+    local distro_mirror_path="${MIRROR_DIRECTORY}/${DISTRO_NAME}"
+    local tis_installer_mirror_path="${MIRROR_DIRECTORY}/${DISTRO_NAME}/tis-installer"
+    local binary_mirror_path="${mirror_path}/${DISTRO_NAME}/${OPENSTACK_RELEASE}/Binary"
+    local version="0.2"
+    local local_mirror="/import/mirror"
+
+    if docker run -it  --rm \
+        --name "${STX_CONTAINER_NAME}" \
+        -v "${script_path}:/${GUEST_LOCALDISK}" \
+        -v "${MIRROR_PATH}/${MIRROR_NAME}:/${local_mirror}" \
+        -w "/${GUEST_LOCALDISK}" \
+        "${STX_CONTAINER_TAG}" \
+        bash -c "${script/*\//\./}"; then
+        id=$(docker ps | awk '/'"${STX_CONTAINER_NAME}"'/ {print $1}')
+        print -i "Container ${STX_CONTAINER_NAME} started with id $id"
+    else
+        print -e "Container ${STX_CONTAINER_NAME} failed"
+    fi
+
+    if [ ! -d "${MIRROR_DIRECTORY}/${DISTRO_NAME}" ]; then
+        mkdir -p "${distro_mirror_path}"
+    fi
+    if [ ! -d "${tis_installer_mirror_path}" ]; then
+        mkdir -p "${tis_installer_mirror_path}"
+    fi
+    cp -rf "${mirror_path}/" "${MIRROR_DIRECTORY}/${DISTRO_NAME}"
+    cp -f \
+        "${binary_mirror_path}/images/pxeboot/initrd.img" \
+        "${tis_installer_mirror_path}/initrd.img-stx-${version}"
+    cp -f \
+        "${binary_mirror_path}/images/pxeboot/vmlinuz" \
+        "${tis_installer_mirror_path}/vmlinuz-stx-${version}"
+    cp -f \
+        "${binary_mirror_path}/LiveOS/squashfs.img" \
+        "${tis_installer_mirror_path}/squashfs.img-stx-${version}"
+}
+
+function print()
+{
+    declare OPTIND
+    local message
+    local message_type
+    local clean_color
+    local time_stamp
+    time_stamp="$(date +'%b %d %H:%M:%S')"
+    local ret_code="0"
+    local stderr_flag="false"
+    while getopts "i:w:e:s:t:" opt; do
+        case "${opt}" in
+        i)
+            message_type="[ INFO ]"
+            message="${OPTARG}"
+            color="\\e[1;30m"
+            ;;
+        w)
+            message_type="[ WARNING ]"
+            message="${OPTARG}"
+            color="\\e[1;33m"
+            stderr_flag="true"
+            ;;
+        e)
+            message_type="[ ERROR ]"
+            message="${OPTARG}"
+            color="\\e[0;31m"
+            stderr_flag="true"
+            ret_code="1"
+            ;;
+        s)
+            message_type="[ SUCCESS ]"
+            message="${OPTARG}"
+            color="\\e[0;32m"
+            ;;
+        t)
+            message="${OPTARG}"
+            ;;
+        *)
+            return 1
+            ;;
+        esac
+    done
+    if [ "${TERM:-none}" = "screen-256color" ]; then
+        clean_color="\\033[0m"
+    else
+        color=""
+    fi
+
+    if [ ${stderr_flag:-false} = "true" ]; then
+        printf "%-16s%b%-16s%b%s\\n"  "${time_stamp}" "${color}" \
+            "${message_type}" "${clean_color}" "${message}">&2
+    else
+        printf "%-16s%b%-16s%b%s\\n" "${time_stamp}" "${color}" \
+            "${message_type}" "${clean_color}" "${message}"
+    fi
+    return "${ret_code}"
+}
+
+function general_help()
+{
+cat <<EOF
+usage: $0 COMMAND [options] ...
+Description:
+    This tool allows to build and debug an
+    StarlingX ISO image.
+
+List of Main Commands:
+    build,       build starlingx.
+    help,        show this help menu.
+    view-log,    show log.
+    version,     show the verson of this script.
+EOF
+}
+
+function check_docker_image()
+{
+    if docker images | grep "${STX_CONTAINER_TAG/:*/}"; then
+        print  -i "${STX_CONTAINER_TAG} image found"
+        return 0
+    else
+        print -w "Previous ${STX_CONTAINER_TAG} image not found"
+        return 1
+    fi
+}
+
+function build_docker_image()
+{
+    declare OPTIND
+    local myuname="builder"
+
+    while getopts "ch" opt; do
+        case "${opt}" in
+        c)
+            CLEAN_FLAG="true"
+        ;;
+        h)
+            build_docker_image_help
+            exit 0
+        ;;
+        *)
+            exit 1
+        ;;
+        esac
+    done
+    shift $((OPTIND-1))
+
+    if [ "${CLEAN_FLAG:-false}" = "true" ]; then
+        clean_docker_image
+    else
+        if check_docker_image; then
+            print -i "Previous docker image ${STX_CONTAINER_TAG} found"
+            return 0
+        fi
+    fi
+
+    print -i "Building ${STX_CONTAINER_TAG} docker image"
+
+    if docker build \
+        --build-arg "MYUID=$(id -u)" \
+        --build-arg "MYUNAME=${myuname}" \
+        --ulimit core=0 \
+        --network host \
+        -t "${STX_CONTAINER_TAG}" \
+        .; then
+        print -s "Docker ${STX_CONTAINER_TAG} built"
+    else
+        print -e "Error building ${STX_CONTAINER_TAG}"
+    fi
+  }
+
+function clean_docker_image()
+{
+    if docker images | grep "${STX_CONTAINER_TAG/:*/}"; then
+        print -i "Cleaning environment"
+        if docker ps | grep " ${STX_CONTAINER_TAG} "; then
+            for id in \
+                $(docker ps | awk '/'" ${STX_CONTAINER_NAME} "'/ {print $1}'); do
+                if docker rm -f "$id"; then
+                    print -i "Container with id $id was deleted"
+                else
+                    print -e "Error deleting container with id $id"
+                fi
+            done
+        fi
+   else
+        print -i "No previous docker image ${STX_CONTAINER_TAG} found"
+        return 0
+    fi
+
+    if docker image rm "${STX_CONTAINER_TAG}" -f; then
+        print -s "The ${STX_CONTAINER_TAG} docker image was deleted"
+    else
+        print -e "The ${STX_CONTAINER_TAG} can't be deleted"
+    fi
+}
+
+function list_log()
+{
+    if [ ! -d "$LOG_PATH" ]; then
+        print -i "SatrlingX build log files no found"
+    else
+        find  "$LOG_PATH" -type f -name "*.log" -exec basename {} \;| sort -n
+    fi
+}
+
+function view_log()
+{
+    local OPTIND
+    local log_name
+    log_name="$(list_log | tail -n 1)"
+
+    while getopts "ln:p:h" opt; do
+        case "${opt}" in
+        l)
+            list_log
+            return "$?"
+        ;;
+        n)
+            log_name=${OPTARG}
+        ;;
+        p)
+            LOG_PATH=${OPTARG}
+        ;;
+        h)
+            view_log_help
+        ;;
+        *)
+            exit 1
+        ;;
+        esac
+    done
+    shift $((OPTIND-1))
+    cat "${LOG_PATH}/${log_name}"
+}
+
+function build_iso()
+{
+    local OPTIND
+
+    while getopts "m:w:n:hci" opt; do
+        case ${opt} in
+        c)
+            CLEAN_FLAG=""
+        ;;
+        h)
+            build_iso_help
+            exit 0
+        ;;
+        i)
+            INTERACTIVE_MODE_FLAG="true"
+        ;;
+        n)
+            MIRROR_NAME="${OPTARG}"
+        ;;
+        m)
+            MIRROR_DIRECTORY="${OPTARG}"
+        ;;
+        w)
+            WORK_DIRECTORY="${OPTARG}"
+        ;;
+        *)
+            exit 1
+        ;;
+        esac
+    done
+    shift $((OPTIND-1))
+    build_docker_image
+    init_work_directory
+    build_mirror
+    docker_run_builder
+}
+
+function build_help()
+{
+cat <<EOF
+usage: $0 build COMMAND [options] ...
+Description:
+    This tool allows to build and debug an
+    StarlingX ISO image.
+
+List of Main Commands:
+    docker-image,    build docker image.
+    help,            show this help menu.
+    iso,             build iso.
+    mirror,          build mirror.
+EOF
+}
+
+function build_docker_image_help()
+{
+cat <<EOF
+usage: $0 build docker-image [OPTIONS] ...
+Description:
+    Build StarlingX docker-image
+
+Optional arguments:
+    -c,    delete previous workspace, mirror and docker image.
+    -h,    show this help menu.
+EOF
+}
+
+function build_mirror_help()
+{
+cat <<EOF
+usage: $0 build mirror [OPTIONS] ...
+Description:
+    Build StarlingX mirror.
+
+Optional arguments:
+    -c,    delete previous  workspace, mirror and docker image.
+    -h,    show this help menu.
+    -n,    set mirror name.
+    -p,    set mirror_path.
+EOF
+}
+
+function build_iso_help()
+{
+cat <<EOF
+usage: $0 build iso [OPTIONS] ...
+Description:
+    Build StarlingX ISO
+
+Optional arguments:
+    -c,    delete previous  workspace, mirror and docker image.
+    -h,    show this help menu.
+    -i,    enable y/n dessisions.
+    -n,    set mirror name.
+    -n,    set mirror_path.
+    -w,    set work_directory.
+EOF
+}
+
+function build()
+{
+    if [ "$#" -eq 0 ]; then
+        build_help
+        exit 1
+    fi
+    command=$1
+    shift
+    case $command in
+    docker-image)
+        BUILD_DOCKER_IMAGE_FLAG="true"
+        build_docker_image "$@" |& tee "$LOG_FILE"
+        ;;
+    help)
+        build_help
+    ;;
+    iso)
+        BUILD_ISO_FLAG="true"
+        build_iso "$@" |& tee "$LOG_FILE"
+    ;;
+    mirror)
+        BUILD_MIRROR_FLAG="true"
+        build_mirror "$@" |& tee "$LOG_FILE"
+    ;;
+   *)
+        if [ -n "$command" ]; then
+            print -e "Unknown command: $command"
+        fi
+
+    ;;
+    esac
+}
+
+function main()
+{
+    if [ "$#" -eq 0 ]; then
+        general_help
+        exit 1
+    fi
+
+    if [ -d "${LOG_PATH}" ]; then
+        mkdir -p "${LOG_PATH}"
+    fi
+
+    command=$1
+    shift
+    case $command in
+    build)
+        build "${@}" |& tee "$LOG_FILE"
+        print -i "Total time: $SECONDS seconds"
+    ;;
+    help)
+        general_help
+    ;;
+    view-log)
+        view_log "${@}"
+    ;;
+    version)
+        print -i "StarlingX tool version: $VERSION"
+        exit 0
+    ;;
+    *)
+        if [ -n "$command" ]; then
+            print -e "Unknown command: $command"
+        fi
+    ;;
+    esac
+}
+
+main "$@"
