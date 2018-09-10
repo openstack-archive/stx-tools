@@ -11,24 +11,11 @@ on other flavors of Linux.
 Container Build Preparation
 ---------------------------
 
-We will use a copy of your existing ``.gitconfig`` in the container to
-pick up existing configuration. The StarlingX build system also has some
-specific requirements that do not need to be in your personal
-``.gitconfig``. Copy it into ``toCOPY`` to be picked up in the container
-build.
-
-.. code-block:: bash
-
-    cp ~/.gitconfig toCOPY
+As first step, it is possible to customize some values for the building
+process of StarlingX docker image.
 
 Configuration
 -------------
-
-tbuilder uses a two-step configuration process that provides access to
-certain configuration values both inside and outside the container. This
-is extremely useful for path variables such as ``MY_REPO`` with have
-different values inside and outside but can be set to point to the same
-place.
 
 The ``buildrc`` file is a shell script that is used to set the default
 configuration values. It is contained in the tbuilder repo and should
@@ -51,36 +38,16 @@ Makefile
 --------
 
 tbuilder contains a Makefile that can be used to automate the build
-lifecycle of a container. The commands below are handled by the Makefile
-and will read the contents of the ``buildrc`` file.
+lifecycle of a container. The Makefile will read the contents of the
+``buildrc`` file.
 
-The targets commonly used are: \* build - build the Docker images as
-required (This includes dev-centos, to build just the base dev image use
-target ``base-build``.) \* clean - remove the stx-builder image (The
-dev-centos image is not removed, use ``base-clean`` to do that)
 
 Base Container Build
 --------------------
 
-The container build has been split into two parts to simplify iterating
-on build development. The basic CentOS image and the nearly 500 required
-development packages are pre-installed into a base image
-(``local/dev-centos:7.3``) that is then used for the StarlingX
-builder-specific bits.
-
-.. code-block:: bash
-
-    make base-build
-
-will run essentially the following manual build command:
-
-.. code-block:: bash
-
-    docker build \
-        --ulimit core=0 \
-        -t local/dev-centos:7.3 \
-        -f Dockerfile.centos73 \
-        .
+The container takes the CentOS image as base, the Dockerfile describe
+nearly 500 required development and it describes the serie of required
+configurations.
 
 STX Builder Container Build
 ---------------------------
@@ -90,7 +57,7 @@ should include your username.
 
 .. code-block:: bash
 
-    make build
+    make
 
 NOTE:
 ~~~~~
@@ -104,6 +71,24 @@ NOTE:
 
 Use the Builder Container
 -------------------------
+
+This container is useful to handle all steps related to StarlingX ISO creation.
+
+Mirror creation
+---------------
+
+Once the StarlingX docker image has been built, it is necessary to create a
+mirror before to follow with the ISO image creation. Basically a mirror is a
+directory with a serie of packages. These packages are organized in order to
+be consumed by the ISO creation scripts. Follow these
+`instructions <centos-mirror-tools/README.rst>`_ for the mirror creation.
+
+This mirror must live in the path described by ``HOST_MIRROR_DIR`` variable.
+buildrc file include the value of this variable unlees unless it has been
+modified in localrc file.
+
+ISO creation
+------------
 
 The ``tb.sh`` script is used to manage the run/stop lifecycle of working
 containers. Copy it to somewhere on your ``PATH``, say ``$HOME/bin`` if
