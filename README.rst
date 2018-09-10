@@ -6,38 +6,35 @@ StarlingX Build Tools
 
 The StarlingX build process is tightly tied to CentOS in a number of
 ways, doing the build inside a Docker container makes this much easier
-on other flavors of Linux.
+on other flavors of Linux. Basically, the StarlingX ISO image creation
+flow involves the following general steps.
 
-Container Build Preparation
----------------------------
+1. Build the StarlingX docker image.
+2. Package mirror creation.
+3. Build packages/ISO creation.
 
-We will use a copy of your existing ``.gitconfig`` in the container to
-pick up existing configuration. The StarlingX build system also has some
-specific requirements that do not need to be in your personal
-``.gitconfig``. Copy it into ``toCOPY`` to be picked up in the container
-build.
+Build the Starlingx docker image
+--------------------------------
 
-.. code-block:: bash
+StarlingX docker image handles all steps related to StarlingX ISO
+creation. This section describes how to customize the docker image
+building process.
 
-    cp ~/.gitconfig toCOPY
+Container build image customization
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Configuration
--------------
+You can start by customizing values for the StarlingX docker image
+build process. There are a pair of useful files that can help to do
+this.
 
-tbuilder uses a two-step configuration process that provides access to
-certain configuration values both inside and outside the container. This
-is extremely useful for path variables such as ``MY_REPO`` with have
-different values inside and outside but can be set to point to the same
-place.
+- ``buildrc``
+- ``localrc``
 
 The ``buildrc`` file is a shell script that is used to set the default
 configuration values. It is contained in the tbuilder repo and should
 not need to be modified by users as it reads a ``localrc`` file that
 will not be overwritten by tbuilder updates. This is where users should
-alter the default settings.
-
-Sample ``localrc``
-~~~~~~~~~~~~~~~~~~
+alter the default settings. This is a sample of a ``localrc`` file:
 
 .. code-block:: bash
 
@@ -47,50 +44,22 @@ Sample ``localrc``
     HOST_PREFIX=$HOME/starlingx/workspace
     HOST_MIRROR_DIR=$HOME/starlingx/mirror
 
-Makefile
---------
+This project contains a Makefile that can be used to automate the build
+lifecycle of a container. The Makefile will read the contents of the
+``buildrc`` file.
 
-tbuilder contains a Makefile that can be used to automate the build
-lifecycle of a container. The commands below are handled by the Makefile
-and will read the contents of the ``buildrc`` file.
-
-The targets commonly used are: \* build - build the Docker images as
-required (This includes dev-centos, to build just the base dev image use
-target ``base-build``.) \* clean - remove the stx-builder image (The
-dev-centos image is not removed, use ``base-clean`` to do that)
-
-Base Container Build
---------------------
-
-The container build has been split into two parts to simplify iterating
-on build development. The basic CentOS image and the nearly 500 required
-development packages are pre-installed into a base image
-(``local/dev-centos:7.3``) that is then used for the StarlingX
-builder-specific bits.
-
-.. code-block:: bash
-
-    make base-build
-
-will run essentially the following manual build command:
-
-.. code-block:: bash
-
-    docker build \
-        --ulimit core=0 \
-        -t local/dev-centos:7.3 \
-        -f Dockerfile.centos73 \
-        .
-
-STX Builder Container Build
----------------------------
-
-StarlingX Builder container images are tied to your UID so image names
+StarlingX Builder container image are tied to your UID so image names
 should include your username.
 
+Build image
+~~~~~~~~~~~
+
+Once the configuration files have been customized, it is possible to build
+the docker image. This process is automated by the Makefile.
+
 .. code-block:: bash
 
-    make build
+    make
 
 NOTE:
 ~~~~~
@@ -102,8 +71,99 @@ NOTE:
 -  The Dockerfile needs MYUID and MYUNAME defined, the rest of the
    configuration is copied in via buildrc/localrc.
 
-Use the Builder Container
--------------------------
+Package mirror creation
+-----------------------
+
+Once the StarlingX docker image has been built, you must create a mirror
+before creating the ISO image. Basically, a mirror is a directory that
+contains a series of packages. The packages are organized in way to be
+consumed by the ISO creation scripts.
+
+The ``HOST_MIRROR_DIR`` variable provides the path to the mirror. The
+``buildrc`` file sets the value of this variable unless the ``localrc``
+file has modified it.
+
+The mirror creation involves a set of scripts and configuration files
+required to download a group of RPMs, SRPMs, source code packages and
+so forth. These tools live inside ``centos-mirror-tools`` directory.
+
+.. code-block :: bash
+    $ cd centos-mirror-tools
+
+All items included in this directory must be visble inside the container
+environment. Then the container shall be run from the same directory where
+these tools are stored. Basically, we run a container with the StarlingX
+docker image created previously with the following configuration.
+
+.. code-block :: bash
+
+    $ docker run -it -v $(pwd):/localdisk <your_docker_image_name>:<your_image_version> bash
+
+As ``/localdisk`` is defined as the workdir of the container. The same
+folder name should be used to define the volume. The container will
+start to run and populate ``logs`` and ``output`` folders in this
+directory. The container shall be run from the same directory where the
+other scripts are stored.
+
+Run the ``download_mirror.sh`` script
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Once inside the container, run the downloader script
+
+.. code-block :: bash
+
+    $ cd localdisk && bash download_mirror.sh
+
+NOTE: in case there are some downloading failures due to network
+instability or timeouts, you should download them manually, to assure
+you get all RPMs listed in "rpms\_from\_3rd\_parties.lst" and
+"rpms\_from\_centos\_repo.lst".
+
+Copy the files to the mirror
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+After all downloading complete, copy the download files to mirror.
+
+.. code-block :: bash
+
+    $ find ./output -name "*.i686.rpm" | xargs rm -f
+    $ chown  751:751 -R ./output
+    $ cp -rf  output/stx-r1/ <your_mirror_folder>/
+
+In this case, ``<your_mirror_folder>`` can be whatever folder you want to
+use as mirror.
+
+Tweaks in the StarlingX build system.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+NOTE: You do not need to do the following step if you've synced the latest codebase.
+
+Go into the StarlingX build system (i.e. *another* container that hosts the
+cgcs build system) and perform the following steps:
+
+Debugging issues
+~~~~~~~~~~~~~~~~
+
+The ``download_mirror.sh`` script will create log files in the form of
+``centos_rpms_*.txt``. After the download is complete, it's recommended
+to check the content of these files to see if everything was downloaded
+correctly.
+
+A quick look into these files could be:
+
+.. code-block :: bash
+
+    $ cd logs
+    $ cat *_missing_*log
+    $ cat *_failmove_*log
+
+Build packages/ISO creation
+---------------------------
+
+StarlingX ISO image creation required some customized packages. In this step,
+a set of patches and customizations are applied to the source code to create
+the RPM packages. We have an script called ``tb.sh`` that helps with
+the process.
 
 The ``tb.sh`` script is used to manage the run/stop lifecycle of working
 containers. Copy it to somewhere on your ``PATH``, say ``$HOME/bin`` if
