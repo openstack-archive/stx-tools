@@ -15,6 +15,9 @@ TC_CONTAINER_NAME := $(USER)-centos-builder
 TC_CONTAINER_TAG := local/$(USER)-stx-builder:7.3
 TC_DOCKERFILE := Dockerfile.centos73.TC-builder
 
+prefix = /usr/local
+bindir = $(prefix)/bin
+
 # Import the build config
 NULL := $(shell bash -c "source buildrc; set | sed -E '/^[[:alnum:]_]+/s/=/:=/' | sed 's/^//' > .makeenv")
 include .makeenv
@@ -59,4 +62,13 @@ env:
 	@echo "LOCALDISK=${LOCALDISK}"
 	@echo "GUEST_LOCALDISK=${GUEST_LOCALDISK}"
 
-.PHONY: base-build base-clean build clean env
+install:
+	cp stxb $(bindir)/stxb
+	install -d -m 0755 /etc/stxb
+	cp -f buildrc /etc/stxb
+
+uninstall:
+	rm $(bindir)/stxb
+	rm -rf /etc/stxb
+
+.PHONY: base-build base-clean build clean env install uninstall
