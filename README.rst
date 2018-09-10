@@ -291,6 +291,36 @@ WARNING HACK WARNING
    build-tools/update-efiboot-image is linked to the one in
    /usr/local/bin
 
+ stxb tool
+--------------------
+
+-  The Stxb version 0.1 reduces the number of steps to create a mirror and build
+   an ISO by building a docker image and running the necessary steps inside a
+   docker container, to install stxb you need to do the following:
+
+   .. code-block:: bash
+
+       $ sudo make install
+
+-  This will install the stbx executable in /usr/local/bin by default, this
+   path can be changed by setting the 'prefix' or 'bindir'.
+   By default each time stxb is executed it will create a workspace on the
+   current directory, path can be overriden by setting the stxb path variables
+   'MIRROR_DIRECTORY' and 'WORK_DIRECTORY' in the ~/.stxb/.stxbrc file.
+   To build an iso from scratch you need to execute the following command:
+
+   .. code-block:: bash
+
+       $ stx build iso -u
+
+-  The '-u' flag indicates that the repositories and mirror will be updated,
+   update is disabled by default to avoid missing current progress when trying
+   to work on an specific change. For more commands available you can run
+
+   .. code-block:: bash
+
+       $ stx help
+
 Troubleshooting
 ---------------
 
