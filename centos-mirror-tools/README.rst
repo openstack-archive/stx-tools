@@ -1,34 +1,18 @@
 Create mirror for StarlingX
 ===========================
 
-Step 0 - Build the container
-----------------------------
-
-Build the docker image on your Linux host (with Docker supported).
-**NOTE**: if necessary you might have to set http/https proxy in your
-Dockerfile before building the docker image below.
-
-.. code-block :: bash
-
-    $ docker build -t <your_docker_image_name>:<your_image_version> -f Dockerfile .
-
 Step 1 - Run the container
 --------------------------
+
+At this point you had to build the StarlingX docker image. In opposite case
+you should follow the instruction to build it `here <../README.rst>`_.
 
 The container shall be run from the same directory where the other
 scripts are stored.
 
 .. code-block :: bash
 
-    $ docker run -it -v $(pwd):/localdisk <your_docker_image_name>:<your_image_version>
-
-The container can also be run the following way, so the
-``download_mirror.sh`` runs automatically without having to enter the
-container and the step 2can be simplified.
-
-.. code-block :: bash
-
-    $ docker run -it -v $(pwd):/localdisk <your_docker_image_name>:<your_image_version> download_mirror.sh
+    $ docker run -it -v $(pwd):/localdisk <your_docker_image_name>:<your_image_version> bash
 
 As ``/localdisk`` is defined as the workdir of the container, the same
 folder name should be used to define the volume. The container will
@@ -43,7 +27,7 @@ Once inside the container run the downloader script
 
 .. code-block :: bash
 
-    $ ./download_mirror.sh
+    $ cd localdisk && bash download_mirror.sh
 
 NOTE: in case there are some downloading failures due to network
 instability (or timeout), you should download them manually, to assure
