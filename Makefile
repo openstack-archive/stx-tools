@@ -7,35 +7,16 @@ UID := $(shell id -u)
 USER := $(shell id -un)
 MYUNAME := builder
 
-BASE_CONTAINER := centos73
-BASE_CONTAINER_TAG := local/dev-centos:7.3
-BASE_DOCKERFILE := Dockerfile.centos73
-
 TC_CONTAINER_NAME := $(USER)-centos-builder
-TC_CONTAINER_TAG := local/$(USER)-stx-builder:7.3
-TC_DOCKERFILE := Dockerfile.centos73.TC-builder
+TC_CONTAINER_TAG := local/$(USER)-stx-builder:7.4
+TC_DOCKERFILE := Dockerfile
 
 # Import the build config
 NULL := $(shell bash -c "source buildrc; set | sed -E '/^[[:alnum:]_]+/s/=/:=/' | sed 's/^//' > .makeenv")
 include .makeenv
 
-# Base CentOS container
-
-base-build:
-	docker build \
-		--ulimit core=0 \
-		--network host \
-		-t $(BASE_CONTAINER_TAG) \
-		-f $(BASE_DOCKERFILE) \
-		.
-
-base-clean:
-	docker image rm $(BASE_CONTAINER_TAG)
-
-# TC builder container
-
-build:
-	docker build \
+all:
+	@docker build \
 		--build-arg MYUID=$(UID) \
 		--build-arg MYUNAME=$(MYUNAME) \
 		--ulimit core=0 \
@@ -59,4 +40,4 @@ env:
 	@echo "LOCALDISK=${LOCALDISK}"
 	@echo "GUEST_LOCALDISK=${GUEST_LOCALDISK}"
 
-.PHONY: base-build base-clean build clean env
+.PHONY: all clean env
