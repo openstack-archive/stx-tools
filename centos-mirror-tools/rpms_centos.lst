@@ -888,7 +888,7 @@ openssh-clients-7.4p1-16.el7.x86_64.rpm
 openssl-1.0.2k-12.el7.x86_64.rpm
 openssl-devel-1.0.2k-12.el7.x86_64.rpm
 openssl-libs-1.0.2k-12.el7.x86_64.rpm
-openstack-aodh-3.0.4-1.el7.src.rpm
+openstack-aodh-5.1.0-1.el7.src.rpm
 openstack-macros-2018.1.0-0.noarch.rpm
 openstack-nova-cert-14.0.8-1.el7.noarch.rpm
 openstack-panko-3.0.0-1.el7.src.rpm
