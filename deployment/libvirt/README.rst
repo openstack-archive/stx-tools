@@ -5,6 +5,9 @@ This is a quick reference for deploying StarlingX on libvirt/qemu systems.
 It assumes you have a working libvirt/qemu installation for a non-root user
 and that your user has NOPASSWD sudo permissions.
 
+Refer also to pages "Installation Guide Virtual Environment", "Testing Guide"
+on the StarlingX wiki: https://wiki.openstack.org/wiki/StarlingX
+
 Overview
 --------
 
