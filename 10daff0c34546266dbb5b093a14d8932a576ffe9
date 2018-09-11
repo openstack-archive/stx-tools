@@ -1,0 +1,9 @@
+Code-Review+2: Dean Troyer <dtroyer@gmail.com>
+Code-Review+2: Scott Little <scott.little@windriver.com>
+Workflow+1: Scott Little <scott.little@windriver.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Tue, 11 Sep 2018 15:57:47 +0000
+Reviewed-on: https://review.openstack.org/601278
+Project: openstack/stx-tools
+Branch: refs/heads/master
