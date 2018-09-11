@@ -771,6 +771,7 @@ libXv-1.0.11-1.el7.x86_64.rpm
 libXxf86vm-1.1.4-1.el7.x86_64.rpm
 libXxf86vm-devel-1.1.4-1.el7.x86_64.rpm
 libyaml-0.1.4-11.el7_0.x86_64.rpm
+lighttpd-1.4.50-1.el7.src.rpm
 linuxconsoletools-1.4.5-3.el7.x86_64.rpm
 linuxdoc-tools-0.9.68-5.el7.x86_64.rpm
 linux-firmware-20180220-62.2.git6d51311.el7_5.noarch.rpm
