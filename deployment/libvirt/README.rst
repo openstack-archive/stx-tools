@@ -22,10 +22,8 @@ an interactive shell that configures everything.  Here's an example::
 	export CONTROLLER=madcloud
 	export COMPUTE=madnode
 	export BRIDGE_INTERFACE=madbr
-	export INTERNAL_NETWORK=172.30.20.0/24
-	export INTERNAL_IP=172.30.20.1/24
-	export EXTERNAL_NETWORK=192.168.20.0/24
-    export EXTERNAL_IP=192.168.20.1/24
+	export EXTERNAL_NETWORK=172.30.20.0/24
+	export EXTERNAL_IP=172.30.20.1/24
 
 There is also a script ``cleanup_network.sh`` that will remove networking
 configuration from libvirt.
