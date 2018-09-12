@@ -817,7 +817,6 @@ mesa-libwayland-egl-17.2.3-8.20171019.el7.x86_64.rpm
 mesa-libwayland-egl-devel-17.2.3-8.20171019.el7.x86_64.rpm
 microcode_ctl-2.1-29.el7.x86_64.rpm
 mod_wsgi-3.4-12.el7_0.x86_64.rpm
-mokutil-12-1.el7.centos.x86_64.rpm
 moyogo-molengo-fonts-0.10-9.el7.noarch.rpm
 mozilla-fira-fonts-common-4.202-1.el7.noarch.rpm
 mozilla-fira-mono-fonts-4.202-1.el7.noarch.rpm
@@ -1054,7 +1053,6 @@ puppet-ironic-11.3.0-1.el7.src.rpm
 puppet-keystone-11.3.0-1.el7.src.rpm
 puppet-kmod-2.1.1-2.0d69a96git.el7.noarch.rpm
 puppet-magnum-11.3.0-1.el7.src.rpm
-puppet-memcached-2.8.1-2.7671b5fgit.el7.noarch.rpm
 puppet-memcached-3.0.2-1.adf8b63git.el7.src.rpm
 puppet-murano-11.3.0-1.el7.src.rpm
 puppet-mysql-3.11.0-1.920dd76git.el7.noarch.rpm
@@ -1068,7 +1066,6 @@ puppet-rabbitmq-5.6.0-4.5ac45degit.el7.src.rpm
 puppet-rsync-0.4.0-1.8cc3c6fgit.el7.noarch.rpm
 puppet-staging-1.0.4-1.b466d93git.el7.src.rpm
 puppet-stdlib-4.18.0-2.el7.src.rpm
-puppet-swift-11.3.0-1.el7.noarch.rpm
 puppet-swift-11.3.0-1.el7.src.rpm
 puppet-sysctl-0.0.11-1.el7.noarch.rpm
 puppet-tempest-11.3.0-1.el7.noarch.rpm
@@ -1115,10 +1112,8 @@ python2-deprecation-1.0-3.el7.noarch.rpm
 python2-designateclient-2.7.0-1.el7.noarch.rpm
 python2-django-babel-0.4.0-2.el7.noarch.rpm
 python2-django-formtools-1.0-4.el7.noarch.rpm
-python2-django-openstack-auth-3.5.0-1.el7.noarch.rpm
 python2-docker-2.4.2-1.2.el7.noarch.rpm
 python2-dulwich-0.16.1-1.el7.x86_64.rpm
-python2-eventlet-0.18.4-2.el7.noarch.rpm
 python2-fasteners-0.14.1-6.el7.noarch.rpm
 python2-fixtures-3.0.0-7.el7.noarch.rpm
 python2-funcsigs-1.0.2-4.el7.noarch.rpm
@@ -1142,8 +1137,6 @@ python2-jsonpatch-1.14-1.el7.noarch.rpm
 python2-jsonpath-rw-ext-1.0.0-1.el7.noarch.rpm
 python2-jsonpointer-1.10-4.el7.noarch.rpm
 python2-jsonschema-2.5.1-3.el7.noarch.rpm
-python2-keystoneauth1-3.1.0-1.el7.noarch.rpm
-python2-keystoneclient-3.13.0-1.el7.noarch.rpm
 python2-kombu-4.0.2-5.el7.noarch.rpm
 python2-kubernetes-4.0.0-1.el7.noarch.rpm
 python2-lz4-0.9.0-1.el7.x86_64.rpm
@@ -1158,14 +1151,12 @@ python2-mock-2.0.0-1.el7.noarch.rpm
 python2-monascaclient-1.7.0-1.el7.noarch.rpm
 python2-mox3-0.23.0-1.el7.noarch.rpm
 python2-murano-pkg-check-0.3.0-2.el7.noarch.rpm
-python2-neutronclient-6.5.0-1.el7.noarch.rpm
 python2-numexpr-2.6.1-3.el7.x86_64.rpm
 python2-numpy-1.11.2-2.el7.x86_64.rpm
 python2-oauth2client-4.0.0-2.el7.noarch.rpm
 python2-oauthlib-2.0.1-8.el7.noarch.rpm
 python2-olefile-0.44-1.el7.noarch.rpm
 python2-openstack-doc-tools-1.3.0-2.el7.noarch.rpm
-python2-osc-lib-1.7.0-1.el7.noarch.rpm
 python2-os-client-config-1.28.0-1.el7.noarch.rpm
 python2-oslo-cache-1.25.0-1.el7.noarch.rpm
 python2-oslo-concurrency-3.21.1-1.el7.noarch.rpm
@@ -1259,7 +1250,6 @@ python2-typing-3.6.1-1.el7.noarch.rpm
 python2-ujson-1.35-1.el7.x86_64.rpm
 python2-uritemplate-3.0.0-1.el7.noarch.rpm
 python2-vine-1.1.3-2.el7.noarch.rpm
-python2-voluptuous-0.11.1-1.el7.noarch.rpm
 python2-weakrefmethod-1.0.2-3.el7.noarch.rpm
 python2-whoosh-2.7.4-3.el7.noarch.rpm
 python2-wsgi_intercept-1.2.2-1.el7.noarch.rpm
@@ -1312,10 +1302,8 @@ python-dateutil-2.4.2-1.el7.noarch.rpm
 python-dateutil-2.6.1-1.el7.src.rpm
 python-decorator-3.4.0-3.el7.noarch.rpm
 python-deltarpm-3.6-3.el7.x86_64.rpm
-python-django-1.8.14-1.el7.noarch.rpm
 python-django-1.8.14-1.el7.src.rpm
 python-django-appconf-1.0.1-4.el7.noarch.rpm
-python-django-bash-completion-1.8.14-1.el7.noarch.rpm
 python-django-compressor-2.0-1.el7.noarch.rpm
 python-django-nose-1.4.3-1.el7.noarch.rpm
 python-django-openstack-auth-3.5.0-1.el7.src.rpm
@@ -1464,7 +1452,6 @@ python-unittest2-1.1.0-4.el7.noarch.rpm
 python-urlgrabber-3.10-8.el7.noarch.rpm
 python-urwid-1.1.1-3.el7.x86_64.rpm
 python-versiontools-1.9.1-4.el7.noarch.rpm
-python-voluptuous-0.8.9-1.el7.noarch.rpm
 python-voluptuous-0.8.9-1.el7.src.rpm
 python-waitress-0.8.9-5.el7.noarch.rpm
 python-warlock-1.0.1-1.el7.noarch.rpm
@@ -1561,7 +1548,6 @@ shadow-utils-4.1.5.1-24.el7.x86_64.rpm
 shared-mime-info-1.8-4.el7.x86_64.rpm
 shim-12-1.el7.centos.src.rpm
 shim-signed-12-1.el7.centos.src.rpm
-shim-unsigned-x64-12-1.el7.centos.x86_64.rpm
 sil-abyssinica-fonts-1.200-6.el7.noarch.rpm
 sil-mingzat-fonts-0.100-6.el7.noarch.rpm
 sip-4.19-1.el7.x86_64.rpm

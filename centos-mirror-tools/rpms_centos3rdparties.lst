@@ -40,9 +40,7 @@ gtk3-devel-docs-3.22.26-4.el7_5.x86_64.rpm
 gtk-update-icon-cache-3.22.26-4.el7_5.x86_64.rpm
 ima-evm-utils-1.1-2.el7.x86_64.rpm
 ima-evm-utils-devel-1.1-2.el7.x86_64.rpm
-initscripts-9.49.41-1.el7.x86_64.rpm
 iprutils-2.4.15.1-1.el7.x86_64.rpm
-iptables-1.4.21-24.1.el7_5.x86_64.rpm
 java-1.8.0-openjdk-1.8.0.181-3.b13.el7_5.x86_64.rpm
 java-1.8.0-openjdk-devel-1.8.0.181-3.b13.el7_5.x86_64.rpm
 java-1.8.0-openjdk-headless-1.8.0.181-3.b13.el7_5.x86_64.rpm
@@ -99,7 +97,6 @@ pulseaudio-libs-glib2-10.0-5.el7.x86_64.rpm
 pykickstart-1.99.66.18-1.el7.noarch.rpm
 python-2.7.5-69.el7_5.x86_64.rpm
 python2-google-api-client-1.6.3-1.el7.noarch.rpm
-python2-ironicclient-1.17.0-1.el7.noarch.rpm
 python2-manilaclient-1.17.2-1.el7.noarch.rpm
 python2-mistralclient-3.1.3-1.el7.noarch.rpm
 python2-msgpack-0.4.8-1.el7.x86_64.rpm
@@ -109,7 +106,6 @@ python2-scapy-2.4.0-2.el7.noarch.rpm
 python2-sushy-1.1.0-1.el7.noarch.rpm
 python2-tempestconf-1.1.3-1.el7.noarch.rpm
 python2-urllib3-1.21.1-1.el7.noarch.rpm
-python-debug-2.7.5-69.el7_5.x86_64.rpm
 python-devel-2.7.5-69.el7_5.x86_64.rpm
 python-ironic-inspector-client-2.1.0-1.el7.noarch.rpm
 python-ironic-lib-2.10.0-1.el7.noarch.rpm
@@ -119,8 +115,6 @@ python-pyngus-2.2.1-1.el7.noarch.rpm
 python-requests-mock-1.3.0-1.el7.noarch.rpm
 python-setuptools-22.0.5-1.el7.src.rpm
 python-tempest-17.0.0-1.el7.noarch.rpm
-python-test-2.7.5-69.el7_5.x86_64.rpm
-python-tools-2.7.5-69.el7_5.x86_64.rpm
 python-virtualenv-15.1.0-2.el7.noarch.rpm
 rest-0.8.0-2.el7.x86_64.rpm
 samba-client-libs-4.7.1-9.el7_5.x86_64.rpm
