@@ -69,8 +69,8 @@ bind-libs-lite-9.9.4-61.el7.x86_64.rpm
 bind-license-9.9.4-61.el7.noarch.rpm
 bind-lite-devel-9.9.4-61.el7.x86_64.rpm
 bind-utils-9.9.4-61.el7.x86_64.rpm
-binutils-2.27-28.base.el7_5.1.x86_64.rpm
-binutils-devel-2.27-28.base.el7_5.1.x86_64.rpm
+binutils-2.25.1-22.base.el7.x86_64.rpm
+binutils-devel-2.25.1-22.base.el7.x86_64.rpm
 biosdevname-0.7.3-1.el7.x86_64.rpm
 bison-3.0.4-1.el7.x86_64.rpm
 bitmap-console-fonts-0.3-21.el7.noarch.rpm
