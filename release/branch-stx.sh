@@ -1,11 +1,24 @@
 #!/bin/bash
-# branch-stx.sh - create STX branches based on today
+# branch-stx.sh - create STX branches
 #
-# branch-stx.sh [--dry-run] [<manifest>]
+# branch-stx.sh [--dry-run|-n] [-l] [-m <manifest>] [<repo-url> ...]
 #
-# * get the repo list from stx-manifest in both starlingx and stx-staging remotes
-# * create a new branch
-# * tag the new branch with an initial release identifier
+# --dry-run|-n      Do all work except pushing back to the remote repo.
+#                   Useful to validate everything locally before pushing.
+#
+# -l                List the repo URLS that would be processed and exit
+#
+# -m <manifest>     Extract the repo list from <manifest> for starlingx
+#                   and stx-staging remotes
+#
+# <repo-url>        Specify one or more direct repo URLs to branch (ie git remote)
+#                   These are appended to the list of repos extracted from the
+#                   manifest if one is specified.
+#
+# For each repo:
+# * create a new branch $BRANCH
+# * tag the new branch with an initial release identifier if $TAG is set
+# * update the .gitreview file to default to the new branch (Gerrit repos only)
 #
 # Some environment variables are available for modifying this script's behaviour:
 #
@@ -17,18 +30,59 @@
 # 'r/' (for periodic releases) to SERIES.
 #
 # TAG is the release tag that represents the actual release, derived by adding
-# a 'patch' version to SERIES, initially '0'.
+# a 'patch' version to SERIES, initially '0'. If TAG is unset no tag is created.
+#
+# Notes:
+# * This script is used for creating milestone, release and feature branches.
+# * The default action is to create a milestone branch with prefix 'm/'.
+# * To create a release branch set BRANCH directly using a 'r/' prefix.
+# * To create a feature branch set BRANCH directly using a 'f/' prefix and set
+#   TAG="" to skip tagging the branch point.
+# * The detection to use Gerrit or Github is determined by the presence of
+#   'git.starlingx.io' in the repo URL.  This may be sub-optimal.  The only actual
+#   difference in execution is .gitreview updates are only prepared for Gerrit repos.
 
 set -e
 
-# Grab options
-if [[ "$1" == "--dry-run" ]]; then
-    DRY_RUN=1
-    shift;
-fi
+# Defaults
+MANIFEST=""
 
-# Where to get the repo list
-MANIFEST=${1:-default.xml}
+optspec="lm:n-:"
+while getopts "$optspec" o; do
+    case "${o}" in
+        # Hack in longopt support
+        -)
+            case "${OPTARG}" in
+                dry-run)
+                    DRY_RUN=1
+                    ;;
+                *)
+                    if [[ "$OPTERR" = 1 ]] && [[ "${optspec:0:1}" != ":" ]]; then
+                        echo "Unknown option --${OPTARG}" >&2
+                    fi
+                    ;;
+
+            esac
+            ;;
+        l)
+            LIST=1
+            ;;
+        m)
+            MANIFEST=${OPTARG}
+            ;;
+        n)
+            DRY_RUN=1
+            ;;
+    esac
+done
+shift $((OPTIND-1))
+
+# See if we can build a repo list
+if [[ $# == 0 && -z $MANIFEST ]]; then
+    echo "ERROR: No repos to process"
+    echo "Usage: $0 [--dry-run|-n] [-l] [-m <manifest>] [<repo-url> ...]"
+    exit 1
+fi
 
 # SERIES is the base of the branch and release tag names: year.month (YYYY.MM)
 SERIES=${SERIES:-$(date '+%Y.%m')}
@@ -57,7 +111,7 @@ function update_gitreview {
 defaultbranch=$branch"
     echo "$grcontents" > .gitreview
     git add .gitreview
-    if ! git commit -s -m "Update .gitreview for $branch"; then
+    if git commit -s -m "Update .gitreview for $branch"; then
         if [[ -z $DRY_RUN ]]; then
             git review -t "create-${branch}"
         else
@@ -68,21 +122,20 @@ defaultbranch=$branch"
     fi
 }
 
-# branch_repo <remote> <repo-uri> <sha> <branch-base>
+# branch_repo <repo-uri> <sha> <branch-base>
 function branch_repo {
-    local remote=$1
-    local repo=$2
-    local sha=$3
-    local branch=$4
-    local tag=$5
+    local repo=$1
+    local sha=$2
+    local branch=$3
+    local tag=$4
 
     local repo_dir=${repo##*/}
 
     if [[ ! -d $repo_dir ]]; then
-        git clone $i $repo_dir || true
+        git clone $repo $repo_dir || true
     fi
 
-    cd $repo_dir
+    pushd $repo_dir >/dev/null
     git checkout master
 
     if ! git branch | grep $BRANCH; then
@@ -90,11 +143,13 @@ function branch_repo {
         git branch $branch $sha
     fi
 
-    # tag branch point at $sha
-    git tag -s -m "Branch $branch" -f $tag $sha
+    if [[ -n $tag ]]; then
+        # tag branch point at $sha
+        git tag -s -m "Branch $branch" -f $tag $sha
+    fi
 
     # Push the new goodness back up
-    if [[ "$r" == "starlingx" ]]; then
+    if [[ "$repo" =~ "git.starlingx.io" ]]; then
         # Do the Gerrit way
 
         # set up gerrit remote
@@ -118,14 +173,30 @@ function branch_repo {
         fi
     fi
 
-    cd -
+    popd >/dev/null
 }
 
-for r in $REMOTES; do
-    repos=$($script_dir/getrepo.sh $MANIFEST $r)
-    # crap, convert github URLs to git:
-    repos=$(sed -e 's|https://github.com/starlingx-staging|git@github.com:starlingx-staging|g' <<<$repos)
-    for i in $repos; do
-        branch_repo $r $i HEAD $BRANCH $TAG
+repo_list=""
+
+if [[ -n $MANIFEST ]]; then
+    # First get repos from the manifest
+    for r in $REMOTES; do
+        repos=$($script_dir/getrepo.sh $MANIFEST $r)
+        # crap, convert github URLs to git:
+        repos=$(sed -e 's|https://github.com/starlingx-staging|git@github.com:starlingx-staging|g' <<<$repos)
+        repo_list+=" $repos"
     done
+fi
+
+if [[ $# != 0 ]]; then
+    # Then add whatever is on the command line
+    repo_list+=" $@"
+fi
+
+for i in $repo_list; do
+    if [[ -z $LIST ]]; then
+        branch_repo $i HEAD $BRANCH $TAG
+    else
+        echo "$i"
+    fi
 done

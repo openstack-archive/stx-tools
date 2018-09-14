@@ -1,8 +1,12 @@
 ---
 - project:
+    templates:
+      - build-openstack-docs-pti
     check:
       jobs:
+        - build-openstack-releasenotes
         - openstack-tox-linters
     gate:
       jobs:
+        - build-openstack-releasenotes
         - openstack-tox-linters

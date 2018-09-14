@@ -5,6 +5,9 @@ This is a quick reference for deploying StarlingX on libvirt/qemu systems.
 It assumes you have a working libvirt/qemu installation for a non-root user
 and that your user has NOPASSWD sudo permissions.
 
+Refer also to pages "Installation Guide Virtual Environment", "Testing Guide"
+on the StarlingX wiki: https://wiki.openstack.org/wiki/StarlingX
+
 Overview
 --------
 
@@ -22,10 +25,8 @@ an interactive shell that configures everything.  Here's an example::
 	export CONTROLLER=madcloud
 	export COMPUTE=madnode
 	export BRIDGE_INTERFACE=madbr
-	export INTERNAL_NETWORK=172.30.20.0/24
-	export INTERNAL_IP=172.30.20.1/24
-	export EXTERNAL_NETWORK=192.168.20.0/24
-    export EXTERNAL_IP=192.168.20.1/24
+	export EXTERNAL_NETWORK=172.30.20.0/24
+	export EXTERNAL_IP=172.30.20.1/24
 
 There is also a script ``cleanup_network.sh`` that will remove networking
 configuration from libvirt.

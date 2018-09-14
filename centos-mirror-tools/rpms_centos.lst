@@ -810,7 +810,7 @@ mcstrans-0.3.4-5.el7.x86_64.rpm
 mdadm-4.0-13.el7.x86_64.rpm
 mdi-common-1.4.57.0-4.el7.noarch.rpm
 mdi-fonts-1.4.57.0-4.el7.noarch.rpm
-memcached-1.4.39-1.el7.src.rpm
+memcached-1.4.39-1.el7.x86_64.rpm
 mesa-libGLU-9.0.0-4.el7.x86_64.rpm
 mesa-libGLU-devel-9.0.0-4.el7.x86_64.rpm
 mesa-libwayland-egl-17.2.3-8.20171019.el7.x86_64.rpm
