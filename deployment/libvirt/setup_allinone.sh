@@ -48,7 +48,7 @@ for i in {0..1}; do
     sudo qemu-img create -f qcow2 /var/lib/libvirt/images/${CONTROLLER_NODE}-1.img 200G
     ISOIMAGE=${ISOIMAGE}
     DOMAIN_FILE=${DOMAIN_DIRECTORY}/${CONTROLLER_NODE}.xml
-    cp controller.xml ${DOMAIN_FILE}
+    cp controller_allinone.xml ${DOMAIN_FILE}
     sed -i -e "
         s,NAME,${CONTROLLER_NODE},
         s,DISK0,/var/lib/libvirt/images/${CONTROLLER_NODE}-0.img,
