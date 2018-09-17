@@ -46,6 +46,7 @@ for i in {0..1}; do
     CONTROLLER_NODE=${CONTROLLER}-${i}
     sudo qemu-img create -f qcow2 /var/lib/libvirt/images/${CONTROLLER_NODE}-0.img 600G
     sudo qemu-img create -f qcow2 /var/lib/libvirt/images/${CONTROLLER_NODE}-1.img 200G
+    sudo qemu-img create -f qcow2 /var/lib/libvirt/images/${CONTROLLER_NODE}-2.img 200G
     ISOIMAGE=${ISOIMAGE}
     DOMAIN_FILE=${DOMAIN_DIRECTORY}/${CONTROLLER_NODE}.xml
     cp controller_allinone.xml ${DOMAIN_FILE}
@@ -53,6 +54,7 @@ for i in {0..1}; do
         s,NAME,${CONTROLLER_NODE},
         s,DISK0,/var/lib/libvirt/images/${CONTROLLER_NODE}-0.img,
         s,DISK1,/var/lib/libvirt/images/${CONTROLLER_NODE}-1.img,
+        s,DISK2,/var/lib/libvirt/images/${CONTROLLER_NODE}-2.img,
         s,%BR1%,${BRIDGE_INTERFACE}1,
         s,%BR2%,${BRIDGE_INTERFACE}2,
         s,%BR3%,${BRIDGE_INTERFACE}3,

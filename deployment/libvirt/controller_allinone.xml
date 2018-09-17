@@ -39,11 +39,17 @@
       <backingStore/>
       <target dev='sdb' bus='sata'/>
     </disk>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2'/>
+      <source file='DISK2'/>
+      <backingStore/>
+      <target dev='sdc' bus='sata'/>
+    </disk>
     <disk type='file' device='cdrom'>
       <driver name='qemu' type='raw'/>
       <source file='ISO'/>
       <backingStore/>
-      <target dev='sdc' bus='sata'/>
+      <target dev='sdd' bus='sata'/>
       <readonly/>
       <boot order='2'/>
     </disk>

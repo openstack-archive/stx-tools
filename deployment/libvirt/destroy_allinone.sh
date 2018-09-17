@@ -20,6 +20,7 @@ for i in {0..1}; do
         sudo virsh undefine ${CONTROLLER_NODE}
         delete_disk /var/lib/libvirt/images/${CONTROLLER_NODE}-0.img
         delete_disk /var/lib/libvirt/images/${CONTROLLER_NODE}-1.img
+        delete_disk /var/lib/libvirt/images/${CONTROLLER_NODE}-2.img
         [ -e ${DOMAIN_FILE} ] && delete_xml ${DOMAIN_FILE}
     fi
 done
