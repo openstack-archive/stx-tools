@@ -7,17 +7,17 @@
     <partition>/machine</partition>
   </resource>
   <os>
-    <type arch='x86_64' machine='pc-i440fx-xenial'>hvm</type>
+    <type arch='x86_64' machine='pc-q35-xenial'>hvm</type>
   </os>
   <features>
     <acpi/>
     <apic/>
     <pae/>
   </features>
-  <cpu mode='host-model'>
-    <model fallback='allow'/>
+  <cpu match='exact'>
+    <model fallback='forbid'>Nehalem</model>
     <topology sockets='1' cores='4' threads='1'/>
-    <feature policy='optional' name='vmx'/>
+    <feature policy='require' name='vmx'/>
     <feature policy='optional' name='svm'/>
   </cpu>
   <clock offset='utc'/>
