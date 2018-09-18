@@ -54,14 +54,12 @@
       <boot order='2'/>
     </disk>
     <interface type='bridge'>
-      <mac address='52:54:00:da:8c:ad'/>
       <source bridge='%BR1%'/>
       <target dev='vnet0'/>
       <model type='e1000'/>
       <alias name='net0'/>
     </interface>
     <interface type='bridge'>
-      <mac address='52:54:00:da:48:ff'/>
       <source bridge='%BR2%'/>
       <target dev='vnet1'/>
       <model type='e1000'/>
@@ -69,14 +67,12 @@
       <alias name='net1'/>
     </interface>
     <interface type='bridge'>
-      <mac address='52:54:00:54:e6:c2'/>
       <source bridge='%BR3%'/>
       <target dev='vnet2'/>
       <model type='virtio'/>
       <alias name='net2'/>
     </interface>
     <interface type='bridge'>
-      <mac address='52:54:00:c5:62:6d'/>
       <source bridge='%BR4%'/>
       <target dev='vnet3'/>
       <model type='virtio'/>
