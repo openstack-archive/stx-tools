@@ -2,7 +2,7 @@
   <name>NAME</name>
   <memory unit='MiB'>24576</memory>
   <currentMemory unit='MiB'>24576</currentMemory>
-  <vcpu placement='static'>4</vcpu>
+  <vcpu placement='static'>6</vcpu>
   <resource>
     <partition>/machine</partition>
   </resource>
@@ -16,7 +16,7 @@
   </features>
   <cpu match='exact'>
     <model fallback='forbid'>Nehalem</model>
-    <topology sockets='1' cores='4' threads='1'/>
+    <topology sockets='1' cores='6' threads='1'/>
     <feature policy='require' name='vmx'/>
     <feature policy='optional' name='svm'/>
   </cpu>
