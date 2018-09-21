@@ -2,7 +2,7 @@ abattis-cantarell-fonts-0.0.25-1.el7.noarch.rpm
 acl-2.2.51-14.el7.x86_64.rpm
 acpica-tools-20160527-1.el7.x86_64.rpm
 acpid-2.0.19-9.el7.x86_64.rpm
-adobe-source-code-pro-fonts-2.010.1.030-1.el7.noarch.rpm
+adobe-source-code-pro-fonts-2.030.1.050-5.el7.noarch.rpm
 adobe-source-han-sans-cn-fonts-1.000-2.el7.noarch.rpm
 adobe-source-han-sans-twhk-fonts-1.000-1.el7.noarch.rpm
 adobe-source-sans-pro-fonts-2.020-1.el7.noarch.rpm
@@ -554,8 +554,8 @@ libcap-devel-2.22-9.el7.x86_64.rpm
 libcap-ng-0.7.5-4.el7.x86_64.rpm
 libcap-ng-devel-0.7.5-4.el7.x86_64.rpm
 libcgroup-0.41-15.el7.x86_64.rpm
-libcmocka-1.1.1-0.el7.x86_64.rpm
-libcmocka-devel-1.1.1-0.el7.x86_64.rpm
+libcmocka-1.1.2-1.el7.x86_64.rpm
+libcmocka-devel-1.1.2-1.el7.x86_64.rpm
 libcollection-0.7.0-29.el7.x86_64.rpm
 libconfig-1.4.9-5.el7.x86_64.rpm
 libcroco-0.6.11-1.el7.x86_64.rpm
@@ -1848,7 +1848,7 @@ tuned-2.9.0-1.el7.src.rpm
 tzdata-2018e-3.el7.noarch.rpm
 tzdata-java-2018e-3.el7.noarch.rpm
 unbound-libs-1.6.6-1.el7.x86_64.rpm
-unifont-fonts-9.0.06-2.el7.noarch.rpm
+unifont-fonts-10.0.07-2.el7.noarch.rpm
 unixODBC-2.3.1-11.el7.x86_64.rpm
 unixODBC-devel-2.3.1-11.el7.x86_64.rpm
 unzip-6.0-19.el7.x86_64.rpm
