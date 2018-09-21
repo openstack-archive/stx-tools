@@ -1086,6 +1086,7 @@ python-2.7.5-69.el7_5.src.rpm
 python2-amqp-2.1.4-1.el7.noarch.rpm
 python2-aodhclient-0.9.0-1.el7.noarch.rpm
 python2-appdirs-1.4.0-4.el7.noarch.rpm
+python2-asn1crypto-0.23.0-2.el7.noarch.rpm
 python2-automaton-1.12.0-1.el7.noarch.rpm
 python2-babel-2.3.4-1.el7.noarch.rpm
 python2-barbicanclient-4.5.2-1.el7.noarch.rpm
@@ -1095,12 +1096,13 @@ python2-boto-2.45.0-3.el7.noarch.rpm
 python2-cachez-0.1.0-2.el7.noarch.rpm
 python2-castellan-0.12.0-1.el7.noarch.rpm
 python2-certifi-2016.9.26-2.el7.noarch.rpm
+python2-cffi-1.11.2-1.el7.x86_64.rpm
 python2-colorama-0.3.7-2.el7.noarch.rpm
 python2-congressclient-1.8.0-1.el7.noarch.rpm
 python2-cotyledon-1.6.3-1.el7.noarch.rpm
 python2-coverage-4.4.1-1.el7.x86_64.rpm
 python2-crypto-2.6.1-15.el7.x86_64.rpm
-python2-cryptography-1.7.2-1.el7.x86_64.rpm
+python2-cryptography-2.1.4-1.el7.x86_64.rpm
 python2-cursive-0.1.2-1.el7.noarch.rpm
 python2-cycler-0.10.0-2.el7.noarch.rpm
 python2-Cython-0.25.2-3.el7.x86_64.rpm
