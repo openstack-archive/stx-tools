@@ -362,7 +362,7 @@ for line in $(cat $tarball_file); do
 
             rm -rf "MLNX_OFED_SRC-${pkg_version}"
             rm -rf "$directory_name"
-        elif [ "$tarball_name" = "qat1.7.upstream.l.1.0.3-42.tar.gz" ]; then
+        elif [ "$tarball_name" = "qat1.7.l.4.2.0-00012.tar.gz" ]; then
             download_package $tarball_url
             if [ $? -ne 0 ]; then
                 error_count=$((error_count + 1))
