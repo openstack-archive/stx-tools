@@ -25,7 +25,7 @@ openvswitch-2.8.1.tar.gz#openvswitch-2.8.1#http://openvswitch.org/releases/openv
 python-cephclient-v0.1.0.5.tar.gz#python-cephclient-0.1.0.5#https://github.com/dmsimard/python-cephclient/archive/v0.1.0.5.tar.gz
 python-setuptools-v38.5.1.tar.gz#setuptools-38.5.1#https://github.com/pypa/setuptools/archive/v38.5.1.tar.gz
 python-smartpm-1.4.1.tar.gz#smart-1.4.1#http://launchpad.net/smart/trunk/1.4.1/+download/smart-1.4.1.tar.bz2
-!qat1.7.upstream.l.1.0.3-42.tar.gz#quickassist#https://01.org/sites/default/files/downloads/intelr-quickassist-technology/qat1.7.upstream.l.1.0.3-42.tar.gz
+!qat1.7.l.4.2.0-00012.tar.gz#quickassist#https://01.org/sites/default/files/downloads/intelr-quickassist-technology/qat1.7.l.4.2.0-00012.tar.gz
 requests-toolbelt-0.5.1.tar.gz#requests-toolbelt-0.5.1#https://github.com/requests/toolbelt/archive/0.5.1.tar.gz
 rpm-4.14.0.tar.bz2#rpm-4.14.0#https://ftp.osuosl.org/pub/rpm/releases/rpm-4.14.x/rpm-4.14.0.tar.bz2
 swtpm-0.1.0-253eac5.tar.gz#swtpm-0.1.0#https://github.com/stefanberger/swtpm/tarball/1303be7d03294fb02204cb8242f366cbf0da076d
