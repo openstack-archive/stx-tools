@@ -17,9 +17,7 @@ ldapscripts-2.0.8.tgz#ldapscripts-2.0.8#https://sourceforge.net/projects/ldapscr
 libtpms-0.6.0-4f0d59d.tar.gz#libtpms-0.6.0#https://github.com/stefanberger/libtpms/tarball/c421ca0f4d00c0caceeda8d62c1efb2b7e47db04
 lldpd-0.9.0.tar.gz#lldpd-0.9.0#https://media.luffy.cx/files/lldpd/lldpd-0.9.0.tar.gz
 !mariadb-10.1.28.tar.gz#mariadb-10.1.28#https://github.com/MariaDB/server/archive/mariadb-10.1.28.tar.gz
-!MLNX_OFED_LINUX-4.2-1.2.0.0-rhel7.4-x86_64.tgz#MLNX_OFED_LINUX-4.2-1.2.0.0-rhel7.4-x86_64#http://www.mellanox.com/downloads/ofed/MLNX_OFED-4.2-1.2.0.0/MLNX_OFED_LINUX-4.2-1.2.0.0-rhel7.4-x86_64.tgz
-!MLNX_OFED_LINUX-4.3-1.0.1.0-rhel7.4-x86_64.tgz#MLNX_OFED_LINUX-4.3-1.0.1.0-rhel7.4-x86_64#http://www.mellanox.com/downloads/ofed/MLNX_OFED-4.3-1.0.1.0/MLNX_OFED_LINUX-4.3-1.0.1.0-rhel7.4-x86_64.tgz
-!MLNX_OFED_LINUX-4.3-3.0.2.1-rhel7.5-x86_64.tgz#MLNX_OFED_LINUX-4.3-3.0.2.1-rhel7.5-x86_64#http://www.mellanox.com/downloads/ofed/MLNX_OFED-4.3-3.0.2.1/MLNX_OFED_LINUX-4.3-3.0.2.1-rhel7.5-x86_64.tgz
+!MLNX_OFED_LINUX-4.4-2.0.7.0-rhel7.5-x86_64.tgz#MLNX_OFED_LINUX-4.4-2.0.7.0-rhel7.5-x86_64#http://www.mellanox.com/downloads/ofed/MLNX_OFED-4.4-2.0.7.0/MLNX_OFED_LINUX-4.4-2.0.7.0-rhel7.5-x86_64.tgz
 !mvn.repo.tgz#mvn#https://repo.maven.apache.org/maven2
 openvswitch-2.8.1.tar.gz#openvswitch-2.8.1#http://openvswitch.org/releases/openvswitch-2.8.1.tar.gz
 python-cephclient-v0.1.0.5.tar.gz#python-cephclient-0.1.0.5#https://github.com/dmsimard/python-cephclient/archive/v0.1.0.5.tar.gz
