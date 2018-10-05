@@ -21,8 +21,8 @@ fi
 
 CMD=$1
 
-TC_CONTAINER_NAME=${USER}-centos-builder
-TC_CONTAINER_TAG=local/${USER}-stx-builder:7.3
+TC_CONTAINER_NAME=${MYUNAME}-centos-builder
+TC_CONTAINER_TAG=local/${MYUNAME}-stx-builder:7.3
 TC_DOCKERFILE=Dockerfile.centos73.TC-builder
 
 function exec_container {
@@ -33,7 +33,7 @@ function exec_container {
 
 function run_container {
     # create localdisk
-    mkdir -p ${LOCALDISK}/designer/${USER}/${PROJECT}
+    mkdir -p ${LOCALDISK}/designer/${MYUNAME}/${PROJECT}
 
     docker run -it --rm \
         --name ${TC_CONTAINER_NAME} \

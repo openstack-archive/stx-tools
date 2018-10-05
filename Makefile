@@ -5,19 +5,20 @@ MY_TC_RELEASE := tis-r5-pike
 
 UID := $(shell id -u)
 USER := $(shell id -un)
-MYUNAME := builder
-
-BASE_CONTAINER := centos73
-BASE_CONTAINER_TAG := local/dev-centos:7.3
-BASE_DOCKERFILE := Dockerfile.centos73
-
-TC_CONTAINER_NAME := $(USER)-centos-builder
-TC_CONTAINER_TAG := local/$(USER)-stx-builder:7.3
-TC_DOCKERFILE := Dockerfile.centos73.TC-builder
 
 # Import the build config
 NULL := $(shell bash -c "source buildrc; set | sed -E '/^[[:alnum:]_]+/s/=/:=/' | sed 's/^//' > .makeenv")
 include .makeenv
+
+MYUNAME ?= $(USER)
+BASE_CONTAINER := centos73
+BASE_CONTAINER_TAG := local/dev-centos:7.3
+BASE_DOCKERFILE := Dockerfile.centos73
+
+TC_CONTAINER_NAME := $(MYUNAME)-centos-builder
+TC_CONTAINER_TAG := local/$(MYUNAME)-stx-builder:7.3
+TC_DOCKERFILE := Dockerfile.centos73.TC-builder
+
 
 # Base CentOS container
 
