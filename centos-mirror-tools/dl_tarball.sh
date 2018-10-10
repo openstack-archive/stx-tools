@@ -8,14 +8,13 @@
 # by the StarlingX building system recipes.
 
 # input files:
-# The files tarball-dl.lst and mvn-artifacts.lst contain the list of packages
-# and artifacts for building this sub-mirror.
+# The file tarball-dl.lst contains the list of packages and artifacts for
+# building this sub-mirror.
 script_path="$(dirname $(readlink -f $0))"
 tarball_file="$script_path/tarball-dl.lst"
-mvn_artf_file="$script_path/mvn-artifacts.lst"
 
-if [ ! -e $tarball_file -o ! -e $mvn_artf_file ];then
-    echo "$download_list does not exist, please have a check!"
+if [ ! -e $tarball_file ];then
+    echo "$tarball_file does not exist, please have a check!"
     exit -1
 fi
 
@@ -122,23 +121,6 @@ for line in $(cat $tarball_file); do
             popd
             tar czvf $tarball_name $directory_name
             rm -rf $directory_name
-        # The mvn.repo.tgz tarball will be created downloading a serie of
-        # of maven artifacts described in mvn-artifacts file.
-        elif [ "$tarball_name" = "mvn.repo.tgz" ]; then
-            mkdir -p "$directory_name"
-            if [ ! -f "$mvn_artf_file" ]; then
-                echo "$mvn_artf_file no found" 1>&2
-                exit 1
-            fi
-            while read -r artf; do
-                echo "download: $(basename $artf)"
-                wget "$tarball_url/$artf" -P "$directory_name/$(dirname $artf)"
-            done < "$mvn_artf_file"
-
-            # Create tarball
-            tar -zcvf "$tarball_name" -C "$directory_name"/ .
-            rm  -rf "$directory_name"
-            mv "$tarball_name" "$download_directory"
         elif [[ "$tarball_name" =~ ^'MLNX_OFED_LINUX' ]]; then
             pkg_version=$(echo "$tarball_name" | cut -d "-" -f2-3)
             srpm_path="MLNX_OFED_SRC-${pkg_version}/SRPMS/"
