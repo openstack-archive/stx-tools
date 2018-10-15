@@ -1,3 +1,4 @@
+=======================
 stx-tools Release Notes
 =======================
 
@@ -5,3 +6,9 @@ stx-tools Release Notes
    :maxdepth: 2
 
    unreleased
+
+Search
+------
+
+:ref:`search`
+

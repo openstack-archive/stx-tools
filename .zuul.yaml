@@ -13,3 +13,4 @@
     post:
       jobs:
         - publish-stx-tox
+        - publish-stx-releasenotes
