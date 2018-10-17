@@ -1,4 +1,3 @@
-dpdk-17.05.2.tar.gz#dpdk-stable-17.05.2#https://fast.dpdk.org/rel/dpdk-17.05.2.tar.gz
 dpkg_1.18.24.tar.xz#dpkg-1.18.24#http://http.debian.net/debian/pool/main/d/dpkg/dpkg_1.18.24.tar.xz
 drbd-8.4.3.tar.gz#drbd-8.4.3#http://www.linbit.com/downloads/drbd/8.4/archive/drbd-8.4.3.tar.gz
 drbd-8.4.7-1.tar.gz#drbd-8.4.7-1#http://www.linbit.com/downloads/drbd/8.4/drbd-8.4.7-1.tar.gz
@@ -21,7 +20,6 @@ lldpd-0.9.0.tar.gz#lldpd-0.9.0#https://media.luffy.cx/files/lldpd/lldpd-0.9.0.ta
 !MLNX_OFED_LINUX-4.3-1.0.1.0-rhel7.4-x86_64.tgz#MLNX_OFED_LINUX-4.3-1.0.1.0-rhel7.4-x86_64#http://www.mellanox.com/downloads/ofed/MLNX_OFED-4.3-1.0.1.0/MLNX_OFED_LINUX-4.3-1.0.1.0-rhel7.4-x86_64.tgz
 !MLNX_OFED_LINUX-4.3-3.0.2.1-rhel7.5-x86_64.tgz#MLNX_OFED_LINUX-4.3-3.0.2.1-rhel7.5-x86_64#http://www.mellanox.com/downloads/ofed/MLNX_OFED-4.3-3.0.2.1/MLNX_OFED_LINUX-4.3-3.0.2.1-rhel7.5-x86_64.tgz
 !mvn.repo.tgz#mvn#https://repo.maven.apache.org/maven2
-openvswitch-2.8.1.tar.gz#openvswitch-2.8.1#http://openvswitch.org/releases/openvswitch-2.8.1.tar.gz
 python-cephclient-v0.1.0.5.tar.gz#python-cephclient-0.1.0.5#https://github.com/dmsimard/python-cephclient/archive/v0.1.0.5.tar.gz
 python-setuptools-v38.5.1.tar.gz#setuptools-38.5.1#https://github.com/pypa/setuptools/archive/v38.5.1.tar.gz
 python-smartpm-1.4.1.tar.gz#smart-1.4.1#http://launchpad.net/smart/trunk/1.4.1/+download/smart-1.4.1.tar.bz2
