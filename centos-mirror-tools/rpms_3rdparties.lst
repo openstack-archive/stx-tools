@@ -1,3 +1,12 @@
+go-srpm-macros-2-3.el7.noarch.rpm#http://cbs.centos.org/kojifiles/packages/go-srpm-macros/2/3.el7/noarch/go-srpm-macros-2-3.el7.noarch.rpm
+golang-1.10.2-1.el7.x86_64.rpm#http://cbs.centos.org/kojifiles/packages/golang/1.10.2/1.el7/x86_64/golang-1.10.2-1.el7.x86_64.rpm
+golang-bin-1.10.2-1.el7.x86_64.rpm#http://cbs.centos.org/kojifiles/packages/golang/1.10.2/1.el7/x86_64/golang-bin-1.10.2-1.el7.x86_64.rpm
+golang-docs-1.10.2-1.el7.noarch.rpm#http://cbs.centos.org/kojifiles/packages/golang/1.10.2/1.el7/noarch/golang-docs-1.10.2-1.el7.noarch.rpm
+golang-misc-1.10.2-1.el7.noarch.rpm#http://cbs.centos.org/kojifiles/packages/golang/1.10.2/1.el7/noarch/golang-misc-1.10.2-1.el7.noarch.rpm
+golang-race-1.10.2-1.el7.x86_64.rpm#http://cbs.centos.org/kojifiles/packages/golang/1.10.2/1.el7/x86_64/golang-race-1.10.2-1.el7.x86_64.rpm
+golang-shared-1.10.2-1.el7.x86_64.rpm#http://cbs.centos.org/kojifiles/packages/golang/1.10.2/1.el7/x86_64/golang-shared-1.10.2-1.el7.x86_64.rpm
+golang-src-1.10.2-1.el7.noarch.rpm#http://cbs.centos.org/kojifiles/packages/golang/1.10.2/1.el7/noarch/golang-src-1.10.2-1.el7.noarch.rpm
+golang-tests-1.10.2-1.el7.noarch.rpm#http://cbs.centos.org/kojifiles/packages/golang/1.10.2/1.el7/noarch/golang-tests-1.10.2-1.el7.noarch.rpm
 libvirt-python-4.7.0-1.fc28.src.rpm#https://libvirt.org/sources/python/libvirt-python-4.7.0-1.fc28.src.rpm
 novnc-0.6.2-1.el7.noarch.rpm#http://cbs.centos.org/kojifiles/packages/novnc/0.6.2/1.el7/noarch/novnc-0.6.2-1.el7.noarch.rpm
 python2-httpbin-0.5.0-6.el7.noarch.rpm#http://cbs.centos.org/kojifiles/packages/python-httpbin/0.5.0/6.el7/noarch/python2-httpbin-0.5.0-6.el7.noarch.rpm
