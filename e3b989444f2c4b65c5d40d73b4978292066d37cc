@@ -1,0 +1,11 @@
+Code-Review+1: Al Bailey <al.bailey@windriver.com>
+Code-Review+1: Don Penney <don.penney@windriver.com>
+Code-Review+2: Jason McKenna <jason.mckenna@windriver.com>
+Code-Review+2: Scott Little <scott.little@windriver.com>
+Workflow+1: Al Bailey <al.bailey@windriver.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Thu, 18 Oct 2018 20:50:58 +0000
+Reviewed-on: https://review.openstack.org/611101
+Project: openstack/stx-tools
+Branch: refs/heads/master
