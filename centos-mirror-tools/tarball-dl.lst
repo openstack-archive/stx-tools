@@ -42,6 +42,8 @@ puppet-network-7deacd5fdc22c0543455878a8d1872f2f5417c1d.tar.gz#packstack/puppet/
 puppet-nslcd-b8c19b1ada89865f2e50758e054583798ad8011a.tar.gz#packstack/puppet/modules/nslcd#https://github.com/jlyheden/puppet-nslcd/tarball/b8c19b1ada89865f2e50758e054583798ad8011a
 puppi-c1c47f4edfd761d1bbde32a75da0c3fa7cc93a81.tar.gz#puppi-master#https://github.com/example42/puppi/tarball/c1c47f4edfd761d1bbde32a75da0c3fa7cc93a81
 helm-v2.11.0-linux-amd64.tar.gz#linux-amd64#https://storage.googleapis.com/kubernetes-helm/helm-v2.11.0-linux-amd64.tar.gz
+openstack-helm-b9fab949aaf9627be59487c35156428ca12f7442.tar.gz#openstack-helm#https://github.com/openstack/openstack-helm/archive/b9fab949aaf9627be59487c35156428ca12f7442.tar.gz
+openstack-helm-infra-d9457c8860e3e20ff84b53b5de71b5889043cf04.tar.gz#openstack-helm-infra#https://github.com/openstack/openstack-helm-infra/archive/d9457c8860e3e20ff84b53b5de71b5889043cf04.tar.gz
 gnocchi-4.2.5.tar.gz#gnocchi-4.2.5#https://pypi.io/packages/source/g/gnocchi/gnocchi-4.2.5.tar.gz
 gnocchiclient-7.0.1.tar.gz#gnocchiclient-7.0.1#https://pypi.io/packages/source/g/gnocchiclient/gnocchiclient-7.0.1.tar.gz
 kubernetes-v1.12.1.tar.gz#kubernetes-1.12.1#https://github.com/kubernetes/kubernetes/archive/v1.12.1.tar.gz
