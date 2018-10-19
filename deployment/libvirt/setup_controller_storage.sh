@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-#set -x
-
 usage() {
     echo "$0 [-h] [-i <iso image>]"
     echo ""
@@ -40,7 +38,7 @@ CONTROLLER=${CONTROLLER:-controller}
 COMPUTE=${COMPUTE:-compute}
 DOMAIN_DIRECTORY=vms
 
-bash destroy_standard_controller.sh
+bash destroy_controller_storage.sh
 
 [ ! -d ${DOMAIN_DIRECTORY} ] && mkdir ${DOMAIN_DIRECTORY}
 

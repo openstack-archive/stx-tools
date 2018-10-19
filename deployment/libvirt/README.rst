@@ -45,9 +45,10 @@ It should also only be used after all of the VMs created below have been destroy
 Controllers
 -----------
 
-There are two scripts for creating the controllers: ``setup_allinone.sh`` and
-``setup_standard_controller.sh``.  They are operated in the same manner but build
-different StarlingX cloud configurations. Choose wisely.
+There are three scripts for creating the controllers: ``setup_allinone.sh``,
+``setup_controller_storage.sh`` and ``setup_dedicated_storage.sh``.
+They are operated in the same manner but build different StarlingX cloud
+configurations. Choose wisely.
 
 You need an ISO file for the installation, these scripts take a name with the
 ``-i`` option::
@@ -64,4 +65,5 @@ Then connect to the serial console::
 
 Continue the usual StarlingX installation from this point forward.
 
-Tear down the VMs using ``destroy_allinone.sh`` and ``destroy_standard_controller.sh``.
+Tear down the VMs using ``destroy_allinone.sh``,
+``destroy_controller_storage.sh`` or ``destroy_dedicated_storage.sh``.
