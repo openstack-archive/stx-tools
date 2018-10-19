@@ -45,17 +45,18 @@ It should also only be used after all of the VMs created below have been destroy
 Controllers
 -----------
 
-There are two scripts for creating the controllers: ``setup_allinone.sh`` and
-``setup_standard_controller.sh``.  They are operated in the same manner but build
-different StarlingX cloud configurations. Choose wisely.
+There are three scripts for creating the controllers: ``setup_simplex.sh``,
+``setup_duplex.sh``, ``setup_controller_storage.sh`` and
+``setup_dedicated_storage.sh``. They are operated in the same manner
+but build different StarlingX cloud configurations.
 
 You need an ISO file for the installation, these scripts take a name with the
 ``-i`` option::
 
-	./setup_allinone.sh -i stx-2018-08-28-93.iso
+	./setup_simplex.sh -i stx-2018-08-28-93.iso
 
 And the setup will begin.  The scripts create one or more VMs and start the boot
-of the first controller, named oddly enough ``controller-0``.  If you have Xwindows
+of the first controller, named oddly enough ``simplex-controller-0``.  If you have Xwindows
 available you will get virt-manager running.
 If not, Ctrl-C out of that attempt if it doesn't return to a shell prompt.
 Then connect to the serial console::
@@ -64,4 +65,5 @@ Then connect to the serial console::
 
 Continue the usual StarlingX installation from this point forward.
 
-Tear down the VMs using ``destroy_allinone.sh`` and ``destroy_standard_controller.sh``.
+Tear down the VMs using ``destroy_simplex.sh``, ``destroy_duplex.sh``,
+``destroy_controller_storage.sh`` or ``destroy_dedicated_storage.sh``.
