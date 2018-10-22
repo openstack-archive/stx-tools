@@ -1079,7 +1079,7 @@ pysendfile-2.0.0-5.el7.x86_64.rpm
 pyserial-2.6-6.el7.noarch.rpm
 python-2.7.5-69.el7_5.src.rpm
 python2-amqp-2.1.4-1.el7.noarch.rpm
-python2-aodhclient-0.9.0-1.el7.noarch.rpm
+python-aodhclient-0.9.0-1.el7.src.rpm
 python2-appdirs-1.4.0-4.el7.noarch.rpm
 python2-automaton-1.12.0-1.el7.noarch.rpm
 python2-babel-2.3.4-1.el7.noarch.rpm
