@@ -1518,7 +1518,9 @@ rubygems-2.0.14.1-33.el7_4.noarch.rpm
 ruby-irb-2.0.0.648-33.el7_4.noarch.rpm
 ruby-libs-2.0.0.648-33.el7_4.x86_64.rpm
 ruby-shadow-1.4.1-23.el7.x86_64.rpm
-sanlock-3.6.0-1.el7.src.rpm
+sanlock-3.6.0-1.el7.x86_64.rpm
+sanlock-devel-3.6.0-1.el7.x86_64.rpm
+sanlock-lib-3.6.0-1.el7.x86_64.rpm
 sazanami-fonts-common-0.20040629-22.el7.noarch.rpm
 sazanami-gothic-fonts-0.20040629-22.el7.noarch.rpm
 sazanami-mincho-fonts-0.20040629-22.el7.noarch.rpm
