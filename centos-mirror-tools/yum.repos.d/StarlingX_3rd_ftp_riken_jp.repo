@@ -1,7 +1,0 @@
-#####
-# ftp.riken.jp
-
-[Starlingx-ftp.riken.jp_Linux_cern_centos_7_rt_Sources]
-name=Starlingx-ftp.riken.jp_Linux_cern_centos_7_rt_Sources - ftp.riken.jp_Linux_cern_centos_7_rt_Sources
-baseurl=http://ftp.riken.jp/Linux/cern/centos/7/rt/Sources
-enabled=1
