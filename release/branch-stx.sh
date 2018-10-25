@@ -11,6 +11,8 @@
 # -m <manifest>     Extract the repo list from <manifest> for starlingx
 #                   and stx-staging remotes
 #
+# -t                Set tag only (sets SRC_BRANCH == BRANCH)
+#
 # <repo-url>        Specify one or more direct repo URLs to branch (ie git remote)
 #                   These are appended to the list of repos extracted from the
 #                   manifest if one is specified.
@@ -28,6 +30,10 @@
 #
 # BRANCH is the actual branch name, derived by adding 'm/' (for milestones) or
 # 'r/' (for periodic releases) to SERIES.
+#
+# SRC_BRANCH is the starting point for the new branch.  Needed when the working
+# branch is not named 'master'.  When SRC_BRANCH == BRANCH this is effectively
+# a tag-only operation.
 #
 # TAG is the release tag that represents the actual release, derived by adding
 # a 'patch' version to SERIES, initially '0'. If TAG is unset no tag is created.
@@ -47,7 +53,7 @@ set -e
 # Defaults
 MANIFEST=""
 
-optspec="lm:n-:"
+optspec="lm:nt-:"
 while getopts "$optspec" o; do
     case "${o}" in
         # Hack in longopt support
@@ -73,6 +79,9 @@ while getopts "$optspec" o; do
         n)
             DRY_RUN=1
             ;;
+        t)
+            TAG_ONLY=1
+            ;;
     esac
 done
 shift $((OPTIND-1))
@@ -95,6 +104,14 @@ TAG=${TAG:-$SERIES.0}
 
 # The list of remotes to extract from MANIFEST
 REMOTES="starlingx stx-staging"
+
+if [[ -n $TAG_ONLY ]]; then
+    # Force source and target branches to be the same
+    SRC_BRANCH=${BRANCH}
+fi
+
+# The starting branch
+SRC_BRANCH=${SRC_BRANCH:-master}
 
 # This is where other scripts live that we need
 script_dir=$(realpath $(dirname $0))
@@ -136,7 +153,8 @@ function branch_repo {
     fi
 
     pushd $repo_dir >/dev/null
-    git checkout master
+    git checkout $SRC_BRANCH
+    git pull origin $SRC_BRANCH
 
     if ! git branch | grep $BRANCH; then
         # create branch
@@ -162,7 +180,10 @@ function branch_repo {
             echo "### skipping push to $branch"
         fi
 
-        update_gitreview $branch
+        if [[ -z $TAG_ONLY ]]; then
+            # Skip .gitreview changes for tag-only mode
+            update_gitreview $branch
+        fi
     else
         # Do the Github way
         # push
