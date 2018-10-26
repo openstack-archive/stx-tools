@@ -2,6 +2,8 @@
 
 #set -x
 
+SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}" )" )"
+
 usage() {
     echo "$0 [-h] [-i <iso image>]"
     echo ""
@@ -40,7 +42,7 @@ CONTROLLER=${CONTROLLER:-controller}
 COMPUTE=${COMPUTE:-compute}
 DOMAIN_DIRECTORY=vms
 
-bash destroy_standard_controller.sh
+bash ${SCRIPT_DIR}/destroy_standard_controller.sh
 
 [ ! -d ${DOMAIN_DIRECTORY} ] && mkdir ${DOMAIN_DIRECTORY}
 
@@ -50,7 +52,7 @@ for i in {0..1}; do
     sudo qemu-img create -f qcow2 /var/lib/libvirt/images/${CONTROLLER_NODE}-1.img 200G
     ISOIMAGE=${ISOIMAGE}
     DOMAIN_FILE=${DOMAIN_DIRECTORY}/${CONTROLLER_NODE}.xml
-    cp controller.xml ${DOMAIN_FILE}
+    cp ${SCRIPT_DIR}/controller.xml ${DOMAIN_FILE}
     sed -i -e "
         s,NAME,${CONTROLLER_NODE},
         s,DISK0,/var/lib/libvirt/images/${CONTROLLER_NODE}-0.img,
@@ -76,7 +78,7 @@ for i in {0..1}; do
     sudo qemu-img create -f qcow2 /var/lib/libvirt/images/${COMPUTE_NODE}-0.img 200G
     sudo qemu-img create -f qcow2 /var/lib/libvirt/images/${COMPUTE_NODE}-1.img 200G
     DOMAIN_FILE=${DOMAIN_DIRECTORY}/${COMPUTE_NODE}.xml
-    cp compute.xml ${DOMAIN_FILE}
+    cp ${SCRIPT_DIR}/compute.xml ${DOMAIN_FILE}
     sed -i -e "
         s,NAME,${COMPUTE_NODE},;
         s,DISK0,/var/lib/libvirt/images/${COMPUTE_NODE}-0.img,;

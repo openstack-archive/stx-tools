@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}" )" )"
+
 usage() {
     echo "$0 [-h] [-i <iso image>]"
     echo ""
@@ -38,7 +40,7 @@ CONTROLLER=${CONTROLLER:-controller-allinone}
 DOMAIN_DIRECTORY=vms
 DOMAIN_FILE=$DOMAIN_DIRECTORY/$CONTROLLER.xml
 
-bash destroy_allinone.sh
+bash ${SCRIPT_DIR}/destroy_allinone.sh
 
 [ ! -d ${DOMAIN_DIRECTORY} ] && mkdir ${DOMAIN_DIRECTORY}
 
@@ -49,7 +51,7 @@ for i in {0..1}; do
     sudo qemu-img create -f qcow2 /var/lib/libvirt/images/${CONTROLLER_NODE}-2.img 200G
     ISOIMAGE=${ISOIMAGE}
     DOMAIN_FILE=${DOMAIN_DIRECTORY}/${CONTROLLER_NODE}.xml
-    cp controller_allinone.xml ${DOMAIN_FILE}
+    cp ${SCRIPT_DIR}/controller_allinone.xml ${DOMAIN_FILE}
     sed -i -e "
         s,NAME,${CONTROLLER_NODE},
         s,DISK0,/var/lib/libvirt/images/${CONTROLLER_NODE}-0.img,

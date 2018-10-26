@@ -2,9 +2,9 @@
 #
 # cleanup_network.sh - Cleans up network interfaces - not safe to run blindly!
 
-MY_WORKING_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}" )" )"
+SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}" )" )"
 
-source ${MY_WORKING_DIR}/functions.sh
+source ${SCRIPT_DIR}/functions.sh
 
 NETWORK_DEFAULT=${NETWORK_DEFAULT:-default}
 BRIDGE_INTERFACE=${BRIDGE_INTERFACE=stxbr0}

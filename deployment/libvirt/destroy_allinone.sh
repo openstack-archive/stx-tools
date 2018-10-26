@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-MY_WORKING_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}" )" )"
+SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}" )" )"
 
-source ${MY_WORKING_DIR}/functions.sh
+source ${SCRIPT_DIR}/functions.sh
 
 BRIDGE_INTERFACE=${BRIDGE_INTERFACE:-stxbr}
 CONTROLLER=${CONTROLLER:-controller-allinone}
