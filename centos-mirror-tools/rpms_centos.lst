@@ -836,7 +836,8 @@ nekohtml-1.9.14-13.el7.noarch.rpm
 neon-0.30.0-3.el7.x86_64.rpm
 netcf-devel-0.2.8-4.el7.x86_64.rpm
 netcf-libs-0.2.8-4.el7.x86_64.rpm
-netpbm-10.79.00-7.el7.src.rpm
+netpbm-10.79.00-7.el7.x86_64.rpm
+netpbm-progs-10.79.00-7.el7.x86_64.rpm
 net-snmp-5.7.2-33.el7_5.2.src.rpm
 nettle-2.7.1-8.el7.x86_64.rpm
 nettle-devel-2.7.1-8.el7.x86_64.rpm
