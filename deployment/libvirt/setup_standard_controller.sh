@@ -27,6 +27,7 @@ CONFIGURATION="standardcontroller"
 BRIDGE_INTERFACE=${BRIDGE_INTERFACE:-stxbr}
 CONTROLLER=${CONTROLLER:-controller}
 COMPUTE=${COMPUTE:-compute}
+COMPUTE_NODES_NUMBER=${COMPUTE_NODES_NUMBER:-1}
 DOMAIN_DIRECTORY=vms
 
 bash ${SCRIPT_DIR}/destroy_standard_controller.sh
@@ -35,22 +36,9 @@ bash ${SCRIPT_DIR}/destroy_standard_controller.sh
 
 create_controller $CONFIGURATION $CONTROLLER $BRIDGE_INTERFACE $ISOIMAGE
 
-for i in {0..1}; do
+for ((i=0; i<=$COMPUTE_NODES_NUMBER; i++)); do
     COMPUTE_NODE=${COMPUTE}-${i}
-    sudo qemu-img create -f qcow2 /var/lib/libvirt/images/${COMPUTE_NODE}-0.img 200G
-    sudo qemu-img create -f qcow2 /var/lib/libvirt/images/${COMPUTE_NODE}-1.img 200G
-    DOMAIN_FILE=${DOMAIN_DIRECTORY}/${COMPUTE_NODE}.xml
-    cp ${SCRIPT_DIR}/compute.xml ${DOMAIN_FILE}
-    sed -i -e "
-        s,NAME,${COMPUTE_NODE},;
-        s,DISK0,/var/lib/libvirt/images/${COMPUTE_NODE}-0.img,;
-        s,DISK1,/var/lib/libvirt/images/${COMPUTE_NODE}-1.img,
-        s,%BR1%,${BRIDGE_INTERFACE}1,
-        s,%BR2%,${BRIDGE_INTERFACE}2,
-        s,%BR3%,${BRIDGE_INTERFACE}3,
-        s,%BR4%,${BRIDGE_INTERFACE}4,
-    " ${DOMAIN_FILE}
-    sudo virsh define ${DOMAIN_FILE}
+    create_compute ${COMPUTE_NODE}
 done
 
 sudo virt-manager
