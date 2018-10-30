@@ -132,3 +132,39 @@ destroy_controller() {
         fi
     done
 }
+
+# Create a Compute node
+create_compute() {
+    local COMPUTE_NODE=$1
+    local DOMAIN_FILE=${DOMAIN_DIRECTORY}/${COMPUTE_NODE}.xml
+    sudo qemu-img create -f qcow2 /var/lib/libvirt/images/${COMPUTE_NODE}-0.img 200G
+    sudo qemu-img create -f qcow2 /var/lib/libvirt/images/${COMPUTE_NODE}-1.img 200G
+    cp compute.xml ${DOMAIN_FILE}
+    sed -i -e "
+        s,NAME,${COMPUTE_NODE},;
+        s,DISK0,/var/lib/libvirt/images/${COMPUTE_NODE}-0.img,;
+        s,DISK1,/var/lib/libvirt/images/${COMPUTE_NODE}-1.img,
+        s,%BR1%,${BRIDGE_INTERFACE}1,
+        s,%BR2%,${BRIDGE_INTERFACE}2,
+        s,%BR3%,${BRIDGE_INTERFACE}3,
+        s,%BR4%,${BRIDGE_INTERFACE}4,
+    " ${DOMAIN_FILE}
+    sudo virsh define ${DOMAIN_FILE}
+}
+
+# Delete a Compute node
+destroy_compute() {
+    local COMPUTE_NODE=$1
+    local DOMAIN_FILE=$DOMAIN_DIRECTORY/$COMPUTE_NODE.xml
+    if virsh list --all --name | grep ${COMPUTE_NODE}; then
+        STATUS=$(virsh list --all | grep ${COMPUTE_NODE} | awk '{ print $3}')
+        if ([ "$STATUS" == "running" ])
+        then
+            sudo virsh destroy ${COMPUTE_NODE}
+        fi
+        sudo virsh undefine ${COMPUTE_NODE}
+        delete_disk /var/lib/libvirt/images/${COMPUTE_NODE}-0.img
+        delete_disk /var/lib/libvirt/images/${COMPUTE_NODE}-1.img
+        [ -e ${DOMAIN_FILE} ] && delete_xml ${DOMAIN_FILE}
+    fi
+}
