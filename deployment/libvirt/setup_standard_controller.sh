@@ -1,21 +1,12 @@
 #!/usr/bin/env bash
 
-#set -x
-
 SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}" )" )"
-
-usage() {
-    echo "$0 [-h] [-i <iso image>]"
-    echo ""
-    echo "Options:"
-    echo "  -i: StarlingX ISO image"
-    echo ""
-}
+source ${SCRIPT_DIR}/functions.sh
 
 while getopts "i:" o; do
     case "${o}" in
         i)
-            ISOIMAGE="$OPTARG"
+            ISOIMAGE=$(readlink -f "$OPTARG")
             ;;
         *)
             usage
@@ -30,12 +21,7 @@ if [ -z "${ISOIMAGE}" ]; then
     exit -1
 fi
 
-ISOIMAGE=$(readlink -f "$ISOIMAGE")
-FILETYPE=$(file --mime-type -b ${ISOIMAGE})
-if ([ "$FILETYPE" != "application/x-iso9660-image" ]); then
-    echo "$ISOIMAGE is not an application/x-iso9660-image type"
-    exit -1
-fi
+iso_image_check ${ISOIMAGE}
 
 BRIDGE_INTERFACE=${BRIDGE_INTERFACE:-stxbr}
 CONTROLLER=${CONTROLLER:-controller}
