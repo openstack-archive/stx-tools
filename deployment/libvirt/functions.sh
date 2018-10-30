@@ -1,5 +1,22 @@
 #!/usr/bin/env bash
 
+usage() {
+    echo "$0 [-h] [-i <iso image>]"
+    echo ""
+    echo "Options:"
+    echo "  -i: StarlingX ISO image"
+    echo ""
+}
+
+iso_image_check() {
+    local ISOIMAGE=$1
+    FILETYPE=$(file --mime-type -b ${ISOIMAGE})
+    if ([ "$FILETYPE" != "application/x-iso9660-image" ]); then
+        echo "$ISOIMAGE is not an application/x-iso9660-image type"
+        exit -1
+    fi
+}
+
 # delete a node's disk file in a safe way
 delete_disk() {
     local fpath="$1"
