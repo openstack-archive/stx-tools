@@ -25,6 +25,7 @@ if [[ -z ${CONFIGURATION} ]] || [[ -z "${ISOIMAGE}" ]]; then
 fi
 
 iso_image_check ${ISOIMAGE}
+configuration_check ${CONFIGURATION}
 
 CONFIGURATION=${CONFIGURATION:-allinone}
 BRIDGE_INTERFACE=${BRIDGE_INTERFACE:-stxbr}
@@ -41,7 +42,7 @@ create_controller $CONFIGURATION $CONTROLLER $BRIDGE_INTERFACE $ISOIMAGE
 
 if ([ "$CONFIGURATION" == "standardcontroller" ]); then
     for ((i=0; i<=$COMPUTE_NODES_NUMBER; i++)); do
-        COMPUTE_NODE=${COMPUTE}-${i}
+        COMPUTE_NODE=${CONFIGURATION}-${COMPUTE}-${i}
         create_compute ${COMPUTE_NODE}
     done
 fi
