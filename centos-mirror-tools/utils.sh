@@ -2,6 +2,10 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+UTILS_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}" )" )"
+
+source $UTILS_DIR/url_utils.sh
+
 get_yum_command() {
     local _file=$1
     local _level=$2
@@ -38,6 +42,8 @@ get_rpm_level_name() {
         SFILE=`echo $_rpm_name | rev | cut -d'.' -f3- | rev`
     elif [ $_level == "L2" ];then
         SFILE=`echo $_rpm_name | rev | cut -d'-' -f2- | rev`
+    elif [ $_level == "cengn" ];then
+        SFILE=`echo $_rpm_name | rev | cut -d'-' -f2- | rev`
     else
         SFILE=`echo $_rpm_name | rev | cut -d'-' -f3- | rev`
     fi
@@ -53,6 +59,9 @@ get_url() {
         _ret="$(koji_url $_name)"
     elif [[ "$_name" == *"#"* ]]; then
         _ret="$(echo $_name | cut -d'#' -f2-2)"
+        if [ $_level == "stx_mirror" ]; then
+            _ret="$(url_to_stx_mirror_url $_ret $distro)"
+        fi
     else
         _url_cmd="$(get_yum_command $_name $_level)"
         _ret="$($_url_cmd --url)"
@@ -155,7 +164,7 @@ get_download_cmd() {
         fi
     else
         # Build wget command
-        rpm_url=$(echo $ff | cut -d"#" -f2-2)
+        rpm_url=$(get_url "$ff" "$_level")
         download_cmd="$(get_wget_command $rpm_url)"
     fi
 
