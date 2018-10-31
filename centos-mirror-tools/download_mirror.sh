@@ -4,7 +4,7 @@
 #
 
 usage() {
-    echo "$0 [-n] [-c <yum.conf>] [-g]"
+    echo "$0 [-n] [-c <yum.conf>] [-g] [-s|-S|-u|-U]"
     echo ""
     echo "Options:"
     echo "  -n: Do not use sudo when performing operations (option passed on to"
@@ -12,6 +12,10 @@ usage() {
     echo "  -c: Use an alternate yum.conf rather than the system file (option passed"
     echo "      on to subscripts when appropriate)"
     echo "  -g: do not change group IDs of downloaded artifacts"
+    echo "  -s: Download from StarlingX mirror only"
+    echo "  -S: Download from StarlingX mirror, upstream as backup (default)"
+    echo "  -u: Download from original upstream sources only"
+    echo "  -U: Download from original upstream sources, StarlingX mirror as backup"
     echo ""
 }
 
@@ -25,7 +29,16 @@ generate_log_name() {
 need_file(){
     for f in $*; do
         if [ ! -e $f ]; then
-            echo "ERROR: $f does not exist."
+            echo "ERROR: File $f does not exist."
+            exit 1
+        fi
+    done
+}
+
+need_dir(){
+    for d in $*; do
+        if [ ! -e $d ]; then
+            echo "ERROR: Directory $d does not exist."
             exit 1
         fi
     done
@@ -35,12 +48,16 @@ need_file(){
 rpm_downloader="./dl_rpms.sh"
 tarball_downloader="./dl_tarball.sh"
 other_downloader="./dl_other_from_centos_repo.sh"
+make_stx_mirror_yum_conf="./make_stx_mirror_yum_conf.sh"
 
 # track optional arguments
 change_group_ids=1
 use_system_yum_conf=1
+alternate_yum_conf=""
+alternate_repo_dir=""
 rpm_downloader_extra_args=""
 tarball_downloader_extra_args=""
+distro="centos"
 
 # lst files to use as input
 rpms_from_3rd_parties="./rpms_3rdparties.lst"
@@ -51,8 +68,33 @@ other_downloads="./other_downloads.lst"
 # Overall success
 success=1
 
-# Parse out optional -c or -n arguments
-while getopts "c:ngh" o; do
+# Permitted values of dl_source
+dl_from_stx_mirror="stx_mirror"
+dl_from_upstream="upstream"
+dl_from_stx_then_upstream="$dl_from_stx_mirror $dl_from_upstream"
+dl_from_upstream_then_stx="$dl_from_upstream $dl_from_stx_mirror"
+
+# Download from what source?
+#   dl_from_stx_mirror = StarlingX mirror only
+#   dl_from_upstream   = Original upstream source only
+#   dl_from_stx_then_upstream = Either source, STX prefered (default)"
+#   dl_from_upstream_then_stx = Either source, UPSTREAM prefered"
+dl_source="$dl_from_stx_then_upstream"
+dl_flag=""
+
+dl_from_stx () {
+    local re="\\b$dl_from_stx_mirror\\b"
+    [[ "$dl_source" =~ $re ]]
+}
+
+dl_from_upstream () {
+    local re="\\b$dl_from_upstream\\b"
+    [[ "$dl_source" =~ $re ]]
+}
+
+
+# Parse out optional arguments
+while getopts "c:nghsSuU" o; do
     case "${o}" in
         n)
             # Pass -n ("no-sudo") to rpm downloader
@@ -61,11 +103,31 @@ while getopts "c:ngh" o; do
         c)
             # Pass -c ("use alternate yum.conf") to rpm downloader
             use_system_yum_conf=0
-            rpm_downloader_extra_args="${rpm_downloader_extra_args} -c ${OPTARG}"
+            alternate_yum_conf="${OPTARG}"
             ;;
         g)
             # Do not attempt to change group IDs on downloaded packages
             change_group_ids=0
+            ;;
+        s)
+            # Download from StarlingX mirror only. Do not use upstream sources.
+            dl_source="$dl_from_stx_mirror"
+            dl_flag="-s"
+            ;;
+        S)
+            # Download from StarlingX mirror only. Do not use upstream sources.
+            dl_source="$dl_from_stx_then_upstream"
+            dl_flag="-S"
+            ;;
+        u)
+            # Download from upstream only. Do not use StarlingX mirror.
+            dl_source="$dl_from_upstream"
+            dl_flag="-u"
+            ;;
+        U)
+            # Download from upstream only. Do not use StarlingX mirror.
+            dl_source="$dl_from_upstream_then_stx"
+            dl_flag="-U"
             ;;
         h)
             # Help
@@ -98,6 +160,50 @@ need_file ${rpms_from_centos_repo}
 need_file ${other_downloads}
 need_file tarball-dl.lst mvn-artifacts.lst
 
+if [ $use_system_yum_conf -eq 0 ]; then
+    need_file "${alternate_yum_conf}"
+    if [ "$alternate_repo_dir" == "" ]; then
+        alternate_repo_dir=$(grep '^repodir=' "${alternate_yum_conf}" | cit -d '=' -f 2)
+        need_dir "${alternate_repo_dir}"
+    fi
+fi
+
+TEMP_DIR=""
+rpm_downloader_extra_args="${rpm_downloader_extra_args} -D $distro"
+
+if [ "$dl_flag" == "" ]; then
+    if [ $use_system_yum_conf -eq 0 ]; then
+        rpm_downloader_extra_args="${rpm_downloader_extra_args} -c ${alternate_yum_conf}"
+    fi
+else
+    rpm_downloader_extra_args="${rpm_downloader_extra_args} $dl_flag"
+
+    if ! dl_from_stx; then
+        if [ $use_system_yum_conf -eq 0 ]; then
+            rpm_downloader_extra_args="${rpm_downloader_extra_args} -c ${alternate_yum_conf}"
+        fi
+    else
+        TEMP_DIR=$(mktemp -d /tmp/stx_mirror_XXXXXX)
+        TEMP_CONF="$TEMP_DIR/yum.conf"
+        need_file ${make_stx_mirror_yum_conf}
+        need_dir ${TEMP_DIR}
+        if [ $use_system_yum_conf -eq 0 ]; then
+            if dl_from_upstream; then
+                ${make_stx_mirror_yum_conf} -R -d $TEMP_DIR -y $alternate_yum_conf -r $alternate_repo_dir -D $distro
+            else
+                ${make_stx_mirror_yum_conf} -d $TEMP_DIR -y $alternate_yum_conf -r $alternate_repo_dir -D $distro
+            fi
+            rpm_downloader_extra_args="${rpm_downloader_extra_args} -c $TEMP_CONF"
+        else
+            if dl_from_upstream; then
+                ${make_stx_mirror_yum_conf} -R -d $TEMP_DIR -y /etc/yum.conf -r /etc/yum.repos.d -D $distro
+            else
+                ${make_stx_mirror_yum_conf} -d $TEMP_DIR -y /etc/yum.conf -r /etc/yum.repos.d -D $distro
+            fi
+            rpm_downloader_extra_args="${rpm_downloader_extra_args} -c $TEMP_CONF"
+        fi
+    fi
+fi
 
 #download RPMs/SRPMs from 3rd_party websites (not CentOS repos) by "wget"
 echo "step #1: start downloading RPMs/SRPMs from 3rd-party websites..."
@@ -232,7 +338,7 @@ fi
 echo "step #3: start downloading other files ..."
 
 logfile=$LOGSDIR"/otherfiles_centos_download.log"
-${other_downloader} ${other_downloads} ./output/stx-r1/CentOS/pike/Binary/ |& tee $logfile
+${other_downloader} ${dl_flag} -D "$distro" ${other_downloads} ./output/stx-r1/CentOS/pike/Binary/ |& tee $logfile
 retcode=${PIPESTATUS[0]}
 if [ $retcode -eq 0 ];then
     echo "step #3: done successfully"
@@ -249,7 +355,7 @@ fi
 # they will be downloaded.
 echo "step #4: start downloading tarball compressed files"
 logfile=$LOGSDIR"/tarballs_download.log"
-${tarball_downloader} ${tarball_downloader_extra_args}  |& tee $logfile
+${tarball_downloader} ${dl_flag} -D "$distro" ${tarball_downloader_extra_args}  |& tee $logfile
 retcode=${PIPESTATUS[0]}
 if [ $retcode -eq 0 ];then
     echo "step #4: done successfully"
@@ -259,6 +365,13 @@ else
     echo "   Please check the log at $(pwd)/$logfile !"
     echo ""
     success=0
+fi
+
+#
+# Clean up the mktemp directory, if required.
+#
+if [ "$TEMP_DIR" != "" ]; then
+    rm -rf "$TEMP_DIR"
 fi
 
 echo "IMPORTANT: The following 3 files are just bootstrap versions. Based"
