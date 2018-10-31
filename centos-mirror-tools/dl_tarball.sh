@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
 # The build of StarlingX relies, besides RPM Binaries and Sources, in this
 # repository which is a collection of packages in the form of Tar Compressed
 # files and 3 RPMs obtained from a Tar Compressed file. This script and a text
@@ -13,6 +17,85 @@
 script_path="$(dirname $(readlink -f $0))"
 tarball_file="$script_path/tarball-dl.lst"
 mvn_artf_file="$script_path/mvn-artifacts.lst"
+
+DL_TARBALL_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}" )" )"
+
+source $DL_TARBALL_DIR/url_utils.sh
+
+usage () {
+    echo "$0 [-D <distro>] [-s|-S|-u|-U] [-h] <other_download_list.ini> <save_path> [<force_update>]"
+}
+
+# Permitted values of dl_source
+dl_from_stx_mirror="stx_mirror"
+dl_from_upstream="upstream"
+dl_from_stx_then_upstream="$dl_from_stx_mirror $dl_from_upstream"
+dl_from_upstream_then_stx="$dl_from_upstream $dl_from_stx_mirror"
+
+# Download from what source?
+#   dl_from_stx_mirror = StarlingX mirror only
+#   dl_from_upstream   = Original upstream source only
+#   dl_from_stx_then_upstream = Either source, STX prefered (default)"
+#   dl_from_upstream_then_stx = Either source, UPSTREAM prefered"
+dl_source="$dl_from_stx_then_upstream"
+dl_flag=""
+
+distro="centos"
+
+MULTIPLE_DL_FLAG_ERROR_MSG="Error: Please use only one of: -s,-S,-u,-U"
+
+multiple_dl_flag_check () {
+    if [ "$dl_flag" != "" ]; then
+        echo "$MULTIPLE_DL_FLAG_ERROR_MSG"
+        usage
+        exit 1
+    fi
+}
+
+# Parse out optional arguments
+while getopts "D:hsSuU" o; do
+    case "${o}" in
+        D)
+            distro="${OPTARG}"
+            ;;
+
+        s)
+            # Download from StarlingX mirror only. Do not use upstream sources.
+            multiple_dl_flag_check
+            dl_source="$dl_from_stx_mirror"
+            dl_flag="-s"
+            ;;
+        S)
+            # Download from StarlingX mirror only. Do not use upstream sources.
+            multiple_dl_flag_check
+            dl_source="$dl_from_stx_then_upstream"
+            dl_flag="-S"
+            ;;
+        u)
+            # Download from upstream only. Do not use StarlingX mirror.
+            multiple_dl_flag_check
+            dl_source="$dl_from_upstream"
+            dl_flag="-u"
+            ;;
+        U)
+            # Download from upstream only. Do not use StarlingX mirror.
+            multiple_dl_flag_check
+            dl_source="$dl_from_upstream_then_stx"
+            dl_flag="-U"
+            ;;
+        h)
+            # Help
+            usage
+            exit 0
+            ;;
+        *)
+            usage
+            exit 1
+            ;;
+    esac
+done
+shift $((OPTIND-1))
+
 
 if [ ! -e $tarball_file -o ! -e $mvn_artf_file ];then
     echo "$download_list does not exist, please have a check!"
@@ -40,19 +123,54 @@ fi
 # Download function using wget command
 
 download_package() {
-    wget --spider $1
-    if [ $? != 0 ]; then
-        echo "$1 is broken"
-    else
-        wget -t 5 --wait=15 $1
+    local upstream_url="$1"
+    local stx_url=""
+    local url=""
+    local rc=1
+
+    stx_url="$(url_to_stx_mirror_url "$upstream_url" "$distro")"
+
+    for dl_src in $dl_source; do
+        case $dl_src in
+            $dl_from_stx_mirror)
+                url="$stx_url"
+                ;;
+            $dl_from_upstream)
+                url="$upstream_url"
+                ;;
+            *)
+                echo "Error: Unknown dl_source '$dl_src'"
+                continue
+                ;;
+        esac
+
+        wget --spider "$url"
         if [ $? != 0 ]; then
-            echo "$1" > "$output_log"
+            echo "Warning: '$url' is broken"
+        else
+            wget -t 5 --wait=15 "$url"
+            if [ $? -eq 0 ]; then
+                rc=0
+                break
+            else
+                echo "Warning: failed to download '$url'"
+                continue
+            fi
         fi
+    done
+
+    if [ $rc != 0 ]; then
+        echo "Error: failed to download '$upstream_url'"
+        echo "$upstream_url" > "$output_log"
     fi
+
+    return $rc
 }
 
 # This script will iterate over the tarball.lst text file and execute specific
 # tasks based on the name of the package:
+
+error_count=0;
 
 for line in $(cat $tarball_file); do
 
@@ -69,11 +187,31 @@ for line in $(cat $tarball_file); do
     #   denotes special handling is required tarball_name=`echo $line | cut -d"#" -f1-1`
     # - Column 2, name of the directory path after it is decompressed as it is
     #   referenced in the build system recipe.
-    # - Column 3, the URL for the package download
+    # - Column 3, the URL for the file or git to download
+    # - Column 4, download method, one of
+    #             http - download a simple file
+    #             http_filelist - download multiple files by appending a list of subpaths
+    #                             to the base url.  Tar up the lot.
+    #             http_script - download a simple file, run script whos output is a tarball
+    #             git - download a git, checkout branch and tar it up
+    #             git_script - download a git, checkout branch, run script whos output is a tarball
+    #
+    # - Column 5, utility field
+    #             If method is git or git_script, this is a branch,tag,sha we need to checkout
+    #             If method is http_filelist, this is the path to a file containing subpaths.
+    #                 Subpaths are appended to the urls and downloaded.
+    #             Otherwise unused
+    # - Column 6, Path to script.
+    #             Not yet supported.
+    #             Intent is to run this script to produce the final tarball, replacing
+    #             all the special case code currently embedded in this script.
 
     tarball_name=$(echo $line | cut -d"#" -f1-1)
     directory_name=$(echo $line | cut -d"#" -f2-2)
     tarball_url=$(echo $line | cut -d"#" -f3-3)
+    method=$(echo $line | cut -d"#" -f4-4)
+    util=$(echo $line | cut -d"#" -f5-5)
+    script=$(echo $line | cut -d"#" -f6-6)
 
     # Remove leading '!' if present
     tarball_name="${tarball_name//!/}"
@@ -104,6 +242,12 @@ for line in $(cat $tarball_file); do
         pushd $output_tarball
         if [ "$tarball_name" = "integrity-kmod-e6aef069.tar.gz" ]; then
             download_package $tarball_url
+            if [ $? -ne 0 ]; then
+                error_count=$((error_count + 1))
+                popd    # pushd $output_tarball
+                continue
+            fi
+
             tar xf e6aef069b6e97790cb127d5eeb86ae9ff0b7b0e3.tar.gz
             mv linux-tpmdd-e6aef06/security/integrity/ $directory_name
             tar czvf $tarball_name $directory_name
@@ -111,6 +255,12 @@ for line in $(cat $tarball_file); do
             rm e6aef069b6e97790cb127d5eeb86ae9ff0b7b0e3.tar.gz
         elif [ "$tarball_name" = "mariadb-10.1.28.tar.gz" ]; then
             download_package $tarball_url
+            if [ $? -ne 0 ]; then
+                error_count=$((error_count + 1))
+                popd    # pushd $output_tarball
+                continue
+            fi
+
             mkdir $directory_name
             tar xf $tarball_name --strip-components 1 -C $directory_name
             rm $tarball_name
@@ -122,6 +272,7 @@ for line in $(cat $tarball_file); do
             popd
             tar czvf $tarball_name $directory_name
             rm -rf $directory_name
+            popd    # pushd $directory_name
         # The mvn.repo.tgz tarball will be created downloading a serie of
         # of maven artifacts described in mvn-artifacts file.
         elif [ "$tarball_name" = "mvn.repo.tgz" ]; then
@@ -130,10 +281,48 @@ for line in $(cat $tarball_file); do
                 echo "$mvn_artf_file no found" 1>&2
                 exit 1
             fi
+
+            success_all=0
             while read -r artf; do
                 echo "download: $(basename $artf)"
-                wget "$tarball_url/$artf" -P "$directory_name/$(dirname $artf)"
+                success=1
+                for dl_src in $dl_source; do
+                    case $dl_src in
+                        $dl_from_stx_mirror)
+                            url="$(url_to_stx_mirror_url "$tarball_url/$artf" "$distro")"
+                            ;;
+                        $dl_from_upstream)
+                            url="$tarball_url/$artf"
+                            ;;
+                        *)
+                            echo "Error: Unknown dl_source '$dl_src'"
+                            continue
+                            ;;
+                    esac
+
+                    wget "$url" -P "$directory_name/$(dirname $artf)"
+                    if [ $? -eq 0 ]; then
+                        success=0
+                        break
+                    else
+                        echo "Warning: Failed to download from $url"
+                        continue;
+                    fi
+                done
+
+                if [ $success -ne 0 ]; then
+                    success_all=1
+                    echo "Error: Failed to download from '$tarball_url/$artf'"
+                fi
             done < "$mvn_artf_file"
+
+            if [ $success_all -ne 0 ]; then
+                echo "Error: Failed to download one or more components from '$tarball_url'"
+                echo "$tarball_url" > "$output_log"
+                error_count=$((error_count + 1))
+                popd    # pushd $output_tarball
+                continue
+            fi
 
             # Create tarball
             tar -zcvf "$tarball_name" -C "$directory_name"/ .
@@ -142,7 +331,14 @@ for line in $(cat $tarball_file); do
         elif [[ "$tarball_name" =~ ^'MLNX_OFED_LINUX' ]]; then
             pkg_version=$(echo "$tarball_name" | cut -d "-" -f2-3)
             srpm_path="MLNX_OFED_SRC-${pkg_version}/SRPMS/"
+
             download_package "$tarball_url"
+            if [ $? -ne 0 ]; then
+                error_count=$((error_count + 1))
+                popd    # pushd $output_tarball
+                continue
+            fi
+
             tar -xf "$tarball_name"
             tar -xf "$directory_name/src/MLNX_OFED_SRC-${pkg_version}.tgz"
             # This section of code gets specific SRPMs versions according
@@ -168,8 +364,20 @@ for line in $(cat $tarball_file); do
             rm -rf "$directory_name"
         elif [ "$tarball_name" = "qat1.7.upstream.l.1.0.3-42.tar.gz" ]; then
             download_package $tarball_url
+            if [ $? -ne 0 ]; then
+                error_count=$((error_count + 1))
+                popd    # pushd $output_tarball
+                continue
+            fi
+
         elif [ "$tarball_name" = "tpm-kmod-e6aef069.tar.gz" ]; then
             download_package $tarball_url
+            if [ $? -ne 0 ]; then
+                error_count=$((error_count + 1))
+                popd    # pushd $output_tarball
+                continue
+            fi
+
             tar xf e6aef069b6e97790cb127d5eeb86ae9ff0b7b0e3.tar.gz
             mv linux-tpmdd-e6aef06/drivers/char/tpm $directory_name
             tar czvf $tarball_name $directory_name
@@ -177,22 +385,74 @@ for line in $(cat $tarball_file); do
             rm -rf $directory_name
             rm e6aef069b6e97790cb127d5eeb86ae9ff0b7b0e3.tar.gz
         elif [ "$tarball_name" = "tss2-930.tar.gz" ]; then
-            git clone https://git.code.sf.net/p/ibmtpm20tss/tss ibmtpm20tss-tss
-            pushd ibmtpm20tss-tss
-            git checkout v930
+            dest_dir=ibmtpm20tss-tss
+            for dl_src in $dl_source; do
+                case $dl_src in
+                    $dl_from_stx_mirror)
+                        url="$(url_to_stx_mirror_url "$tarball_url" "$distro")"
+                        ;;
+                    $dl_from_upstream)
+                        url="$tarball_url"
+                        ;;
+                    *)
+                        echo "Error: Unknown dl_source '$dl_src'"
+                        continue
+                        ;;
+                esac
+
+                git clone $url $dest_dir
+                if [ $? -eq 0 ]; then
+                    # Success
+                    break
+                else
+                    echo "Warning: Failed to git clone from '$url'"
+                    continue
+                fi
+            done
+
+            if [ ! -d $dest_dir ]; then
+                echo "Error: Failed to git clone from '$tarball_url'"
+                echo "$tarball_url" > "$output_log"
+                error_count=$((error_count + 1))
+                popd    # pushd $output_tarball
+                continue
+            fi
+
+            pushd $dest_dir
+            branch=$util
+            git checkout $branch
             rm -rf .git
             popd
             mv ibmtpm20tss-tss $directory_name
             tar czvf $tarball_name $directory_name
             rm -rf $directory_name
+            popd     # pushd $dest_dir
         fi
-        popd
+        popd  # pushd $output_tarball
         continue
     fi
 
-    download_cmd="wget -t 5 --wait=15 $tarball_url -O $download_path"
+    if [ -e $download_path ]; then
+        echo "Already have $download_path"
+        continue
+    fi
 
-    if [ ! -e $download_path ]; then
+    for dl_src in $dl_source; do
+        case $dl_src in
+            $dl_from_stx_mirror)
+                url="$(url_to_stx_mirror_url "$tarball_url" "$distro")"
+                ;;
+            $dl_from_upstream)
+                url="$tarball_url"
+                ;;
+            *)
+                echo "Error: Unknown dl_source '$dl_src'"
+                continue
+                ;;
+        esac
+
+        download_cmd="wget -t 5 --wait=15 $url -O $download_path"
+
         if $download_cmd ; then
             echo "Ok: $download_path"
             pushd $download_directory
@@ -204,16 +464,26 @@ for line in $(cat $tarball_file); do
                 rm -r $directory_name
             fi
             popd
+            break
         else
-            echo "Error: Failed to download $tarball_url" 1>&2
-            echo "$tarball_url" > "$output_log"
+            echo "Warning: Failed to download $url" 1>&2
+            continue
         fi
+    done
 
-    else
-        echo "Already have $download_path"
+    if [ ! -e $download_path ]; then
+        echo "Error: Failed to download $tarball_url" 1>&2
+        echo "$tarball_url" > "$output_log"
+        error_count=$((error_count + 1))
     fi
-
 done
 
 # End of file
 
+if [ $error_count -ne 0 ]; then
+    echo ""
+    echo "Encountered $error_count errors"
+    exit 1
+fi
+
+exit 0
