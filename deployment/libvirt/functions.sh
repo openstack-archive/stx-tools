@@ -26,6 +26,15 @@ iso_image_check() {
     fi
 }
 
+configuration_check() {
+    local CONFIGURATION=$1
+    if [ $CONFIGURATION != "allinone" ] && [ $CONFIGURATION != "standardcontroller" ]; then
+        echo "Please check your configuration name, available configurations:"
+        echo "allinone, standardcontroller"
+        exit 1
+    fi
+}
+
 # delete a node's disk file in a safe way
 delete_disk() {
     local fpath="$1"
@@ -75,7 +84,7 @@ create_controller() {
         CONTROLLER_NODE_NUMBER=1
     fi
     for ((i=0; i<=$CONTROLLER_NODE_NUMBER; i++)); do
-        CONTROLLER_NODE=${CONTROLLER}-${i}
+        CONTROLLER_NODE=${CONFIGURATION}-${CONTROLLER}-${i}
         DOMAIN_FILE=${DOMAIN_DIRECTORY}/${CONTROLLER_NODE}.xml
         if ([ "$CONFIGURATION" == "allinone" ]); then
             DISK_0_SIZE=600
@@ -123,7 +132,7 @@ destroy_controller() {
         CONTROLLER_NODE_NUMBER=1
     fi
     for ((i=0; i<=$CONTROLLER_NODE_NUMBER; i++)); do
-        CONTROLLER_NODE=${CONTROLLER}-${i}
+        CONTROLLER_NODE=${CONFIGURATION}-${CONTROLLER}-${i}
         DOMAIN_FILE=$DOMAIN_DIRECTORY/$CONTROLLER_NODE.xml
         if virsh list --all --name | grep ${CONTROLLER_NODE}; then
             STATUS=$(virsh list --all | grep ${CONTROLLER_NODE} | awk '{ print $3}')
