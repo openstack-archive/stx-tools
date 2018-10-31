@@ -15,7 +15,9 @@ SUDOCMD="sudo -E"
 RELEASEVER="--releasever=7"
 YUMCONFOPT=""
 
-source utils.sh
+DL_RPMS_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}" )" )"
+
+source $DL_RPMS_DIR/utils.sh
 
 usage() {
     echo "$0 [-n] [-c <yum.conf>] <rpms_list> <match_level> "
@@ -45,8 +47,23 @@ usage() {
 CLEAN_LOGS_ONLY=0
 dl_rc=0
 
+# Permitted values of dl_source
+dl_from_stx_mirror="stx_mirror"
+dl_from_upstream="upstream"
+dl_from_stx_then_upstream="$dl_from_stx_mirror $dl_from_upstream"
+dl_from_upstream_then_stx="$dl_from_upstream $dl_from_stx_mirror"
+
+# Download from what source?
+#   dl_from_stx_mirror = StarlingX mirror only
+#   dl_from_upstream   = Original upstream source only
+#   dl_from_stx_then_upstream = Either source, STX prefered (default)"
+#   dl_from_upstream_then_stx = Either source, UPSTREAM prefered"
+dl_source="$dl_from_stx_then_upstream"
+
+distro="centos"
+
 # Parse option flags
-while getopts "c:nxh" o; do
+while getopts "c:nxD:sSuUh" o; do
     case "${o}" in
         n)
             # No-sudo
@@ -61,6 +78,27 @@ while getopts "c:nxh" o; do
             YUMCONFOPT="-c $OPTARG"
             grep -q "releasever=" $OPTARG && RELEASEVER="--$(grep releasever= ${OPTARG})"
             ;;
+        D)
+            distro="${OPTARG}"
+            ;;
+
+        s)
+            # Download from StarlingX mirror only. Do not use upstream sources.
+            dl_source="$dl_from_stx_mirror"
+            ;;
+        S)
+            # Download from StarlingX mirror only. Do not use upstream sources.
+            dl_source="$dl_from_stx_then_upstream"
+            ;;
+        u)
+            # Download from upstream only. Do not use StarlingX mirror.
+            dl_source="$dl_from_upstream"
+            ;;
+        U)
+            # Download from upstream only. Do not use StarlingX mirror.
+            dl_source="$dl_from_upstream_then_stx"
+            ;;
+
         h)
             # Help
             usage
@@ -124,8 +162,8 @@ fi
 download () {
     local _file=$1
     local _level=$2
-    local _list=$(cat $_file)
-    local _from=$(get_from $_file)
+    local _list=""
+    local _from=""
 
     local _arch=""
 
@@ -134,23 +172,51 @@ download () {
     local download_url=""
     local rpm_name=""
     local SFILE=""
+    local lvl
+    local dl_result
+
+    _list=$(cat $_file)
+    _from=$(get_from $_file)
 
     echo "now the rpm will come from: $_from"
     for ff in $_list; do
         _arch=$(get_arch_from_rpm $ff)
         rpm_name="$(get_rpm_name $ff)"
-        download_cmd="$(get_download_cmd $ff $_level)"
         dest_dir="$(get_dest_directory $_arch)"
 
         if [ ! -e $dest_dir/$rpm_name ]; then
-            echo "Looking for $rpm_name"
-            echo "--> run: $download_cmd"
-            if $download_cmd ; then
-                download_url="$(get_url $ff $_level)"
-                SFILE="$(get_rpm_level_name $rpm_name $_level)"
-                process_result "$_arch" "$dest_dir" "$download_url" "$SFILE"
-            else
-                echo "Warning: $rpm_name not found"
+            dl_result=1
+            for dl_src in $dl_source; do
+                case $dl_src in
+                    $dl_from_stx_mirror)
+                        lvl=$dl_from_stx_mirror
+                        ;;
+                    $dl_from_upstream)
+                        lvl=$_level
+                        ;;
+                    *)
+                        echo "Error: Unknown dl_source '$dl_src'"
+                        continue
+                        ;;
+                esac
+
+                download_cmd="$(get_download_cmd $ff $lvl)"
+
+                echo "Looking for $rpm_name"
+                echo "--> run: $download_cmd"
+                if $download_cmd ; then
+                    download_url="$(get_url $ff $lvl)"
+                    SFILE="$(get_rpm_level_name $rpm_name $lvl)"
+                    process_result "$_arch" "$dest_dir" "$download_url" "$SFILE"
+                    dl_result=0
+                    break
+                else
+                    echo "Warning: $rpm_name not found"
+                fi
+            done
+
+            if [ $dl_result -eq 1 ]; then
+                echo "Error: $rpm_name not found"
                 echo "missing_srpm:$rpm_name" >> $LOG
                 echo $rpm_name >> $MISSING_SRPMS
                 rc=1
