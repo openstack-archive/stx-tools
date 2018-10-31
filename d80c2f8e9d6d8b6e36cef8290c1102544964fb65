@@ -1,0 +1,9 @@
+Code-Review+2: Brent Rowsell <brent.rowsell@windriver.com>
+Code-Review+2: Jason McKenna <jason.mckenna@windriver.com>
+Workflow+1: Jason McKenna <jason.mckenna@windriver.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Wed, 31 Oct 2018 13:40:15 +0000
+Reviewed-on: https://review.openstack.org/610791
+Project: openstack/stx-tools
+Branch: refs/heads/master
