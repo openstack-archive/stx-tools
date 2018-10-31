@@ -1,10 +1,19 @@
 #!/usr/bin/env bash
 
 usage() {
-    echo "$0 [-h] [-i <iso image>]"
+    echo "$0 [-h] [-c <configuration>] [-i <iso image>]"
     echo ""
     echo "Options:"
+    echo "  -c: Configuration: allinone, standardcontroller"
     echo "  -i: StarlingX ISO image"
+    echo ""
+}
+
+usage_destroy() {
+    echo "$0 [-h] [-c <configuration>]"
+    echo ""
+    echo "Options:"
+    echo "  -c: Configuration: allinone, standardcontroller"
     echo ""
 }
 
