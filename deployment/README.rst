@@ -80,6 +80,7 @@ identity:
 - Controller All-in-one
 - Controller
 - Compute
+- Storage
 
 These nodes are used to create the virtual machines and the network interfaces
 to setup the StarlingX system:
@@ -88,9 +89,13 @@ to setup the StarlingX system:
   - 1 Controller
 - Setup Duplex
   - 2 Controllers
-- Setup Standard Controller
+- Setup Controller Storage
   - 2 Controllers
   - 2 Computes
+- Setup Dedicated Storage
+  - 2 Controllers
+  - 2 Computes
+  - 2 Storages
 
 Directory: virtualbox
 ~~~~~~~~~~~~~~~~~~~~~
