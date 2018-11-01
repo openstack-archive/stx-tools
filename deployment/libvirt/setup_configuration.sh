@@ -32,6 +32,8 @@ BRIDGE_INTERFACE=${BRIDGE_INTERFACE:-stxbr}
 CONTROLLER=${CONTROLLER:-controller}
 COMPUTE=${COMPUTE:-compute}
 COMPUTE_NODES_NUMBER=${COMPUTE_NODES_NUMBER:-1}
+STORAGE=${STORAGE:-storage}
+STORAGE_NODES_NUMBER=${STORAGE_NODES_NUMBER:-1}
 DOMAIN_DIRECTORY=vms
 
 bash ${SCRIPT_DIR}/destroy_configuration.sh -c $CONFIGURATION
@@ -40,10 +42,17 @@ bash ${SCRIPT_DIR}/destroy_configuration.sh -c $CONFIGURATION
 
 create_controller $CONFIGURATION $CONTROLLER $BRIDGE_INTERFACE $ISOIMAGE
 
-if ([ "$CONFIGURATION" == "standardcontroller" ]); then
+if ([ "$CONFIGURATION" == "controllerstorage" ] || [ "$CONFIGURATION" == "dedicatedstorage" ]); then
     for ((i=0; i<=$COMPUTE_NODES_NUMBER; i++)); do
         COMPUTE_NODE=${CONFIGURATION}-${COMPUTE}-${i}
-        create_compute ${COMPUTE_NODE}
+        create_node "compute" ${COMPUTE_NODE} ${BRIDGE_INTERFACE}
+    done
+fi
+
+if ([ "$CONFIGURATION" == "dedicatedstorage" ]); then
+    for ((i=0; i<=$STORAGE_NODES_NUMBER; i++)); do
+        STORAGE_NODE=${CONFIGURATION}-${STORAGE}-${i}
+        create_node "storage" ${STORAGE_NODE} ${BRIDGE_INTERFACE}
     done
 fi
 
