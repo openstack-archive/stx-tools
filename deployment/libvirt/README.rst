@@ -50,7 +50,8 @@ builds different StarlingX cloud configurations:
 
 - simplex
 - duplex
-- standardcontroller
+- controllerstorage
+- dedicatedstorage
 
 You need an StarlingX ISO file for the installation. The script takes the
 configuration name with the ``-c`` option and the ISO file name with the
