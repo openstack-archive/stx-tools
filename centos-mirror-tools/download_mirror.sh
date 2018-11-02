@@ -189,7 +189,10 @@ fi
 if [ $use_system_yum_conf -eq 0 ]; then
     need_file "${alternate_yum_conf}"
     if [ "$alternate_repo_dir" == "" ]; then
-        alternate_repo_dir=$(grep '^repodir=' "${alternate_yum_conf}" | cut -d '=' -f 2)
+        alternate_repo_dir=$(grep '^reposdir=' "${alternate_yum_conf}" | cut -d '=' -f 2)
+        if [ "$alternate_repo_dir" == "" ]; then
+            alternate_repo_dir="$(dirname "${alternate_yum_conf}"/yum.repos.d)"
+        fi
         need_dir "${alternate_repo_dir}"
     fi
 fi
