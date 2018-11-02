@@ -40,9 +40,10 @@ get_rpm_level_name() {
     local _level=$2
     if [ $_level == "L1" ]; then
         SFILE=`echo $_rpm_name | rev | cut -d'.' -f3- | rev`
+    elif [ $_level == "$dl_from_stx_mirror" ];then
+        # stx mirror uses L1 matches
+        SFILE=`echo $_rpm_name | rev | cut -d'.' -f3- | rev`
     elif [ $_level == "L2" ];then
-        SFILE=`echo $_rpm_name | rev | cut -d'-' -f2- | rev`
-    elif [ $_level == "cengn" ];then
         SFILE=`echo $_rpm_name | rev | cut -d'-' -f2- | rev`
     else
         SFILE=`echo $_rpm_name | rev | cut -d'-' -f3- | rev`

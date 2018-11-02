@@ -189,7 +189,10 @@ fi
 if [ $use_system_yum_conf -eq 0 ]; then
     need_file "${alternate_yum_conf}"
     if [ "$alternate_repo_dir" == "" ]; then
-        alternate_repo_dir=$(grep '^repodir=' "${alternate_yum_conf}" | cut -d '=' -f 2)
+        alternate_repo_dir=$(grep '^reposdir=' "${alternate_yum_conf}" | cut -d '=' -f 2)
+        if [ "$alternate_repo_dir" == "" ]; then
+            alternate_repo_dir="$(dirname "${alternate_yum_conf}"/yum.repos.d)"
+        fi
         need_dir "${alternate_repo_dir}"
     fi
 fi
@@ -197,38 +200,49 @@ fi
 TEMP_DIR=""
 rpm_downloader_extra_args="${rpm_downloader_extra_args} -D $distro"
 
-if [ "$dl_flag" == "" ]; then
+if [ "$dl_flag" != "" ]; then
+    # Pass dl_flag on to the rpm_downloader script
+    rpm_downloader_extra_args="${rpm_downloader_extra_args} $dl_flag"
+fi
+
+if ! dl_from_stx; then
+    # Not using stx mirror
     if [ $use_system_yum_conf -eq 0 ]; then
+        # Use provided yum.conf unaltered.
         rpm_downloader_extra_args="${rpm_downloader_extra_args} -c ${alternate_yum_conf}"
     fi
 else
-    rpm_downloader_extra_args="${rpm_downloader_extra_args} $dl_flag"
+    # We want to use stx mirror, so we need to create a new, modified yum.conf and yum.repos.d.
+    # The modifications will add or substitute repos pointing to the StralingX mirror.
+    TEMP_DIR=$(mktemp -d /tmp/stx_mirror_XXXXXX)
+    TEMP_CONF="$TEMP_DIR/yum.conf"
+    need_file ${make_stx_mirror_yum_conf}
+    need_dir ${TEMP_DIR}
 
-    if ! dl_from_stx; then
-        if [ $use_system_yum_conf -eq 0 ]; then
-            rpm_downloader_extra_args="${rpm_downloader_extra_args} -c ${alternate_yum_conf}"
+    if [ $use_system_yum_conf -eq 0 ]; then
+        # Modify user provided yum.conf.  We expect ir to have a 'reposdir=' entry to
+        # point to the repos that need to be modified as well.
+        if dl_from_upstream; then
+            # add
+            ${make_stx_mirror_yum_conf} -R -d $TEMP_DIR -y $alternate_yum_conf -r $alternate_repo_dir -D $distro
+        else
+            # substitute
+            ${make_stx_mirror_yum_conf} -d $TEMP_DIR -y $alternate_yum_conf -r $alternate_repo_dir -D $distro
         fi
     else
-        TEMP_DIR=$(mktemp -d /tmp/stx_mirror_XXXXXX)
-        TEMP_CONF="$TEMP_DIR/yum.conf"
-        need_file ${make_stx_mirror_yum_conf}
-        need_dir ${TEMP_DIR}
-        if [ $use_system_yum_conf -eq 0 ]; then
-            if dl_from_upstream; then
-                ${make_stx_mirror_yum_conf} -R -d $TEMP_DIR -y $alternate_yum_conf -r $alternate_repo_dir -D $distro
-            else
-                ${make_stx_mirror_yum_conf} -d $TEMP_DIR -y $alternate_yum_conf -r $alternate_repo_dir -D $distro
-            fi
-            rpm_downloader_extra_args="${rpm_downloader_extra_args} -c $TEMP_CONF"
+        # Modify system yum.conf and yum.repos.d.  Remember that we expect to run this
+        # inside a container, and the system yum.conf has like been modified else where
+        # in these scripts.
+        if dl_from_upstream; then
+            # add
+            ${make_stx_mirror_yum_conf} -R -d $TEMP_DIR -y /etc/yum.conf -r /etc/yum.repos.d -D $distro
         else
-            if dl_from_upstream; then
-                ${make_stx_mirror_yum_conf} -R -d $TEMP_DIR -y /etc/yum.conf -r /etc/yum.repos.d -D $distro
-            else
-                ${make_stx_mirror_yum_conf} -d $TEMP_DIR -y /etc/yum.conf -r /etc/yum.repos.d -D $distro
-            fi
-            rpm_downloader_extra_args="${rpm_downloader_extra_args} -c $TEMP_CONF"
+            # substitute
+            ${make_stx_mirror_yum_conf} -d $TEMP_DIR -y /etc/yum.conf -r /etc/yum.repos.d -D $distro
         fi
     fi
+
+    rpm_downloader_extra_args="${rpm_downloader_extra_args} -c $TEMP_CONF"
 fi
 
 list=${rpms_from_3rd_parties}
