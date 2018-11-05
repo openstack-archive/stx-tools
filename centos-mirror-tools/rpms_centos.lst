@@ -883,6 +883,11 @@ openssl-1.0.2k-12.el7.x86_64.rpm
 openssl-devel-1.0.2k-12.el7.x86_64.rpm
 openssl-libs-1.0.2k-12.el7.x86_64.rpm
 openstack-aodh-5.1.0-1.el7.src.rpm
+openstack-barbican-5.0.1-1.el7.noarch.rpm
+openstack-barbican-api-5.0.1-1.el7.noarch.rpm
+openstack-barbican-common-5.0.1-1.el7.noarch.rpm
+openstack-barbican-keystone-listener-5.0.1-1.el7.noarch.rpm
+openstack-barbican-worker-5.0.1-1.el7.noarch.rpm
 openstack-macros-2018.1.0-0.noarch.rpm
 openstack-nova-cert-14.0.8-1.el7.noarch.rpm
 openstack-panko-3.0.0-1.el7.src.rpm
@@ -1028,6 +1033,7 @@ pth-2.0.7-23.el7.x86_64.rpm
 puppet-4.8.2-1.el7.src.rpm
 puppet-aodh-11.3.0-1.el7.noarch.rpm
 puppet-apache-1.10.0-2.05a0aacgit.el7.noarch.rpm
+puppet-barbican-11.4.0-1.el7.noarch.rpm
 puppet-ceilometer-11.3.0-1.el7.src.rpm
 puppet-ceph-2.4.1-1.el7.src.rpm
 puppet-certmonger-1.1.1-1.1157a7egit.el7.noarch.rpm
@@ -1083,7 +1089,7 @@ python-aodhclient-0.9.0-1.el7.src.rpm
 python2-appdirs-1.4.0-4.el7.noarch.rpm
 python2-automaton-1.12.0-1.el7.noarch.rpm
 python2-babel-2.3.4-1.el7.noarch.rpm
-python2-barbicanclient-4.5.2-1.el7.noarch.rpm
+python2-barbicanclient-4.5.3-1.el7.noarch.rpm
 python2-bcrypt-3.1.2-3.el7.x86_64.rpm
 python2-bitmath-1.3.1-1.el7.noarch.rpm
 python2-boto-2.45.0-3.el7.noarch.rpm
@@ -1273,6 +1279,7 @@ python-alembic-0.8.10-1.el7.noarch.rpm
 python-anyjson-0.3.3-3.el7.noarch.rpm
 python-backports-1.0-8.el7.x86_64.rpm
 python-backports-ssl_match_hostname-3.5.0.1-1.el7.noarch.rpm
+python-barbican-5.0.1-1.el7.noarch.rpm
 python-beaker-1.5.4-10.el7.noarch.rpm
 python-beautifulsoup4-4.6.0-1.el7.noarch.rpm
 python-betamax-0.7.0-1.el7.noarch.rpm
@@ -1343,6 +1350,7 @@ python-kitchen-1.1.1-5.el7.noarch.rpm
 python-kmod-0.9-4.el7.x86_64.rpm
 python-kubernetes-4.0.0-1.el7.src.rpm
 python-ldap-2.4.15-2.el7.x86_64.rpm
+python-ldap3-0.9.8.6-2.el7.noarch.rpm
 python-ldappool-1.0-4.el7.noarch.rpm
 python-lesscpy-0.9j-4.el7.noarch.rpm
 python-linecache2-1.0.0-1.el7.noarch.rpm
