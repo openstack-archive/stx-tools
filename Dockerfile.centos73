@@ -29,3 +29,10 @@ RUN pip install python-subunit junitxml --upgrade && \
 # Install repo tool
 RUN curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo && \
     chmod a+x /usr/local/bin/repo
+
+# installing golang, dep, and setting paths
+RUN yum install -y golang
+ENV GOPATH="/usr/local/go"
+ENV PATH="${GOPATH}/bin:${PATH}"
+RUN mkdir -p ${GOPATH}/bin
+RUN curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
