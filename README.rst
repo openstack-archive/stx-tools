@@ -78,6 +78,7 @@ will run essentially the following manual build command:
 
     docker build \
         --ulimit core=0 \
+        --network host \
         -t local/dev-centos:7.3 \
         -f Dockerfile.centos73 \
         .
@@ -173,7 +174,7 @@ or by hand:
 
 .. code-block:: bash
 
-    docker exec -it --user=${MYUNAME} ${USER}-centos-builder bash
+    docker exec -it --user=${MYUNAME} ${MYUNAME}-centos-builder bash
 
 Notes:
 ~~~~~~
@@ -196,7 +197,7 @@ or by hand:
 
 .. code-block:: bash
 
-    docker kill ${USER}-centos-builder
+    docker kill ${MYUNAME}-centos-builder
 
 What to do to build from WITHIN the container
 ---------------------------------------------

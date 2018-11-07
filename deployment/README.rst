@@ -79,13 +79,17 @@ Deployment directory hosts a total of 3 directories and 18 files::
     $ tree -L 3 deployment/
     deployment/
     ├── libvirt
+    │   ├── cleanup_network.sh
     │   ├── compute.xml
     │   ├── controller_allinone.xml
     │   ├── controller.xml
     │   ├── destroy_allinone.sh
+    │   ├── destroy_network.sh
     │   ├── destroy_standard_controller.sh
+    │   ├── functions.sh
     │   ├── install_packages.sh
     │   ├── setup_allinone.sh
+    │   ├── setup_network.sh
     │   └── setup_standard_controller.sh
     ├── provision
     │   ├── simplex_stage_1.sh
