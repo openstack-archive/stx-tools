@@ -171,15 +171,6 @@ dl_git_from_url () {
         return 1
     fi
 
-    CMD="git checkout '$BRANCH'"
-    echo "$CMD"
-    eval $CMD
-    if [ $? -ne 0 ]; then
-        echo "Error: $CMD"
-        cd "$SAVE_DIR"
-        return 1
-    fi
-
     cd "$SAVE_DIR"
     return 0
 }
