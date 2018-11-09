@@ -1585,7 +1585,8 @@ swig-2.0.10-5.el7.x86_64.rpm
 sysfsutils-2.1.0-16.el7.x86_64.rpm
 syslinux-4.05-13.el7.x86_64.rpm
 syslinux-extlinux-4.05-13.el7.x86_64.rpm
-syslog-ng-3.5.6-3.el7.src.rpm
+syslog-ng-3.5.6-3.el7.x86_64.rpm
+syslog-ng-libdbi-3.5.6-3.el7.x86_64.rpm
 sysstat-10.1.5-13.el7.x86_64.rpm
 systemd-219-57.el7.src.rpm
 sysvinit-tools-2.88-14.dsf.el7.x86_64.rpm
