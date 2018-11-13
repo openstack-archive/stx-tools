@@ -38,6 +38,8 @@ RUN groupadd -g 751 cgts && \
         yum install -y anaconda \
         anaconda-help \
         anaconda-runtime \
+        autogen \
+        automake \
         bc \
         bind \
         bind-utils \
@@ -48,6 +50,7 @@ RUN groupadd -g 751 cgts && \
         gcc \
         gettext \
         git \
+        libtool \
         libxml2 \
         libxml2-devel \
         libxslt-devel \
