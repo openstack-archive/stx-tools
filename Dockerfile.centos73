@@ -8,7 +8,7 @@ RUN yum install -y epel-release && \
     anaconda anaconda-help anaconda-runtime bc python-psutil createrepo /usr/bin/yumdownloader \
     /usr/bin/mkisofs git quilt pax perl-CPAN gcc expat-devel syslinux udisks2 rpm-build rpm-sign deltarpm \
     python-deltarpm rpm-python cpanminus wget \
-    bind bind-utils squashfs-tools
+    bind bind-utils squashfs-tools automake autogen libtool
 
 # cpan modules, installing with cpanminus to avoid stupid questions since cpan is whack
 RUN cpanm --notest Fatal && \
