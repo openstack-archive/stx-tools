@@ -42,10 +42,10 @@ Sample ``localrc``
 .. code-block:: bash
 
     # tbuilder localrc
-
-    MYUNAME=stx-builder
-    PROJECT=stx-work
-    HOST_PREFIX=$HOME/work
+    MYUNAME=$USER
+    PROJECT=starlingx
+    HOST_PREFIX=$HOME/starlingx/workspace
+    HOST_MIRROR_DIR=$HOME/starlingx/mirror
 
 Makefile
 --------
