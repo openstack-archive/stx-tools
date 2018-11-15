@@ -22,8 +22,8 @@ fi
 CMD=$1
 
 TC_CONTAINER_NAME=${MYUNAME}-centos-builder
-TC_CONTAINER_TAG=local/${MYUNAME}-stx-builder:7.3
-TC_DOCKERFILE=Dockerfile.centos73.TC-builder
+TC_CONTAINER_TAG=local/${MYUNAME}-stx-builder:7.4
+TC_DOCKERFILE=Dockerfile
 
 function exec_container {
     docker cp ${WORK_DIR}/buildrc ${TC_CONTAINER_NAME}:/home/${MYUNAME}
