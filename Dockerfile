@@ -12,6 +12,7 @@
 
 FROM centos:7.4.1708
 
+
 # Proxy configuration
 #ENV http_proxy  "http://your.actual_http_proxy.com:your_port"
 #ENV https_proxy "https://your.actual_https_proxy.com:your_port"
