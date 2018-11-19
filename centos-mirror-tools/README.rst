@@ -57,9 +57,8 @@ After all downloading complete, copy the download files to mirror.
 
 .. code-block :: bash
 
-    $ find ./output -name "*.i686.rpm" | xargs rm -f
-    $ chown  751:751 -R ./output
-    $ cp -rf  output/stx-r1/ <your_mirror_folder>/
+    $ mkdir -p <your_mirror_folder>/
+    $ cp -r output/stx-r1/ <your_mirror_folder>/
 
 In this case ``<your_mirror_folder>`` can be whatever folder you want to
 use as mirror.
