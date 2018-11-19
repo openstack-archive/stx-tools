@@ -65,7 +65,14 @@ get_url() {
         fi
     else
         _url_cmd="$(get_yum_command $_name $_level)"
-        _ret="$($_url_cmd --url)"
+
+        # When we add --url to the yum download command,
+        # --archlist is no longer enforced.  Multiple
+        # url's might be returned.  So use grep to
+        # filter urls for the desitered arch.
+        local arr=( $(split_filename $_name) )
+        local arch=${arr[3]}
+        _ret="$($_url_cmd --url | grep "[.]$arch[.]rpm$")"
     fi
     echo "$_ret"
 }
@@ -139,14 +146,17 @@ process_result() {
         mkdir -p $dest_dir
     fi
 
-    echo "url_srpm:$url" >> $LOG
+    echo "url_srpm:$url"
 
     if ! mv -f $sfile* $dest_dir ; then
         echo "FAILED to move $rpm_name"
         echo "fail_move_srpm:$rpm_name" >> $LOG
+        return 1
     fi
-    echo "found_srpm:$rpm_name" >> $LOG
+
+    echo "found_srpm:$rpm_name"
     echo $rpm_name >> $FOUND_SRPMS
+    return 0
 }
 
 
