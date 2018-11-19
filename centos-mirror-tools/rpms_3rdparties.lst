@@ -9,6 +9,7 @@ golang-src-1.10.2-1.el7.noarch.rpm#http://cbs.centos.org/kojifiles/packages/gola
 golang-tests-1.10.2-1.el7.noarch.rpm#http://cbs.centos.org/kojifiles/packages/golang/1.10.2/1.el7/noarch/golang-tests-1.10.2-1.el7.noarch.rpm
 libvirt-python-4.7.0-1.fc28.src.rpm#https://libvirt.org/sources/python/libvirt-python-4.7.0-1.fc28.src.rpm
 novnc-0.6.2-1.el7.noarch.rpm#http://cbs.centos.org/kojifiles/packages/novnc/0.6.2/1.el7/noarch/novnc-0.6.2-1.el7.noarch.rpm
+python2-docker-3.3.0-1.el7.noarch.rpm#http://cbs.centos.org/kojifiles/packages/python-docker/3.3.0/1.el7/noarch/python2-docker-3.3.0-1.el7.noarch.rpm
 python2-httpbin-0.5.0-6.el7.noarch.rpm#http://cbs.centos.org/kojifiles/packages/python-httpbin/0.5.0/6.el7/noarch/python2-httpbin-0.5.0-6.el7.noarch.rpm
 python-kubernetes-6.0.0-1.el7.src.rpm#http://cbs.centos.org/kojifiles/packages/python-kubernetes/6.0.0/1.el7/src/python-kubernetes-6.0.0-1.el7.src.rpm
 python2-kubernetes-6.0.0-1.el7.noarch.rpm#http://cbs.centos.org/kojifiles/packages/python-kubernetes/6.0.0/1.el7/noarch/python2-kubernetes-6.0.0-1.el7.noarch.rpm
