@@ -915,8 +915,8 @@ pakchois-0.4-10.el7.x86_64.rpm
 paktype-naqsh-fonts-4.1-2.el7.noarch.rpm
 paktype-naskh-basic-fonts-4.1-3.el7.noarch.rpm
 paktype-tehreer-fonts-4.1-2.el7.noarch.rpm
-pam-1.1.8-22.el7.src.rpm
 pam-1.1.8-22.el7.x86_64.rpm
+pam-devel-1.1.8-22.el7.x86_64.rpm
 pango-1.40.4-1.el7.x86_64.rpm
 pango-devel-1.40.4-1.el7.x86_64.rpm
 paratype-pt-sans-caption-fonts-20101909-3.el7.noarch.rpm
