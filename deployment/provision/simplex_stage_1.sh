@@ -7,7 +7,7 @@ system host-disk-list controller-0
 
 NODE=controller-0
 DEVICE=/dev/sdb
-SIZE=$(system host-disk-list $NODE | grep $DEVICE | awk '{print $12}')
+SIZE=$(echo $(system host-disk-list $NODE | grep $DEVICE | awk '{print $12}') | awk -F"." '{print $1}')
 DISK=$(system host-disk-list $NODE | grep $DEVICE | awk '{print $2}')
 # Create a partition for Cinder
 system host-disk-partition-add $NODE $DISK $SIZE -t lvm_phys_vol
@@ -77,7 +77,8 @@ system host-if-modify -m 1500 -n data1 -p ${PHYSNET1} -nt data ${COMPUTE} ${DATA
 system host-lvg-add ${COMPUTE} nova-local
 ROOT_DISK=$(system host-show ${COMPUTE} | grep rootfs | awk '{print $4}')
 ROOT_DISK_UUID=$(system host-disk-list ${COMPUTE} --nowrap | grep ${ROOT_DISK} | awk '{print $2}')
-PARTITION_SIZE=$(($(system host-disk-list ${COMPUTE} --nowrap   | grep ${ROOT_DISK} | awk '{print $12;}')/2))
+ROOT_DISK_SIZE=$(system host-disk-list ${COMPUTE} --nowrap   | grep ${ROOT_DISK} | awk '{print $12}')
+PARTITION_SIZE=$(echo ${ROOT_SIZE}/2|bc)
 CGTS_PARTITION=$(system host-disk-partition-add -t lvm_phys_vol ${COMPUTE} ${ROOT_DISK_UUID} ${PARTITION_SIZE})
 
 while true; do
