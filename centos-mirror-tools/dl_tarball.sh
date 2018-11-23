@@ -12,11 +12,10 @@
 # by the StarlingX building system recipes.
 
 # input files:
-# The files tarball-dl.lst and mvn-artifacts.lst contain the list of packages
-# and artifacts for building this sub-mirror.
+# The file tarball-dl.lst contains the list of packages and artifacts for
+# building this sub-mirror.
 script_path="$(dirname $(readlink -f $0))"
 tarball_file="$script_path/tarball-dl.lst"
-mvn_artf_file="$script_path/mvn-artifacts.lst"
 
 DL_TARBALL_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}" )" )"
 
@@ -97,8 +96,8 @@ done
 shift $((OPTIND-1))
 
 
-if [ ! -e $tarball_file -o ! -e $mvn_artf_file ];then
-    echo "$download_list does not exist, please have a check!"
+if [ ! -e $tarball_file ]; then
+    echo "$tarball_file does not exist, please have a check!"
     exit -1
 fi
 
@@ -273,61 +272,6 @@ for line in $(cat $tarball_file); do
             tar czvf $tarball_name $directory_name
             rm -rf $directory_name
             popd    # pushd $directory_name
-        # The mvn.repo.tgz tarball will be created downloading a serie of
-        # of maven artifacts described in mvn-artifacts file.
-        elif [ "$tarball_name" = "mvn.repo.tgz" ]; then
-            mkdir -p "$directory_name"
-            if [ ! -f "$mvn_artf_file" ]; then
-                echo "$mvn_artf_file no found" 1>&2
-                exit 1
-            fi
-
-            success_all=0
-            while read -r artf; do
-                echo "download: $(basename $artf)"
-                success=1
-                for dl_src in $dl_source; do
-                    case $dl_src in
-                        $dl_from_stx_mirror)
-                            url="$(url_to_stx_mirror_url "$tarball_url/$artf" "$distro")"
-                            ;;
-                        $dl_from_upstream)
-                            url="$tarball_url/$artf"
-                            ;;
-                        *)
-                            echo "Error: Unknown dl_source '$dl_src'"
-                            continue
-                            ;;
-                    esac
-
-                    wget "$url" -P "$directory_name/$(dirname $artf)"
-                    if [ $? -eq 0 ]; then
-                        success=0
-                        break
-                    else
-                        echo "Warning: Failed to download from $url"
-                        continue;
-                    fi
-                done
-
-                if [ $success -ne 0 ]; then
-                    success_all=1
-                    echo "Error: Failed to download from '$tarball_url/$artf'"
-                fi
-            done < "$mvn_artf_file"
-
-            if [ $success_all -ne 0 ]; then
-                echo "Error: Failed to download one or more components from '$tarball_url'"
-                echo "$tarball_url" > "$output_log"
-                error_count=$((error_count + 1))
-                popd    # pushd $output_tarball
-                continue
-            fi
-
-            # Create tarball
-            tar -zcvf "$tarball_name" -C "$directory_name"/ .
-            rm  -rf "$directory_name"
-            mv "$tarball_name" "$download_directory"
         elif [[ "$tarball_name" =~ ^'MLNX_OFED_LINUX' ]]; then
             pkg_version=$(echo "$tarball_name" | cut -d "-" -f2-3)
             srpm_path="MLNX_OFED_SRC-${pkg_version}/SRPMS/"
