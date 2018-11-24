@@ -1495,6 +1495,7 @@ qt-x11-4.8.7-2.el7.x86_64.rpm
 quota-4.01-17.el7.x86_64.rpm
 quota-nls-4.01-17.el7.noarch.rpm
 rabbitmq-server-3.6.5-1.el7.src.rpm
+rabbitmq-server-3.6.5-1.el7.noarch.rpm
 radvd-1.9.2-9.el7.x86_64.rpm
 rdma-7.3_4.7_rc2-6.el7_3.noarch.rpm
 readline-6.2-10.el7.x86_64.rpm
