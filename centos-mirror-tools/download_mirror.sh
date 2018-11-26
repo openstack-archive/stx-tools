@@ -172,7 +172,7 @@ need_file ${rpms_from_3rd_parties}
 need_file ${rpms_from_centos_3rd_parties}
 need_file ${rpms_from_centos_repo}
 need_file ${other_downloads}
-need_file tarball-dl.lst mvn-artifacts.lst
+need_file tarball-dl.lst
 
 #download RPMs/SRPMs from 3rd_party websites (not CentOS repos) by "wget"
 echo "step #1: start downloading RPMs/SRPMs from 3rd-party websites..."
