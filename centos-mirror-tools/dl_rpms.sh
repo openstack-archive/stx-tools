@@ -242,7 +242,6 @@ download () {
             fi
         else
             echo "Already have $dest_dir/$rpm_name"
-            echo "already_there_srpm:$rpm_name" >> $LOG
         fi
         echo
     done
