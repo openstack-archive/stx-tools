@@ -548,6 +548,7 @@ libcap-devel-2.22-9.el7.x86_64.rpm
 libcap-ng-0.7.5-4.el7.x86_64.rpm
 libcap-ng-devel-0.7.5-4.el7.x86_64.rpm
 libcgroup-0.41-15.el7.x86_64.rpm
+libcgroup-tools-0.41-15.el7.x86_64.rpm
 libcmocka-1.1.2-1.el7.x86_64.rpm
 libcmocka-devel-1.1.2-1.el7.x86_64.rpm
 libcollection-0.7.0-29.el7.x86_64.rpm
