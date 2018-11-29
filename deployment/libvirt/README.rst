@@ -60,7 +60,7 @@ available you will get virt-manager running.
 If not, Ctrl-C out of that attempt if it doesn't return to a shell prompt.
 Then connect to the serial console::
 
-	virsh console madcloud-0
+	virsh console controller-0
 
 Continue the usual StarlingX installation from this point forward.
 
