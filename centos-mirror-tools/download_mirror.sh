@@ -301,7 +301,7 @@ elif [ $retcode -eq 1 ]; then
     if [ -e "$LOGSDIR/L1_rpms_missing_centos.log" ]; then
 
         echo "start 2nd round of downloading Binary RPMs with K1 match criteria..."
-        $rpm_downloader $LOGSDIR/L1_rpms_missing_centos.log K1 centos |& tee $K1_logfile
+        $rpm_downloader ${rpm_downloader_extra_args} $LOGSDIR/L1_rpms_missing_centos.log K1 centos |& tee $K1_logfile
         retcode=${PIPESTATUS[0]}
         if [ $retcode -eq 0 ]; then
             echo "finish 2nd round of RPM downloading successfully!"
