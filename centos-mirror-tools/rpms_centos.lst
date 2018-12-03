@@ -1047,7 +1047,6 @@ puppet-cinder-11.3.0-1.el7.src.rpm
 puppet-collectd-5.1.0-2.4a3843cgit.el7.noarch.rpm
 puppet-concat-2.2.0-2.fdf4a84git.el7.noarch.rpm
 puppet-etcd-1.11.0-1.f43e129git.el7.noarch.rpm
-puppet-firewall-1.8.1-2.46a6119git.el7.noarch.rpm
 puppet-glance-11.3.0-1.el7.src.rpm
 puppet-gnocchi-11.3.0-1.el7.src.rpm
 python-gobject-3.22.0-1.el7_4.1.x86_64.rpm
