@@ -53,3 +53,82 @@ delete_xml() {
     sudo rm "$fpath"
 }
 
+# Create a Controller node
+create_controller() {
+    local CONFIGURATION=$1
+    local CONTROLLER=$2
+    local BRIDGE_INTERFACE=$3
+    local ISOIMAGE=$4
+    local DOMAIN_FILE
+    if ([ "$CONFIGURATION" == "allinone" ]); then
+        CONTROLLER_NODE_NUMBER=0
+    else
+        CONTROLLER_NODE_NUMBER=1
+    fi
+    for ((i=0; i<=$CONTROLLER_NODE_NUMBER; i++)); do
+        CONTROLLER_NODE=${CONTROLLER}-${i}
+        DOMAIN_FILE=${DOMAIN_DIRECTORY}/${CONTROLLER_NODE}.xml
+        if ([ "$CONFIGURATION" == "allinone" ]); then
+            DISK_0_SIZE=600
+            cp controller_allinone.xml ${DOMAIN_FILE}
+        else
+            DISK_0_SIZE=200
+            cp controller.xml ${DOMAIN_FILE}
+        fi
+        sed -i -e "
+            s,NAME,${CONTROLLER_NODE},
+            s,DISK0,/var/lib/libvirt/images/${CONTROLLER_NODE}-0.img,
+            s,DISK1,/var/lib/libvirt/images/${CONTROLLER_NODE}-1.img,
+            s,%BR1%,${BRIDGE_INTERFACE}1,
+            s,%BR2%,${BRIDGE_INTERFACE}2,
+            s,%BR3%,${BRIDGE_INTERFACE}3,
+            s,%BR4%,${BRIDGE_INTERFACE}4,
+        " ${DOMAIN_FILE}
+        sudo qemu-img create -f qcow2 /var/lib/libvirt/images/${CONTROLLER_NODE}-0.img ${DISK_0_SIZE}G
+        sudo qemu-img create -f qcow2 /var/lib/libvirt/images/${CONTROLLER_NODE}-1.img 200G
+        if ([ "$CONFIGURATION" == "allinone" ]); then
+            sed -i -e "
+                s,DISK2,/var/lib/libvirt/images/${CONTROLLER_NODE}-2.img,
+            " ${DOMAIN_FILE}
+            sudo qemu-img create -f qcow2 /var/lib/libvirt/images/${CONTROLLER_NODE}-2.img 200G
+        fi
+        if [ $i -eq 0 ]; then
+            sed -i -e "s,ISO,${ISOIMAGE}," ${DOMAIN_FILE}
+        else
+            sed -i -e "s,ISO,," ${DOMAIN_FILE}
+        fi
+        sudo virsh define ${DOMAIN_FILE}
+        if [ $i -eq 0 ]; then
+            sudo virsh start ${CONTROLLER_NODE}
+        fi
+    done
+}
+
+# Delete a Controller node
+destroy_controller() {
+    local CONFIGURATION=$1
+    local CONTROLLER=$2
+    if ([ "$CONFIGURATION" == "allinone" ]); then
+        CONTROLLER_NODE_NUMBER=0
+    else
+        CONTROLLER_NODE_NUMBER=1
+    fi
+    for ((i=0; i<=$CONTROLLER_NODE_NUMBER; i++)); do
+        CONTROLLER_NODE=${CONTROLLER}-${i}
+        DOMAIN_FILE=$DOMAIN_DIRECTORY/$CONTROLLER_NODE.xml
+        if virsh list --all --name | grep ${CONTROLLER_NODE}; then
+            STATUS=$(virsh list --all | grep ${CONTROLLER_NODE} | awk '{ print $3}')
+            if ([ "$STATUS" == "running" ])
+            then
+                sudo virsh destroy ${CONTROLLER_NODE}
+            fi
+            sudo virsh undefine ${CONTROLLER_NODE}
+            delete_disk /var/lib/libvirt/images/${CONTROLLER_NODE}-0.img
+            delete_disk /var/lib/libvirt/images/${CONTROLLER_NODE}-1.img
+            if ([ "$CONFIGURATION" == "allinone" ]); then
+                delete_disk /var/lib/libvirt/images/${CONTROLLER_NODE}-2.img
+            fi
+            [ -e ${DOMAIN_FILE} ] && delete_xml ${DOMAIN_FILE}
+        fi
+    done
+}
