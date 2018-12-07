@@ -1059,7 +1059,6 @@ puppet-ironic-11.3.0-1.el7.src.rpm
 puppet-keystone-11.3.0-1.el7.src.rpm
 puppet-kmod-2.1.1-2.0d69a96git.el7.noarch.rpm
 puppet-magnum-11.3.0-1.el7.src.rpm
-puppet-memcached-3.0.2-1.adf8b63git.el7.src.rpm
 puppet-memcached-3.0.2-1.adf8b63git.el7.noarch.rpm
 puppet-murano-11.3.0-1.el7.src.rpm
 puppet-mysql-3.11.0-1.920dd76git.el7.noarch.rpm
