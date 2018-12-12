@@ -1,0 +1,9 @@
+Code-Review+2: Jason McKenna <jason.mckenna@windriver.com>
+Code-Review+2: Scott Little <scott.little@windriver.com>
+Workflow+1: Scott Little <scott.little@windriver.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Wed, 12 Dec 2018 16:43:31 +0000
+Reviewed-on: https://review.openstack.org/624584
+Project: openstack/stx-tools
+Branch: refs/heads/master
