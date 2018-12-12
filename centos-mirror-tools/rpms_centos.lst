@@ -463,6 +463,8 @@ iptables-services-1.4.21-24.1.el7_5.x86_64.rpm
 iputils-20160308-10.el7.x86_64.rpm
 ipxe-roms-qemu-20170123-1.git4e85b27.el7_4.1.noarch.rpm
 iscsi-initiator-utils-6.2.0.874-7.el7.src.rpm
+iscsi-initiator-utils-6.2.0.874-7.el7.x86_64.rpm
+iscsi-initiator-utils-iscsiuio-6.2.0.874-7.el7.x86_64.rpm
 iso-codes-3.46-2.el7.noarch.rpm
 isomd5sum-1.0.10-5.el7.x86_64.rpm
 ivykis-0.36.2-2.el7.x86_64.rpm
