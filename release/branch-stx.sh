@@ -6,6 +6,8 @@
 # --dry-run|-n      Do all work except pushing back to the remote repo.
 #                   Useful to validate everything locally before pushing.
 #
+# -b                Set branch only (sets TAG="")
+#
 # -l                List the repo URLS that would be processed and exit
 #
 # -m <manifest>     Extract the repo list from <manifest> for starlingx
@@ -53,7 +55,7 @@ set -e
 # Defaults
 MANIFEST=""
 
-optspec="lm:nt-:"
+optspec="blm:nt-:"
 while getopts "$optspec" o; do
     case "${o}" in
         # Hack in longopt support
@@ -69,6 +71,9 @@ while getopts "$optspec" o; do
                     ;;
 
             esac
+            ;;
+        b)
+            BRANCH_ONLY=1
             ;;
         l)
             LIST=1
@@ -104,6 +109,11 @@ TAG=${TAG:-$SERIES.0}
 
 # The list of remotes to extract from MANIFEST
 REMOTES="starlingx stx-staging"
+
+if [[ -n $BRANCH_ONLY ]]; then
+    # Force tag to be empty
+    TAG=""
+fi
 
 if [[ -n $TAG_ONLY ]]; then
     # Force source and target branches to be the same
