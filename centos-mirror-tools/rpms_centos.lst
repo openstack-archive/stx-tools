@@ -58,8 +58,8 @@ avahi-libs-0.6.31-19.el7.x86_64.rpm
 avalon-framework-4.3-10.el7.noarch.rpm
 avalon-logkit-2.1-14.el7.noarch.rpm
 basesystem-10.0-7.el7.centos.noarch.rpm
-bash-4.2.46-30.el7.src.rpm
-bash-4.2.46-30.el7.x86_64.rpm
+bash-4.2.46-31.el7.src.rpm
+bash-4.2.46-31.el7.x86_64.rpm
 bash-completion-2.1-6.el7.noarch.rpm
 bc-1.06.95-13.el7.x86_64.rpm
 bcel-5.2-18.el7.noarch.rpm
