@@ -7,7 +7,7 @@ EXTERNAL_IP=${EXTERNAL_IP:-10.10.10.1/24}
 for i in {1..4}; do
     BRIDGE_INTERFACE_NAME=${BRIDGE_INTERFACE}$i
     if [ -d "/sys/class/net/${BRIDGE_INTERFACE_NAME}" ]; then
-        sudo ifconfig ${BRIDGE_INTERFACE_NAME} down
-        sudo brctl delbr ${BRIDGE_INTERFACE_NAME}
+        sudo ip link set dev ${BRIDGE_INTERFACE_NAME} down
+        sudo ip link delete dev ${BRIDGE_INTERFACE_NAME}
     fi
 done
