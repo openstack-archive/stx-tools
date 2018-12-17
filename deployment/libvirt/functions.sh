@@ -59,7 +59,9 @@ create_controller() {
     local CONTROLLER=$2
     local BRIDGE_INTERFACE=$3
     local ISOIMAGE=$4
+    local DOMAIN_DIRECTORY=${DOMAIN_DIRECTORY:-$5}
     local DOMAIN_FILE
+
     if ([ "$CONFIGURATION" == "allinone" ]); then
         CONTROLLER_NODE_NUMBER=0
     else

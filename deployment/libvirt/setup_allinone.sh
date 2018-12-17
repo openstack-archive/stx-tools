@@ -32,6 +32,6 @@ bash ${SCRIPT_DIR}/destroy_allinone.sh
 
 [ ! -d ${DOMAIN_DIRECTORY} ] && mkdir ${DOMAIN_DIRECTORY}
 
-create_controller $CONFIGURATION $CONTROLLER $BRIDGE_INTERFACE $ISOIMAGE
+create_controller $CONFIGURATION $CONTROLLER $BRIDGE_INTERFACE $ISOIMAGE $DOMAIN_DIRECTORY
 
 sudo virt-manager
