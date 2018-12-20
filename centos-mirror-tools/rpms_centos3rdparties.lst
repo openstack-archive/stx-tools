@@ -83,7 +83,7 @@ nss-softokn-3.36.0-5.el7_5.x86_64.rpm
 nss-softokn-devel-3.36.0-5.el7_5.x86_64.rpm
 nss-softokn-freebl-3.36.0-5.el7_5.x86_64.rpm
 nss-softokn-freebl-devel-3.36.0-5.el7_5.x86_64.rpm
-openldap-2.4.44-15.el7_5.x86_64.rpm
+openldap-2.4.44-20.el7.x86_64.rpm
 openscap-1.2.16-8.el7_5.x86_64.rpm
 openscap-scanner-1.2.16-8.el7_5.x86_64.rpm
 openstack-tempest-17.0.0-1.el7.noarch.rpm
