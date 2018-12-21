@@ -1,0 +1,12 @@
+Code-Review+1: Austin Sun <austin.sun@intel.com>
+Code-Review+1: Don Penney <don.penney@windriver.com>
+Code-Review+1: Lin Shuicheng <shuicheng.lin@intel.com>
+Code-Review+2: Saul Wold <sgw@linux.intel.com>
+Code-Review+2: Scott Little <scott.little@windriver.com>
+Workflow+1: Scott Little <scott.little@windriver.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Fri, 21 Dec 2018 19:16:23 +0000
+Reviewed-on: https://review.openstack.org/623385
+Project: openstack/stx-tools
+Branch: refs/heads/master
