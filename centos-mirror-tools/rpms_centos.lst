@@ -1391,7 +1391,6 @@ python-openstackdocstheme-1.11.0-1.el7.src.rpm
 python-openstack-nose-plugin-0.11-4.el7.noarch.rpm
 python-osc-lib-1.7.0-1.el7.src.rpm
 python-oslo-cache-lang-1.25.0-1.el7.noarch.rpm
-python-oslo-concurrency-3.21.0-1.el7.src.rpm
 python-oslo-concurrency-3.21.1-1.el7.src.rpm
 python-oslo-db-lang-4.25.0-1.el7.noarch.rpm
 python-oslo-db-tests-4.25.0-1.el7.noarch.rpm
