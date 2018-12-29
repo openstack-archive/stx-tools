@@ -1399,6 +1399,7 @@ python-oslo-db-tests-4.25.0-1.el7.noarch.rpm
 python-oslo-i18n-lang-3.17.0-1.el7.noarch.rpm
 python-oslo-log-lang-3.30.0-1.el7.noarch.rpm
 python-oslo-messaging-5.30.0-1.el7.src.rpm
+python-oslo-messaging-5.30.6-1.el7.src.rpm
 python-oslo-middleware-lang-3.30.0-1.el7.noarch.rpm
 python-oslo-policy-lang-1.25.1-1.el7.noarch.rpm
 python-oslo-privsep-lang-1.22.0-1.el7.noarch.rpm
