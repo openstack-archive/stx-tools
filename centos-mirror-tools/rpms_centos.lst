@@ -1325,6 +1325,7 @@ python-django-appconf-1.0.1-4.el7.noarch.rpm
 python-django-compressor-2.0-1.el7.noarch.rpm
 python-django-nose-1.4.3-1.el7.noarch.rpm
 python-django-openstack-auth-3.5.0-1.el7.src.rpm
+python-django-openstack-auth-3.6.1-1.el7.src.rpm
 python-django-pyscss-2.0.2-1.el7.noarch.rpm
 python-dns-1.12.0-4.20150617git465785f.el7.noarch.rpm
 python-docker-pycreds-1.10.6-4.el7.noarch.rpm
