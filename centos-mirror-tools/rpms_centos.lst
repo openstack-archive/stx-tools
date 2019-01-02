@@ -1076,7 +1076,7 @@ puppet-mysql-3.11.0-1.920dd76git.el7.noarch.rpm
 puppet-neutron-11.3.0-1.el7.src.rpm
 puppet-nova-11.4.0-1.el7.src.rpm
 puppet-nssdb-1.0.1-1.el7.noarch.rpm
-puppet-openstacklib-11.3.0-1.el7.src.rpm
+puppet-openstacklib-11.5.0-1.el7.src.rpm
 puppet-oslo-11.3.0-1.el7.src.rpm
 puppet-panko-11.3.0-1.el7.src.rpm
 puppet-rabbitmq-5.6.0-4.5ac45degit.el7.src.rpm
