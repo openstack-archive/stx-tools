@@ -854,8 +854,8 @@ netpbm-progs-10.79.00-7.el7.x86_64.rpm
 net-snmp-5.7.2-33.el7_5.2.src.rpm
 nettle-2.7.1-8.el7.x86_64.rpm
 nettle-devel-2.7.1-8.el7.x86_64.rpm
-net-tools-2.0-0.22.20131004git.el7.src.rpm
-net-tools-2.0-0.22.20131004git.el7.x86_64.rpm
+net-tools-2.0-0.24.20131004git.el7.x86_64.rpm
+net-tools-2.0-0.24.20131004git.el7.src.rpm
 newt-0.52.15-4.el7.x86_64.rpm
 newt-devel-0.52.15-4.el7.x86_64.rpm
 newt-python-0.52.15-4.el7.x86_64.rpm
