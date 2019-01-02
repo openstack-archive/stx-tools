@@ -28,11 +28,12 @@ if [[ -r /sys/class/net/${BRIDGE_INTERFACE}1 ]]; then
 fi
 
 for i in {1..4}; do
-    sudo brctl addbr ${BRIDGE_INTERFACE}$i
+    sudo ip link add ${BRIDGE_INTERFACE}$i type bridge
 done
 
-sudo ifconfig ${BRIDGE_INTERFACE}1 $EXTERNAL_IP up
-sudo ifconfig ${BRIDGE_INTERFACE}2 up
-sudo ifconfig ${BRIDGE_INTERFACE}3 up
-sudo ifconfig ${BRIDGE_INTERFACE}4 up
+sudo ip addr add $EXTERNAL_IP dev ${BRIDGE_INTERFACE}1
+sudo ip link set ${BRIDGE_INTERFACE}1 up
+sudo ip link set ${BRIDGE_INTERFACE}2 up
+sudo ip link set ${BRIDGE_INTERFACE}3 up
+sudo ip link set ${BRIDGE_INTERFACE}4 up
 sudo iptables -t nat -A POSTROUTING -s $EXTERNAL_NETWORK -j MASQUERADE
