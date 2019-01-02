@@ -163,7 +163,6 @@ cracklib-dicts-2.9.0-11.el7.x86_64.rpm
 createrepo-0.9.9-28.el7.noarch.rpm
 cronie-1.4.11-19.el7.x86_64.rpm
 cronie-anacron-1.4.11-19.el7.x86_64.rpm
-crontabs-1.11-6.20121102git.el7.src.rpm
 crontabs-1.11-6.20121102git.el7.noarch.rpm
 crudini-0.9-2.el7.noarch.rpm
 cryptsetup-1.7.4-4.el7.x86_64.rpm
@@ -472,7 +471,6 @@ iptables-utils-1.4.21-24.1.el7_5.x86_64.rpm
 iptables-services-1.4.21-24.1.el7_5.x86_64.rpm
 iputils-20160308-10.el7.x86_64.rpm
 ipxe-roms-qemu-20170123-1.git4e85b27.el7_4.1.noarch.rpm
-iscsi-initiator-utils-6.2.0.874-7.el7.src.rpm
 iscsi-initiator-utils-6.2.0.874-7.el7.x86_64.rpm
 iscsi-initiator-utils-iscsiuio-6.2.0.874-7.el7.x86_64.rpm
 iso-codes-3.46-2.el7.noarch.rpm
@@ -868,7 +866,6 @@ nspr-devel-4.19.0-1.el7_5.x86_64.rpm
 nss-3.36.0-5.el7_5.x86_64.rpm
 nss_compat_ossl-0.9.6-8.el7.x86_64.rpm
 nss-devel-3.36.0-5.el7_5.x86_64.rpm
-nss-pam-ldapd-0.8.13-16.el7.src.rpm
 nss-pam-ldapd-0.8.13-16.el7.x86_64.rpm
 nss-pem-1.0.3-4.el7.x86_64.rpm
 nss-sysinit-3.36.0-5.el7_5.x86_64.rpm
