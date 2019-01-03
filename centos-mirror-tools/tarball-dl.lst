@@ -1,5 +1,5 @@
 dpkg_1.18.24.tar.xz#dpkg-1.18.24#http://http.debian.net/debian/pool/main/d/dpkg/dpkg_1.18.24.tar.xz#http##
-drbd-8.4.3.tar.gz#drbd-8.4.3#http://www.linbit.com/downloads/drbd/8.4/archive/drbd-8.4.3.tar.gz#http##
+drbd-utils-9.7.1.tar.gz#drbd-9.7.1#http://www.linbit.com/downloads/drbd/utils/drbd-utils-9.7.1.tar.gz#http##
 drbd-9.0.16-1.tar.gz#drbd-9.0.16-1#http://www.linbit.com/downloads/drbd/9.0/drbd-9.0.16-1.tar.gz#http##
 dtc-1.4.4.tar.gz#dtc-1.4.4#https://www.kernel.org/pub/software/utils/dtc/dtc-1.4.4.tar.gz#http##
 dep-v0.5.0.tar.gz#dep-v0.5.0#https://github.com/golang/dep/archive/v0.5.0.tar.gz#http##
