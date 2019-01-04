@@ -1128,7 +1128,7 @@ python2-ddt-1.1.3-1.el7.noarch.rpm
 python2-debtcollector-1.17.0-1.el7.noarch.rpm
 python2-deprecation-1.0-3.el7.noarch.rpm
 python2-designateclient-2.7.0-1.el7.noarch.rpm
-python2-django-babel-0.4.0-2.el7.noarch.rpm
+python2-django-babel-0.6.2-1.el7.noarch.rpm
 python2-django-formtools-1.0-4.el7.noarch.rpm
 python2-dulwich-0.16.1-1.el7.x86_64.rpm
 python2-fasteners-0.14.1-6.el7.noarch.rpm
@@ -1321,6 +1321,7 @@ python-dateutil-2.6.1-1.el7.src.rpm
 python-decorator-3.4.0-3.el7.noarch.rpm
 python-deltarpm-3.6-3.el7.x86_64.rpm
 python-django-1.8.14-1.el7.src.rpm
+python-django-1.11.13-4.el7.src.rpm
 python-django-appconf-1.0.1-4.el7.noarch.rpm
 python-django-compressor-2.0-1.el7.noarch.rpm
 python-django-nose-1.4.3-1.el7.noarch.rpm
