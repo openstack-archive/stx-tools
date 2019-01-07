@@ -51,8 +51,8 @@ check_result "$res" "$expect"
 
 # get_yum_command
 
-res=$(get_yum_command "anaconda-21.48.22.121-1.el7.centos.src.rpm" "L1")
-expect="yumdownloader -q -C  --releasever=7 --source anaconda-21.48.22.121-1.el7.centos"
+res=$(get_yum_command "anaconda-21.48.22.147-1.el7.centos.src.rpm" "L1")
+expect="yumdownloader -q -C  --releasever=7 --source anaconda-21.48.22.147-1.el7.centos"
 check_result "$res" "$expect"
 
 res=$(get_yum_command "acpid-2.0.19-9.el7.x86_64.rpm" "L1")
@@ -69,8 +69,8 @@ res=$(get_rpm_level_name "acl-2.2.51-12.el7.x86_64.rpm" "L3")
 expect="acl"
 check_result "$res" "$expect"
 
-res=$(get_rpm_level_name "anaconda-21.48.22.121-1.el7.centos.src.rpm" "L2")
-expect="anaconda-21.48.22.121"
+res=$(get_rpm_level_name "anaconda-21.48.22.147-1.el7.centos.src.rpm" "L2")
+expect="anaconda-21.48.22.147"
 check_result "$res" "$expect"
 
 res=$(get_arch_from_rpm "acl-2.2.51-12.el7.x86_64.rpm")

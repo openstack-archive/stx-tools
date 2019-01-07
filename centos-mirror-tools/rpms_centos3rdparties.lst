@@ -96,7 +96,7 @@ policycoreutils-python-2.5-22.el7.x86_64.rpm
 pulseaudio-libs-10.0-5.el7.x86_64.rpm
 pulseaudio-libs-devel-10.0-5.el7.x86_64.rpm
 pulseaudio-libs-glib2-10.0-5.el7.x86_64.rpm
-pykickstart-1.99.66.18-1.el7.noarch.rpm
+pykickstart-1.99.66.19-2.el7.noarch.rpm
 python-2.7.5-76.el7.x86_64.rpm
 python2-google-api-client-1.6.3-1.el7.noarch.rpm
 python2-manilaclient-1.17.2-1.el7.noarch.rpm
