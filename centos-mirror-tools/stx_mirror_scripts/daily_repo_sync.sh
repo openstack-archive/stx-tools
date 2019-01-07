@@ -24,6 +24,13 @@ YUM_REPOS_DIR="$YUM_CONF_DIR/yum.repos.d"
 DOWNLOAD_PATH_ROOT="/export/mirror/centos"
 URL_UTILS="url_utils.sh"
 
+# These variables drive the download of the centos installer
+# and other non-repo files found under the os/x86_64 subdirectory.
+OS_PATH_PREFIX=/export/mirror/centos/centos
+OS_PATH_SUFFIX=os/x86_64
+OS_FILES="EULA GPL"
+OS_DIRS="EFI LiveOS images isolinux"
+
 DAILY_REPO_SYNC_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}" )" )"
 
 if [ -f "$DAILY_REPO_SYNC_DIR/$URL_UTILS" ]; then
@@ -116,6 +123,32 @@ for REPO in $(find $YUM_REPOS_DIR -name '*.repo'); do
             ERR_COUNT=$((ERR_COUNT+1))
             popd
             continue
+        fi
+
+        # The following will download the centos installer and other non-repo
+        # files and directories found under the os/x86_64 subdirectory.
+        if [[ "$DOWNLOAD_PATH" == "$OS_PATH_PREFIX"/*/"$OS_PATH_SUFFIX" ]]; then
+            for f in $OS_FILES; do
+                CMD="wget '$REPO_URL/$f' --output-document='$DOWNLOAD_PATH/$f'"
+                echo "$CMD"
+                eval $CMD
+                if [ $? -ne 0 ]; then
+                    echo "Error: $CMD"
+                    ERR_COUNT=$((ERR_COUNT+1))
+                    continue
+                fi
+            done
+
+            for d in $OS_DIRS; do
+                CMD="wget -r -N -l 3 -nv -np -e robots=off --reject-regex '.*[?].*' --reject index.html '$REPO_URL/$d/' -P '$OS_PATH_PREFIX/'"    
+                echo "$CMD"
+                eval $CMD
+                if [ $? -ne 0 ]; then
+                    echo "Error: $CMD"
+                    ERR_COUNT=$((ERR_COUNT+1))
+                    continue
+                fi
+            done
         fi
 
         popd
