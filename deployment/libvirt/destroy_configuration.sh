@@ -31,11 +31,11 @@ DOMAIN_DIRECTORY=vms
 destroy_controller ${CONFIGURATION} ${CONTROLLER}
 
 if ([ "$CONFIGURATION" == "controllerstorage" ] || [ "$CONFIGURATION" == "dedicatedstorage" ]); then
-    COMPUTE=${COMPUTE:-compute}
-    COMPUTE_NODES_NUMBER=${COMPUTE_NODES_NUMBER:-1}
-    for ((i=0; i<=$COMPUTE_NODES_NUMBER; i++)); do
-        COMPUTE_NODE=${CONFIGURATION}-${COMPUTE}-${i}
-        destroy_node "compute" $COMPUTE_NODE
+    WORKER=${WORKER:-worker}
+    WORKER_NODES_NUMBER=${WORKER_NODES_NUMBER:-1}
+    for ((i=0; i<=$WORKER_NODES_NUMBER; i++)); do
+        WORKER_NODE=${CONFIGURATION}-${WORKER}-${i}
+        destroy_node "worker" $WORKER_NODE
     done
 fi
 

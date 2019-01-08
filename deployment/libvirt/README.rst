@@ -23,7 +23,7 @@ The simplest way to handle this is to keep an rc file that can be sourced into
 an interactive shell that configures everything.  Here's an example::
 
 	export CONTROLLER=madcloud
-	export COMPUTE=madnode
+	export WORKER=madnode
 	export BRIDGE_INTERFACE=madbr
 	export EXTERNAL_NETWORK=172.30.20.0/24
 	export EXTERNAL_IP=172.30.20.1/24
