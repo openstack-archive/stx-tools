@@ -30,8 +30,8 @@ configuration_check ${CONFIGURATION}
 CONFIGURATION=${CONFIGURATION:-simplex}
 BRIDGE_INTERFACE=${BRIDGE_INTERFACE:-stxbr}
 CONTROLLER=${CONTROLLER:-controller}
-COMPUTE=${COMPUTE:-compute}
-COMPUTE_NODES_NUMBER=${COMPUTE_NODES_NUMBER:-1}
+WORKER=${WORKER:-worker}
+WORKER_NODES_NUMBER=${WORKER_NODES_NUMBER:-1}
 STORAGE=${STORAGE:-storage}
 STORAGE_NODES_NUMBER=${STORAGE_NODES_NUMBER:-1}
 DOMAIN_DIRECTORY=vms
@@ -43,9 +43,9 @@ bash ${SCRIPT_DIR}/destroy_configuration.sh -c $CONFIGURATION
 create_controller $CONFIGURATION $CONTROLLER $BRIDGE_INTERFACE $ISOIMAGE
 
 if ([ "$CONFIGURATION" == "controllerstorage" ] || [ "$CONFIGURATION" == "dedicatedstorage" ]); then
-    for ((i=0; i<=$COMPUTE_NODES_NUMBER; i++)); do
-        COMPUTE_NODE=${CONFIGURATION}-${COMPUTE}-${i}
-        create_node "compute" ${COMPUTE_NODE} ${BRIDGE_INTERFACE}
+    for ((i=0; i<=$WORKER_NODES_NUMBER; i++)); do
+        WORKER_NODE=${CONFIGURATION}-${WORKER}-${i}
+        create_node "worker" ${WORKER_NODE} ${BRIDGE_INTERFACE}
     done
 fi
 
