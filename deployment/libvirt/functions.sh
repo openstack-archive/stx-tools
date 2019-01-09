@@ -10,9 +10,8 @@ usage() {
 
 iso_image_check() {
     local ISOIMAGE=$1
-    FILETYPE=$(file --mime-type -b ${ISOIMAGE})
-    if ([ "$FILETYPE" != "application/x-iso9660-image" ]); then
-        echo "$ISOIMAGE is not an application/x-iso9660-image type"
+    if ! file ${ISOIMAGE} | grep "DOS/MBR" > /dev/null; then
+        echo "$ISOIMAGE is not an ISO type"
         exit -1
     fi
 }
