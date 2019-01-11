@@ -1,4 +1,4 @@
-abattis-cantarell-fonts-0.0.25-1.el7.noarch.rpm
+ebattis-cantarell-fonts-0.0.25-1.el7.noarch.rpm
 acl-2.2.51-14.el7.x86_64.rpm
 acpica-tools-20160527-1.el7.x86_64.rpm
 acpid-2.0.19-9.el7.x86_64.rpm
@@ -1515,7 +1515,7 @@ redhat-lsb-core-4.1-27.el7.centos.1.x86_64.rpm
 redhat-lsb-submod-security-4.1-27.el7.centos.1.x86_64.rpm
 redhat-rpm-config-9.1.0-80.el7.centos.noarch.rpm
 regexp-1.5-13.el7.noarch.rpm
-resource-agents-3.9.5-124.el7.src.rpm
+resource-agents-4.1.1-12.el7_6.7.src.rpm
 roboto-fontface-common-0.5.0.0-1.el7.noarch.rpm
 roboto-fontface-fonts-0.5.0.0-1.el7.noarch.rpm
 rootfiles-8.1-11.el7.noarch.rpm
