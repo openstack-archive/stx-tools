@@ -5,8 +5,8 @@ This is a quick reference for deploying StarlingX on libvirt/qemu systems.
 It assumes you have a working libvirt/qemu installation for a non-root user
 and that your user has NOPASSWD sudo permissions.
 
-Refer also to pages "Installation Guide Virtual Environment", "Testing Guide"
-on the StarlingX wiki: https://wiki.openstack.org/wiki/StarlingX
+Refer also to pages "Installation Guide" on the StarlingX Documentation:
+https://docs.starlingx.io/installation_guide/index.html
 
 Overview
 --------
@@ -45,16 +45,19 @@ It should also only be used after all of the VMs created below have been destroy
 Controllers
 -----------
 
-There are two scripts for creating the controllers: ``setup_allinone.sh`` and
-``setup_standard_controller.sh``.  They are operated in the same manner but build
-different StarlingX cloud configurations. Choose wisely.
+There is one script for creating the controllers: ``setup_configuration.sh``. It
+builds different StarlingX cloud configurations:
 
-You need an ISO file for the installation, these scripts take a name with the
+- allinone
+- standardcontroller
+
+You need an StarlingX ISO file for the installation. The script takes the
+configuration name with the ``-c`` option and the ISO file name with the
 ``-i`` option::
 
-	./setup_allinone.sh -i stx-2018-08-28-93.iso
+	./setup_configuration.sh -c allinone -i stx-2018-08-28-93.iso
 
-And the setup will begin.  The scripts create one or more VMs and start the boot
+And the setup will begin.  The script create one or more VMs and start the boot
 of the first controller, named oddly enough ``controller-0``.  If you have Xwindows
 available you will get virt-manager running.
 If not, Ctrl-C out of that attempt if it doesn't return to a shell prompt.
@@ -64,4 +67,6 @@ Then connect to the serial console::
 
 Continue the usual StarlingX installation from this point forward.
 
-Tear down the VMs using ``destroy_allinone.sh`` and ``destroy_standard_controller.sh``.
+Tear down the VMs giving the configuration name with the ``-c`` option::
+
+>-------./destroy_configuration.sh -c allinone
