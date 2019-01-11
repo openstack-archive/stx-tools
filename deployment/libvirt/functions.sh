@@ -1,18 +1,26 @@
 #!/usr/bin/env bash
 
 usage() {
-    echo "$0 [-h] [-i <iso image>]"
+    echo "$0 [-h] [-c <configuration>] [-i <iso image>]"
     echo ""
     echo "Options:"
+    echo "  -c: Configuration: allinone, standardcontroller"
     echo "  -i: StarlingX ISO image"
+    echo ""
+}
+
+usage_destroy() {
+    echo "$0 [-h] [-c <configuration>]"
+    echo ""
+    echo "Options:"
+    echo "  -c: Configuration: allinone, standardcontroller"
     echo ""
 }
 
 iso_image_check() {
     local ISOIMAGE=$1
-    FILETYPE=$(file --mime-type -b ${ISOIMAGE})
-    if ([ "$FILETYPE" != "application/x-iso9660-image" ]); then
-        echo "$ISOIMAGE is not an application/x-iso9660-image type"
+    if ! file ${ISOIMAGE} | grep "DOS/MBR" > /dev/null; then
+        echo "$ISOIMAGE is not an ISO type"
         exit -1
     fi
 }

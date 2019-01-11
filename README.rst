@@ -291,7 +291,7 @@ links if this is the first build or the mirror has been updated.
 
 .. code-block:: bash
 
-    generate-cgcs-centos-repo.sh /import/mirror/CentOS/pike
+    generate-cgcs-centos-repo.sh /import/mirrors/CentOS/pike
 
 Where the argument to the script is the path of the mirror.
 
