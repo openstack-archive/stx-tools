@@ -1,0 +1,9 @@
+Code-Review+2: Scott Little <scott.little@windriver.com>
+Code-Review+2: Saul Wold <sgw@linux.intel.com>
+Workflow+1: Saul Wold <sgw@linux.intel.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Thu, 17 Jan 2019 01:05:14 +0000
+Reviewed-on: https://review.openstack.org/625773
+Project: openstack/stx-tools
+Branch: refs/heads/f/centos76
