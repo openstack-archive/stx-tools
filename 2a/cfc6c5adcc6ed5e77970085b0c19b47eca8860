@@ -1,0 +1,10 @@
+Code-Review+2: Erich Cordoba <erich.cordoba.malibran@intel.com>
+Code-Review+2: Saul Wold <sgw@linux.intel.com>
+Code-Review+2: Scott Little <scott.little@windriver.com>
+Workflow+1: Scott Little <scott.little@windriver.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Tue, 22 Jan 2019 16:58:22 +0000
+Reviewed-on: https://review.openstack.org/627432
+Project: openstack/stx-tools
+Branch: refs/heads/f/centos76
