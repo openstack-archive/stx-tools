@@ -80,7 +80,7 @@ create_controller() {
             DISK_0_SIZE=600
             cp controller_allinone.xml ${DOMAIN_FILE}
         else
-            DISK_0_SIZE=200
+            DISK_0_SIZE=250
             cp controller.xml ${DOMAIN_FILE}
         fi
         sed -i -e "
