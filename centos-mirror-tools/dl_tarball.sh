@@ -329,48 +329,18 @@ for line in $(cat $tarball_file); do
             rm -rf $directory_name
             rm e6aef069b6e97790cb127d5eeb86ae9ff0b7b0e3.tar.gz
         elif [ "$tarball_name" = "tss2-930.tar.gz" ]; then
-            dest_dir=ibmtpm20tss-tss
-            for dl_src in $dl_source; do
-                case $dl_src in
-                    $dl_from_stx_mirror)
-                        url="$(url_to_stx_mirror_url "$tarball_url" "$distro")"
-                        ;;
-                    $dl_from_upstream)
-                        url="$tarball_url"
-                        ;;
-                    *)
-                        echo "Error: Unknown dl_source '$dl_src'"
-                        continue
-                        ;;
-                esac
-
-                git clone $url $dest_dir
-                if [ $? -eq 0 ]; then
-                    # Success
-                    break
-                else
-                    echo "Warning: Failed to git clone from '$url'"
-                    continue
-                fi
-            done
-
-            if [ ! -d $dest_dir ]; then
-                echo "Error: Failed to git clone from '$tarball_url'"
-                echo "$tarball_url" > "$output_log"
+            download_package $tarball_url
+            if [ $? -ne 0 ]; then
                 error_count=$((error_count + 1))
                 popd    # pushd $output_tarball
                 continue
             fi
-
-            pushd $dest_dir
-            branch=$util
-            git checkout $branch
-            rm -rf .git
-            popd
-            mv ibmtpm20tss-tss $directory_name
+            unzip_file=ibmtpm20tss-tss-52539cb81c811c973b26ed23fafd28a700b7cc78
+            zip_file="$unzip_file.zip"
+            unzip $zip_file
+            mv $unzip_file $directory_name
             tar czvf $tarball_name $directory_name
             rm -rf $directory_name
-            popd     # pushd $dest_dir
         fi
         popd  # pushd $output_tarball
         continue
