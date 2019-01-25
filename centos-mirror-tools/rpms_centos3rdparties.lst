@@ -10,12 +10,6 @@ collectd-5.8.0-4.el7.x86_64.rpm
 containernetworking-cni-0.5.1-1.el7.x86_64.rpm
 copy-jdk-configs-3.3-10.el7_5.noarch.rpm
 cppcheck-1.84-1.el7.x86_64.rpm
-device-mapper-1.02.146-4.el7.x86_64.rpm
-device-mapper-devel-1.02.146-4.el7.x86_64.rpm
-device-mapper-event-1.02.146-4.el7.x86_64.rpm
-device-mapper-event-libs-1.02.146-4.el7.x86_64.rpm
-device-mapper-libs-1.02.146-4.el7.x86_64.rpm
-device-mapper-persistent-data-0.7.3-3.el7.x86_64.rpm
 docker-ce-18.03.1.ce-1.el7.centos.x86_64.rpm
 elfutils-0.172-2.el7.x86_64.rpm
 elfutils-default-yama-scope-0.172-2.el7.noarch.rpm

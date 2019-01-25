@@ -195,8 +195,14 @@ dejavu-sans-mono-fonts-2.33-6.el7.noarch.rpm
 dejavu-serif-fonts-2.33-6.el7.noarch.rpm
 deltarpm-3.6-3.el7.x86_64.rpm
 desktop-file-utils-0.23-1.el7.x86_64.rpm
-device-mapper-multipath-0.4.9-123.el7.x86_64.rpm
-device-mapper-multipath-libs-0.4.9-123.el7.x86_64.rpm
+device-mapper-1.02.146-4.el7.x86_64.rpm
+device-mapper-devel-1.02.146-4.el7.x86_64.rpm
+device-mapper-event-1.02.146-4.el7.x86_64.rpm
+device-mapper-event-libs-1.02.146-4.el7.x86_64.rpm
+device-mapper-libs-1.02.146-4.el7.x86_64.rpm
+device-mapper-multipath-0.4.9-119.el7.x86_64.rpm
+device-mapper-multipath-libs-0.4.9-119.el7.x86_64.rpm
+device-mapper-persistent-data-0.7.3-3.el7.x86_64.rpm
 dhcp-4.2.5-68.el7.centos.1.src.rpm
 dibbler-client-1.0.1-0.RC1.2.el7.x86_64.rpm
 diffutils-3.3-4.el7.x86_64.rpm
