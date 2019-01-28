@@ -30,11 +30,20 @@ DOMAIN_DIRECTORY=vms
 
 destroy_controller ${CONFIGURATION} ${CONTROLLER}
 
-if ([ "$CONFIGURATION" == "standardcontroller" ]); then
+if ([ "$CONFIGURATION" == "controllerstorage" ] || [ "$CONFIGURATION" == "dedicatedstorage" ]); then
     COMPUTE=${COMPUTE:-compute}
     COMPUTE_NODES_NUMBER=${COMPUTE_NODES_NUMBER:-1}
     for ((i=0; i<=$COMPUTE_NODES_NUMBER; i++)); do
         COMPUTE_NODE=${CONFIGURATION}-${COMPUTE}-${i}
-        destroy_compute $COMPUTE_NODE
+        destroy_node "compute" $COMPUTE_NODE
+    done
+fi
+
+if ([ "$CONFIGURATION" == "dedicatedstorage" ]); then
+    STORAGE=${STORAGE:-storage}
+    STORAGE_NODES_NUMBER=${STORAGE_NODES_NUMBER:-1}
+    for ((i=0; i<=$STORAGE_NODES_NUMBER; i++)); do
+        STORAGE_NODE=${CONFIGURATION}-${STORAGE}-${i}
+        destroy_node "storage" ${STORAGE_NODE}
     done
 fi

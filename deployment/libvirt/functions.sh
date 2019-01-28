@@ -4,7 +4,7 @@ usage() {
     echo "$0 [-h] [-c <configuration>] [-i <iso image>]"
     echo ""
     echo "Options:"
-    echo "  -c: Configuration: simplex, duplex, standardcontroller"
+    echo "  -c: Configuration: simplex, duplex, controllerstorage, dedicatedstorage"
     echo "  -i: StarlingX ISO image"
     echo ""
 }
@@ -13,7 +13,7 @@ usage_destroy() {
     echo "$0 [-h] [-c <configuration>]"
     echo ""
     echo "Options:"
-    echo "  -c: Configuration: simplex, duplex, standardcontroller"
+    echo "  -c: Configuration: simplex, duplex, controllerstorage, dedicatedstorage"
     echo ""
 }
 
@@ -27,9 +27,9 @@ iso_image_check() {
 
 configuration_check() {
     local CONFIGURATION=$1
-    if [ $CONFIGURATION != "simplex" ] && [ $CONFIGURATION != "duplex" ] && [ $CONFIGURATION != "standardcontroller" ]; then
+    if [ $CONFIGURATION != "simplex" ] && [ $CONFIGURATION != "duplex" ] && [ $CONFIGURATION != "controllerstorage" ] && [ $CONFIGURATION != "dedicatedstorage" ]; then
         echo "Please check your configuration name, available configurations:"
-        echo "simplex, duplex, standardcontroller"
+        echo "simplex, duplex, controllerstorage, dedicatedstorage"
         exit 1
     fi
 }
@@ -150,17 +150,19 @@ destroy_controller() {
     done
 }
 
-# Create a Compute node
-create_compute() {
-    local COMPUTE_NODE=$1
-    local DOMAIN_FILE=${DOMAIN_DIRECTORY}/${COMPUTE_NODE}.xml
-    sudo qemu-img create -f qcow2 /var/lib/libvirt/images/${COMPUTE_NODE}-0.img 200G
-    sudo qemu-img create -f qcow2 /var/lib/libvirt/images/${COMPUTE_NODE}-1.img 200G
-    cp compute.xml ${DOMAIN_FILE}
+# Create a Node
+create_node() {
+    local IDENTITY=$1
+    local NODE=$2
+    local BRIDGE_INTERFACE=$3
+    local DOMAIN_FILE=${DOMAIN_DIRECTORY}/${NODE}.xml
+    sudo qemu-img create -f qcow2 /var/lib/libvirt/images/${NODE}-0.img 200G
+    sudo qemu-img create -f qcow2 /var/lib/libvirt/images/${NODE}-1.img 200G
+    cp ${IDENTITY}.xml ${DOMAIN_FILE}
     sed -i -e "
-        s,NAME,${COMPUTE_NODE},;
-        s,DISK0,/var/lib/libvirt/images/${COMPUTE_NODE}-0.img,;
-        s,DISK1,/var/lib/libvirt/images/${COMPUTE_NODE}-1.img,
+        s,NAME,${NODE},;
+        s,DISK0,/var/lib/libvirt/images/${NODE}-0.img,;
+        s,DISK1,/var/lib/libvirt/images/${NODE}-1.img,
         s,%BR1%,${BRIDGE_INTERFACE}1,
         s,%BR2%,${BRIDGE_INTERFACE}2,
         s,%BR3%,${BRIDGE_INTERFACE}3,
@@ -169,19 +171,20 @@ create_compute() {
     sudo virsh define ${DOMAIN_FILE}
 }
 
-# Delete a Compute node
-destroy_compute() {
-    local COMPUTE_NODE=$1
-    local DOMAIN_FILE=$DOMAIN_DIRECTORY/$COMPUTE_NODE.xml
-    if virsh list --all --name | grep ${COMPUTE_NODE}; then
-        STATUS=$(virsh list --all | grep ${COMPUTE_NODE} | awk '{ print $3}')
+# Delete a Node
+destroy_node() {
+    local IDENTITY=$1
+    local NODE=$2
+    local DOMAIN_FILE=$DOMAIN_DIRECTORY/$NODE.xml
+    if virsh list --all --name | grep ${NODE}; then
+        STATUS=$(virsh list --all | grep ${NODE} | awk '{ print $3}')
         if ([ "$STATUS" == "running" ])
         then
-            sudo virsh destroy ${COMPUTE_NODE}
+            sudo virsh destroy ${NODE}
         fi
-        sudo virsh undefine ${COMPUTE_NODE}
-        delete_disk /var/lib/libvirt/images/${COMPUTE_NODE}-0.img
-        delete_disk /var/lib/libvirt/images/${COMPUTE_NODE}-1.img
+        sudo virsh undefine ${NODE}
+        delete_disk /var/lib/libvirt/images/${NODE}-0.img
+        delete_disk /var/lib/libvirt/images/${NODE}-1.img
         [ -e ${DOMAIN_FILE} ] && delete_xml ${DOMAIN_FILE}
     fi
 }
