@@ -22,6 +22,8 @@ if [[ -z ${CONFIGURATION} ]]; then
     exit -1
 fi
 
+configuration_check ${CONFIGURATION}
+
 CONFIGURATION=${CONFIGURATION:-allinone}
 CONTROLLER=${CONTROLLER:-controller}
 DOMAIN_DIRECTORY=vms
@@ -32,7 +34,7 @@ if ([ "$CONFIGURATION" == "standardcontroller" ]); then
     COMPUTE=${COMPUTE:-compute}
     COMPUTE_NODES_NUMBER=${COMPUTE_NODES_NUMBER:-1}
     for ((i=0; i<=$COMPUTE_NODES_NUMBER; i++)); do
-        COMPUTE_NODE=${COMPUTE}-${i}
+        COMPUTE_NODE=${CONFIGURATION}-${COMPUTE}-${i}
         destroy_compute $COMPUTE_NODE
     done
 fi
