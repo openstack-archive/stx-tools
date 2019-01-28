@@ -1343,7 +1343,7 @@ python-cliff-tablib-1.1-3.el7.noarch.rpm
 python-cmd2-0.6.8-8.el7.noarch.rpm
 python-configobj-4.7.2-7.el7.noarch.rpm
 python-configshell-1.1.fb23-5.el7.noarch.rpm
-python-construct-2.8.10-1.el7.noarch.rpm
+python-construct-2.5.1-4.el7.noarch.rpm
 python-contextlib2-0.5.1-2.el7.noarch.rpm
 python-croniter-0.3.4-2.el7.noarch.rpm
 python-d2to1-0.2.11-1.el7.noarch.rpm
