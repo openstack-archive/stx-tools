@@ -48,14 +48,15 @@ Controllers
 There is one script for creating the controllers: ``setup_configuration.sh``. It
 builds different StarlingX cloud configurations:
 
-- allinone
+- simplex
+- duplex
 - standardcontroller
 
 You need an StarlingX ISO file for the installation. The script takes the
 configuration name with the ``-c`` option and the ISO file name with the
 ``-i`` option::
 
-	./setup_configuration.sh -c allinone -i stx-2018-08-28-93.iso
+	./setup_configuration.sh -c simplex -i stx-2018-08-28-93.iso
 
 And the setup will begin.  The script create one or more VMs and start the boot
 of the first controller, named oddly enough ``controller-0``.  If you have Xwindows
@@ -69,4 +70,4 @@ Continue the usual StarlingX installation from this point forward.
 
 Tear down the VMs giving the configuration name with the ``-c`` option::
 
->-------./destroy_configuration.sh -c allinone
+>-------./destroy_configuration.sh -c simplex

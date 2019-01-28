@@ -4,7 +4,7 @@ usage() {
     echo "$0 [-h] [-c <configuration>] [-i <iso image>]"
     echo ""
     echo "Options:"
-    echo "  -c: Configuration: allinone, standardcontroller"
+    echo "  -c: Configuration: simplex, duplex, standardcontroller"
     echo "  -i: StarlingX ISO image"
     echo ""
 }
@@ -13,7 +13,7 @@ usage_destroy() {
     echo "$0 [-h] [-c <configuration>]"
     echo ""
     echo "Options:"
-    echo "  -c: Configuration: allinone, standardcontroller"
+    echo "  -c: Configuration: simplex, duplex, standardcontroller"
     echo ""
 }
 
@@ -27,9 +27,9 @@ iso_image_check() {
 
 configuration_check() {
     local CONFIGURATION=$1
-    if [ $CONFIGURATION != "allinone" ] && [ $CONFIGURATION != "standardcontroller" ]; then
+    if [ $CONFIGURATION != "simplex" ] && [ $CONFIGURATION != "duplex" ] && [ $CONFIGURATION != "standardcontroller" ]; then
         echo "Please check your configuration name, available configurations:"
-        echo "allinone, standardcontroller"
+        echo "simplex, duplex, standardcontroller"
         exit 1
     fi
 }
@@ -77,7 +77,7 @@ create_controller() {
     local BRIDGE_INTERFACE=$3
     local ISOIMAGE=$4
     local DOMAIN_FILE
-    if ([ "$CONFIGURATION" == "allinone" ]); then
+    if ([ "$CONFIGURATION" == "simplex" ]); then
         CONTROLLER_NODE_NUMBER=0
     else
         CONTROLLER_NODE_NUMBER=1
@@ -85,7 +85,7 @@ create_controller() {
     for ((i=0; i<=$CONTROLLER_NODE_NUMBER; i++)); do
         CONTROLLER_NODE=${CONFIGURATION}-${CONTROLLER}-${i}
         DOMAIN_FILE=${DOMAIN_DIRECTORY}/${CONTROLLER_NODE}.xml
-        if ([ "$CONFIGURATION" == "allinone" ]); then
+        if ([ "$CONFIGURATION" == "simplex" ] || [ "$CONFIGURATION" == "duplex" ]); then
             DISK_0_SIZE=600
             cp controller_allinone.xml ${DOMAIN_FILE}
         else
@@ -103,7 +103,7 @@ create_controller() {
         " ${DOMAIN_FILE}
         sudo qemu-img create -f qcow2 /var/lib/libvirt/images/${CONTROLLER_NODE}-0.img ${DISK_0_SIZE}G
         sudo qemu-img create -f qcow2 /var/lib/libvirt/images/${CONTROLLER_NODE}-1.img 200G
-        if ([ "$CONFIGURATION" == "allinone" ]); then
+        if ([ "$CONFIGURATION" == "simplex" ] || [ "$CONFIGURATION" == "duplex" ]); then
             sed -i -e "
                 s,DISK2,/var/lib/libvirt/images/${CONTROLLER_NODE}-2.img,
             " ${DOMAIN_FILE}
@@ -125,7 +125,7 @@ create_controller() {
 destroy_controller() {
     local CONFIGURATION=$1
     local CONTROLLER=$2
-    if ([ "$CONFIGURATION" == "allinone" ]); then
+    if ([ "$CONFIGURATION" == "simplex" ]); then
         CONTROLLER_NODE_NUMBER=0
     else
         CONTROLLER_NODE_NUMBER=1
@@ -142,7 +142,7 @@ destroy_controller() {
             sudo virsh undefine ${CONTROLLER_NODE}
             delete_disk /var/lib/libvirt/images/${CONTROLLER_NODE}-0.img
             delete_disk /var/lib/libvirt/images/${CONTROLLER_NODE}-1.img
-            if ([ "$CONFIGURATION" == "allinone" ]); then
+            if ([ "$CONFIGURATION" == "simplex" ] || [ "$CONFIGURATION" == "duplex" ]); then
                 delete_disk /var/lib/libvirt/images/${CONTROLLER_NODE}-2.img
             fi
             [ -e ${DOMAIN_FILE} ] && delete_xml ${DOMAIN_FILE}
