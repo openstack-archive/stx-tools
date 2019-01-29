@@ -23,7 +23,7 @@ The simplest way to handle this is to keep an rc file that can be sourced into
 an interactive shell that configures everything.  Here's an example::
 
 	export CONTROLLER=madcloud
-	export COMPUTE=madnode
+	export WORKER=madnode
 	export BRIDGE_INTERFACE=madbr
 	export EXTERNAL_NETWORK=172.30.20.0/24
 	export EXTERNAL_IP=172.30.20.1/24
@@ -48,14 +48,16 @@ Controllers
 There is one script for creating the controllers: ``setup_configuration.sh``. It
 builds different StarlingX cloud configurations:
 
-- allinone
-- standardcontroller
+- simplex
+- duplex
+- controllerstorage
+- dedicatedstorage
 
 You need an StarlingX ISO file for the installation. The script takes the
 configuration name with the ``-c`` option and the ISO file name with the
 ``-i`` option::
 
-	./setup_configuration.sh -c allinone -i stx-2018-08-28-93.iso
+	./setup_configuration.sh -c simplex -i stx-2018-08-28-93.iso
 
 And the setup will begin.  The script create one or more VMs and start the boot
 of the first controller, named oddly enough ``controller-0``.  If you have Xwindows
@@ -69,4 +71,4 @@ Continue the usual StarlingX installation from this point forward.
 
 Tear down the VMs giving the configuration name with the ``-c`` option::
 
->-------./destroy_configuration.sh -c allinone
+>-------./destroy_configuration.sh -c simplex

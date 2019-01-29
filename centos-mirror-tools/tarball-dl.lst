@@ -28,7 +28,7 @@ requests-toolbelt-0.5.1.tar.gz#requests-toolbelt-0.5.1#https://github.com/reques
 rpm-4.14.0.tar.bz2#rpm-4.14.0#https://ftp.osuosl.org/pub/rpm/releases/rpm-4.14.x/rpm-4.14.0.tar.bz2#http##
 swtpm-0.1.0-253eac5.tar.gz#swtpm-0.1.0#https://github.com/stefanberger/swtpm/tarball/1303be7d03294fb02204cb8242f366cbf0da076d#http##
 !tpm-kmod-e6aef069.tar.gz#tpm#http://git.infradead.org/users/jjs/linux-tpmdd.git/snapshot/e6aef069b6e97790cb127d5eeb86ae9ff0b7b0e3.tar.gz#http_script#post-dl-script/tpm-kmod.sh
-!tss2-930.tar.gz#tss2-930#https://git.code.sf.net/p/ibmtpm20tss/tss#git#v930#
+!tss2-930.tar.gz#tss2-930#https://sourceforge.net/code-snapshots/git/i/ib/ibmtpm20tss/tss.git/ibmtpm20tss-tss-52539cb81c811c973b26ed23fafd28a700b7cc78.zip#http##
 spectre-meltdown-checker-0.37+-5cc77741.tar.gz#spectre-meltdown-checker#https://github.com/speed47/spectre-meltdown-checker/tarball/5cc77741af1d2f52140aa9f89339f56b6c4b6783#http##
 puppet-boolean-22b726dd78b0a60a224cc7054aebbf28e9306f62.tar.gz#puppet-boolean#https://github.com/voxpupuli/puppet-boolean/tarball/22b726dd78b0a60a224cc7054aebbf28e9306f62#http##
 puppet-dnsmasq-cff07e90890662972c97684a2baee964f68ff3ed.tar.gz#packstack/puppet/modules/dnsmasq/#https://github.com/procore/puppet-dnsmasq/tarball/cff07e90890662972c97684a2baee964f68ff3ed#http##
@@ -46,7 +46,7 @@ openstack-helm-9d72fe1a501bc609a875eebf7b6274e18600ed70.tar.gz#openstack-helm#ht
 openstack-helm-infra-5d356f9265b337b75f605dee839faa8cd0ed3ab2.tar.gz#openstack-helm-infra#https://github.com/openstack/openstack-helm-infra/archive/5d356f9265b337b75f605dee839faa8cd0ed3ab2.tar.gz#http##
 gnocchi-4.2.5.tar.gz#gnocchi-4.2.5#https://pypi.io/packages/source/g/gnocchi/gnocchi-4.2.5.tar.gz#http##
 gnocchiclient-7.0.1.tar.gz#gnocchiclient-7.0.1#https://pypi.io/packages/source/g/gnocchiclient/gnocchiclient-7.0.1.tar.gz#http##
-kubernetes-v1.12.1.tar.gz#kubernetes-1.12.1#https://github.com/kubernetes/kubernetes/archive/v1.12.1.tar.gz#http##
+kubernetes-v1.12.3.tar.gz#kubernetes-1.12.3#https://github.com/kubernetes/kubernetes/archive/v1.12.3.tar.gz#http##
 kubernetes-contrib-v1.12.1.tar.gz#kubernetes-contrib-1.12.1#https://github.com/kubernetes/contrib/tarball/4b2a8512a95611acb174bd306e501719ce70b1cf#http##
 gorilla-mux-456bcfa82d672db7cae587c9b541463f65bc2718.tar.gz#gorilla-mux#https://github.com/gorilla/mux/archive/456bcfa82d672db7cae587c9b541463f65bc2718.tar.gz#http##
 gorilla-context-08b5f424b9271eedf6f9f0ce86cb9396ed337a42.tar.gz#gorilla-context#https://github.com/gorilla/context/archive/08b5f424b9271eedf6f9f0ce86cb9396ed337a42.tar.gz#http##
