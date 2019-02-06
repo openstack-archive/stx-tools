@@ -1200,12 +1200,14 @@ python2-passlib-1.7.0-4.el7.noarch.rpm
 python2-pbr-3.1.1-1.el7.noarch.rpm
 python2-pecan-1.1.2-1.el7.noarch.rpm
 python2-persist-queue-0.1.4-1.el7.noarch.rpm
+python2-pexpect-4.6-1.el7.noarch.rpm
 python2-pifpaf-0.12.0-1.el7.noarch.rpm
 python2-pika-0.10.0-9.el7.noarch.rpm
 python2-pika_pool-0.1.3-3.el7.noarch.rpm
 python2-pillow-4.0.0-1.el7.x86_64.rpm
 python2-positional-1.1.1-2.el7.noarch.rpm
 python2-psutil-5.2.2-2.el7.x86_64.rpm
+python2-ptyprocess-0.5.2-3.el7.noarch.rpm
 python2-pyasn1-0.1.9-7.el7.noarch.rpm
 python2-pyasn1-modules-0.1.9-7.el7.noarch.rpm
 python2-pycadf-2.6.0-1.el7.noarch.rpm
@@ -1583,6 +1585,7 @@ speex-1.2-0.19.rc1.el7.x86_64.rpm
 sqlite-3.7.17-8.el7.x86_64.rpm
 sqlite-devel-3.7.17-8.el7.x86_64.rpm
 squashfs-tools-4.3-0.21.gitaae0aff4.el7.x86_64.rpm
+sshpass-1.06-1.el7.x86_64.rpm
 ssmtp-2.64-14.el7.x86_64.rpm
 stix-fonts-1.1.0-5.el7.noarch.rpm
 stix-math-fonts-1.1.0-5.el7.noarch.rpm
