@@ -1,0 +1,8 @@
+Code-Review+2: Jason McKenna <jason.mckenna@windriver.com>
+Workflow+1: Jason McKenna <jason.mckenna@windriver.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Thu, 07 Feb 2019 17:29:00 +0000
+Reviewed-on: https://review.openstack.org/635575
+Project: openstack/stx-tools
+Branch: refs/heads/f/stein
