@@ -71,33 +71,6 @@ are:
 - VirtualBox
 - Libvirt/QEMU
 
-Directory Structure
--------------------
-
-Deployment directory hosts a total of 3 directories and 18 files::
-
-    $ tree -L 3 deployment/
-    deployment/
-    ├── libvirt
-    │   ├── compute.xml
-    │   ├── controller_allinone.xml
-    │   ├── controller.xml
-    │   ├── destroy_allinone.sh
-    │   ├── destroy_standard_controller.sh
-    │   ├── install_packages.sh
-    │   ├── setup_allinone.sh
-    │   └── setup_standard_controller.sh
-    ├── provision
-    │   ├── simplex_stage_1.sh
-    │   └── simplex_stage_2.sh
-    └── virtualbox
-        ├── all_in_one.conf
-        ├── serial_vm.sh
-        ├── setup_vm.sh
-        ├── standard_controller.conf
-        ├── start_vm.sh
-        └── stop_vm.sh
-
 Directory: libvirt
 ~~~~~~~~~~~~~~~~~~
 
@@ -107,18 +80,22 @@ identity:
 - Controller All-in-one
 - Controller
 - Compute
+- Storage
 
 These nodes are used to create the virtual machines and the network interfaces
 to setup the StarlingX system:
 
-- Setup All-in-one
-
+- Setup Simplex
+  - 1 Controller
+- Setup Duplex
   - 2 Controllers
-
-- Setup Standard Controller
-
+- Setup Controller Storage
   - 2 Controllers
   - 2 Computes
+- Setup Dedicated Storage
+  - 2 Controllers
+  - 2 Computes
+  - 2 Storages
 
 Directory: virtualbox
 ~~~~~~~~~~~~~~~~~~~~~
