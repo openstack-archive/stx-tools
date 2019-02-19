@@ -25,6 +25,17 @@ TC_CONTAINER_NAME=${MYUNAME}-centos-builder
 TC_CONTAINER_TAG=local/${MYUNAME}-stx-builder:7.4
 TC_DOCKERFILE=Dockerfile
 
+function create_container {
+    docker build \
+        --build-arg MYUID=$(id -u) \
+		    --build-arg MYUNAME=${USER} \
+		    --ulimit core=0 \
+		    --network host \
+		    -t ${TC_CONTAINER_TAG} \
+		    -f ${TC_DOCKERFILE} \
+		    .
+}
+
 function exec_container {
     docker cp ${WORK_DIR}/buildrc ${TC_CONTAINER_NAME}:/home/${MYUNAME}
     docker cp ${WORK_DIR}/localrc ${TC_CONTAINER_NAME}:/home/${MYUNAME}
@@ -57,8 +68,13 @@ function kill_container {
     docker kill ${TC_CONTAINER_NAME}
 }
 
+function clean_container {
+    docker rm ${TC_CONTAINER_NAME} || true
+    docker image rm ${TC_CONTAINER_TAG}
+}
+
 function usage {
-    echo "$0 [run|exec|env|stop|kill]"
+    echo "$0 [create|run|exec|env|stop|kill|clean]"
 }
 
 case $CMD in
@@ -74,6 +90,9 @@ case $CMD in
         echo "MY_TC_RELEASE=${MY_TC_RELEASE}"
         echo "MY_REPO_ROOT_DIR=${MY_REPO_ROOT_DIR}"
         ;;
+    create)
+        create_container
+        ;;
     exec)
         exec_container
         ;;
@@ -86,9 +105,12 @@ case $CMD in
     kill)
         kill_container
         ;;
+    clean)
+        clean_container
+        ;;
     *)
         echo "Unknown command: $CMD"
-    usage
+        usage
         exit 1
         ;;
 esac

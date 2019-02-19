@@ -54,11 +54,11 @@ Build image
 ~~~~~~~~~~~
 
 Once the configuration files have been customized, it is possible to build
-the docker image. This process is automated by the Makefile.
+the docker image. This process is automated by the ``tb.sh`` script.
 
 .. code-block:: bash
 
-    make
+    ./tb.sh create
 
 NOTE:
 ~~~~~
