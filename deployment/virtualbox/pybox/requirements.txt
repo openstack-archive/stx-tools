@@ -1,0 +1,7 @@
+# Install rsync, sshpass
+#
+configparser
+paramiko
+pytest
+streamexpect
+skpy
