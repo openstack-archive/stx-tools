@@ -1,0 +1,10 @@
+Code-Review+2: Don Penney <don.penney@windriver.com>
+Code-Review+1: Bob Church <robert.church@windriver.com>
+Code-Review+2: Scott Little <scott.little@windriver.com>
+Workflow+1: Scott Little <scott.little@windriver.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Mon, 04 Mar 2019 17:25:09 +0000
+Reviewed-on: https://review.openstack.org/640522
+Project: openstack/stx-tools
+Branch: refs/heads/f/keystone-db
