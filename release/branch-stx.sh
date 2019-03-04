@@ -6,8 +6,6 @@
 # --dry-run|-n      Do all work except pushing back to the remote repo.
 #                   Useful to validate everything locally before pushing.
 #
-# -b                Set branch only (sets TAG="")
-#
 # -l                List the repo URLS that would be processed and exit
 #
 # -m <manifest>     Extract the repo list from <manifest> for starlingx
@@ -37,8 +35,8 @@
 # branch is not named 'master'.  When SRC_BRANCH == BRANCH this is effectively
 # a tag-only operation.
 #
-# TAG is the release tag that represents the actual release, derived by adding
-# a 'patch' version to SERIES, initially '0'. If TAG is unset no tag is created.
+# TAG is the release tag that represents the actual release. If TAG is unset
+# no tag is created.
 #
 # Notes:
 # * This script is used for creating milestone, release and feature branches.
@@ -73,7 +71,8 @@ while getopts "$optspec" o; do
             esac
             ;;
         b)
-            BRANCH_ONLY=1
+            :
+            # left for backward-compatibility, unused
             ;;
         l)
             LIST=1
@@ -105,15 +104,10 @@ SERIES=${SERIES:-$(date '+%Y.%m')}
 BRANCH=${BRANCH:-m/$SERIES}
 
 # tag: YYYY.MM.0
-TAG=${TAG:-$SERIES.0}
+TAG=${TAG:-""}
 
 # The list of remotes to extract from MANIFEST
 REMOTES="starlingx stx-staging"
-
-if [[ -n $BRANCH_ONLY ]]; then
-    # Force tag to be empty
-    TAG=""
-fi
 
 if [[ -n $TAG_ONLY ]]; then
     # Force source and target branches to be the same
@@ -226,7 +220,7 @@ fi
 
 for i in $repo_list; do
     if [[ -z $LIST ]]; then
-        branch_repo $i HEAD $BRANCH $TAG
+        branch_repo "$i" HEAD "$BRANCH" "$TAG"
     else
         echo "$i"
     fi
