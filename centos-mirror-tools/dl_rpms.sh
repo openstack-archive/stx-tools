@@ -251,7 +251,24 @@ download () {
 
 
 # Prime the cache
-${SUDOCMD} yum ${YUMCONFOPT} ${RELEASEVER} makecache
+loop_count=0
+max_loop_count=5
+echo "${SUDOCMD} yum ${YUMCONFOPT} ${RELEASEVER} makecache"
+while ! ${SUDOCMD} yum ${YUMCONFOPT} ${RELEASEVER} makecache ; do
+    # To protect against intermittent 404 errors, we'll retry
+    # a few times.  The suspected issue is pulling repodata
+    # from multiple source that are temporarily inconsistent.
+    loop_count=$((loop_count + 1))
+    if [ $loop_count -gt $max_loop_count ]; then
+        break
+    fi
+    echo "makecache retry: $loop_count"
+
+    # Wipe the inconsistent data from the last try
+    echo "yum ${YUMCONFOPT} ${RELEASEVER} clean all"
+    yum ${YUMCONFOPT} ${RELEASEVER} clean all
+done
+
 
 # Download files
 if [ -s "$rpms_list" ];then

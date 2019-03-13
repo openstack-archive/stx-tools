@@ -13,6 +13,7 @@ bugtracker_url=http://bugs.centos.org/set_project.php?project_id=23&ref=http://b
 distroverpkg=centos-release
 override_install_langs=en_US.utf8
 tsflags=nodocs
+http_caching=packages
 reposdir=yum.repos.d
 
 
