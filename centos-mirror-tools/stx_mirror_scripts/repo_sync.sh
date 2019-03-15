@@ -3,7 +3,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 #
-# Daily update script for mirror.starlingx.cengn.ca covering
+# Update script for mirror.starlingx.cengn.ca covering
 # rpms and src.rpms downloaded from a yum repository.
 #
 # IMPORTANT: This script is only to be run on the StarlingX mirror.
@@ -11,9 +11,11 @@
 #
 # Configuration files for repositories to be downloaded are currently
 # stored at mirror.starlingx.cengn.ca:/export/config/yum.repos.d.
-# Those repos were derived from stx-tools/centos-mirror-tools/yum.repos.d
-# with some modifications that will need to be automated in a
-# future update.
+# Those repos were derived from those found in 
+# stx-tools/centos-mirror-tools/yum.repos.d with some modifications.
+#
+# It is recommended that repo_update.sh be run prior to this script
+# to ensure /export/config/yum.repos.d is kept current.
 #
 # This script was originated by Scott Little.
 #
@@ -23,13 +25,6 @@ YUM_CONF_DIR="/export/config"
 YUM_REPOS_DIR="$YUM_CONF_DIR/yum.repos.d"
 DOWNLOAD_PATH_ROOT="/export/mirror/centos"
 URL_UTILS="url_utils.sh"
-
-# These variables drive the download of the centos installer
-# and other non-repo files found under the os/x86_64 subdirectory.
-OS_PATH_PREFIX=/export/mirror/centos/centos
-OS_PATH_SUFFIX=os/x86_64
-OS_FILES="EULA GPL"
-OS_DIRS="EFI LiveOS images isolinux"
 
 DAILY_REPO_SYNC_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}" )" )"
 
@@ -62,13 +57,15 @@ if [ ! -f "$YUM_CONF" ]; then
     exit 1
 fi
 
-for REPO in $(find $YUM_REPOS_DIR -name '*.repo'); do
-    for REPO_ID in $(grep '^[[]' $REPO | sed 's#[][]##g'); do
+# for REPO in $(find $YUM_REPOS_DIR -name '*.repo'); do
+#     for REPO_ID in $(grep '^[[]' $REPO | sed 's#[][]##g'); do
+for REPO_ID in $(yum repolist --config="yum.conf" --quiet | tail -n +2 | cut -d ' ' -f 1); do
 
         REPO_URL=$(yum repoinfo --config="$YUM_CONF"  --disablerepo="*" --enablerepo="$REPO_ID" | grep Repo-baseurl | cut -d ' ' -f 3)
         DOWNLOAD_PATH="$DOWNLOAD_PATH_ROOT/$(repo_url_to_sub_path "$REPO_URL")"
 
-        echo "Processing: REPO=$REPO  REPO_ID=$REPO_ID  REPO_URL=$REPO_URL  DOWNLOAD_PATH=$DOWNLOAD_PATH"
+#        echo "Processing: REPO=$REPO  REPO_ID=$REPO_ID  REPO_URL=$REPO_URL  DOWNLOAD_PATH=$DOWNLOAD_PATH"
+        echo "Processing: REPO_ID=$REPO_ID  REPO_URL=$REPO_URL  DOWNLOAD_PATH=$DOWNLOAD_PATH"
 
         # Assume it's a repo of binary rpms unless repoid ends in
         # some variation of 'source'.
@@ -125,36 +122,11 @@ for REPO in $(find $YUM_REPOS_DIR -name '*.repo'); do
             continue
         fi
 
-        # The following will download the centos installer and other non-repo
-        # files and directories found under the os/x86_64 subdirectory.
-        if [[ "$DOWNLOAD_PATH" == "$OS_PATH_PREFIX"/*/"$OS_PATH_SUFFIX" ]]; then
-            for f in $OS_FILES; do
-                CMD="wget '$REPO_URL/$f' --output-document='$DOWNLOAD_PATH/$f'"
-                echo "$CMD"
-                eval $CMD
-                if [ $? -ne 0 ]; then
-                    echo "Error: $CMD"
-                    ERR_COUNT=$((ERR_COUNT+1))
-                    continue
-                fi
-            done
-
-            for d in $OS_DIRS; do
-                CMD="wget -r -N -l 3 -nv -np -e robots=off --reject-regex '.*[?].*' --reject index.html '$REPO_URL/$d/' -P '$OS_PATH_PREFIX/'"
-                echo "$CMD"
-                eval $CMD
-                if [ $? -ne 0 ]; then
-                    echo "Error: $CMD"
-                    ERR_COUNT=$((ERR_COUNT+1))
-                    continue
-                fi
-            done
-        fi
-
         popd
-    done
+#     done
 done | tee $LOGFILE
 
+echo ERR_COUNT=$ERR_COUNT
 if [ $ERR_COUNT -ne 0 ]; then
     exit 1
 fi
