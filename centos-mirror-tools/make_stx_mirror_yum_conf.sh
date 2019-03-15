@@ -148,7 +148,7 @@ if grep -q '^reposdir=' $CENGN_YUM_CONF; then
     # reposdir= already exists, modify it
     if [ $RETAIN_REPODIR -eq 1 ]; then
         # Append CENGN_REPOS_DIR
-        sed "s#^reposdir=.*\$#reposdir=\1 $CENGN_REPOS_DIR#" -i $CENGN_YUM_CONF
+        sed "s#^reposdir=\(.*\)\$#reposdir=\1 $CENGN_REPOS_DIR#" -i $CENGN_YUM_CONF
     else
         # replace with CENGN_REPOS_DIR
         sed "s#^reposdir=.*\$#reposdir=$CENGN_REPOS_DIR#" -i $CENGN_YUM_CONF
