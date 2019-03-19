@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+# Copyright (C) 2019 Intel Corporation
+#
 
 SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}" )" )"
 source ${SCRIPT_DIR}/functions.sh

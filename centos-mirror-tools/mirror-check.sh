@@ -2,6 +2,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 #
+# Copyright (C) 2019 Intel Corporation
+#
 
 # This script checks if the required packages in the .lst file list is
 # actually downloadable. Sometimes, the release number in upstream is

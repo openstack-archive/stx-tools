@@ -3,6 +3,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 #
+# Copyright (C) 2019 Intel Corporation
+#
 
 # The build of StarlingX relies, besides RPM Binaries and Sources, in this
 # repository which is a collection of packages in the form of Tar Compressed
