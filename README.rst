@@ -279,7 +279,7 @@ Initialize the source tree.
 .. code-block:: bash
 
     cd $MY_REPO_ROOT_DIR
-    repo init -u git://git.openstack.org/openstack/stx-manifest.git -m default.xml
+    repo init -u https://git.openstack.org/openstack/stx-manifest.git -m default.xml
     repo sync
 
 To generate cgcs-centos-repo
