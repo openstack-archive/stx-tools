@@ -17,7 +17,7 @@
   <cpu match='exact'>
     <model fallback='forbid'>Nehalem</model>
     <topology sockets='1' cores='6' threads='1'/>
-    <feature policy='require' name='vmx'/>
+    <feature policy='optional' name='vmx'/>
     <feature policy='optional' name='svm'/>
   </cpu>
   <clock offset='utc'/>
