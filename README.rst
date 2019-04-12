@@ -38,7 +38,7 @@ alter the default settings. This is a sample of a ``localrc`` file:
 .. code-block:: bash
 
     # tbuilder localrc
-    MYUNAME=$USER
+    MYUNAME=<your user name>
     PROJECT=starlingx
     HOST_PREFIX=$HOME/starlingx/workspace
     HOST_MIRROR_DIR=$HOME/starlingx/mirror
