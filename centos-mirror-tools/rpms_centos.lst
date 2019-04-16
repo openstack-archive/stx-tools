@@ -807,7 +807,7 @@ libXxf86vm-1.1.4-1.el7.x86_64.rpm
 libXxf86vm-devel-1.1.4-1.el7.x86_64.rpm
 libyaml-0.1.4-11.el7_0.x86_64.rpm
 libzstd-1.3.8-1.el7.x86_64.rpm
-lighttpd-1.4.52-1.el7.src.rpm
+lighttpd-1.4.53-1.el7.src.rpm
 linuxconsoletools-1.4.5-3.el7.x86_64.rpm
 linuxdoc-tools-0.9.68-5.el7.x86_64.rpm
 linux-firmware-20180911-69.git85c5d90.el7.noarch.rpm
@@ -997,7 +997,7 @@ perl-ExtUtils-ParseXS-3.18-3.el7.noarch.rpm
 perl-File-Path-2.09-2.el7.noarch.rpm
 perl-File-Temp-0.23.01-3.el7.noarch.rpm
 perl-Filter-1.49-3.el7.x86_64.rpm
-perl-generators-1.08-6.el7.noarch.rpm
+perl-generators-1.08-7.el7.noarch.rpm
 perl-Getopt-Long-2.40-3.el7.noarch.rpm
 perl-Git-1.8.3.1-20.el7.noarch.rpm
 perl-hivex-1.3.10-6.9.el7.x86_64.rpm
@@ -1140,7 +1140,7 @@ python2-bitmath-1.3.1-1.el7.noarch.rpm
 python2-boto-2.45.0-3.el7.noarch.rpm
 python2-cachez-0.1.0-2.el7.noarch.rpm
 python2-castellan-0.12.2-1.el7.noarch.rpm
-python2-certifi-2018.10.15-1.el7.noarch.rpm
+python2-certifi-2018.10.15-4.el7.noarch.rpm
 python2-ceilometerclient-2.9.0-1.el7.noarch.rpm
 python2-colorama-0.3.7-2.el7.noarch.rpm
 python2-congressclient-1.8.0-1.el7.noarch.rpm
@@ -1153,7 +1153,7 @@ python2-cycler-0.10.0-2.el7.noarch.rpm
 python2-Cython-0.25.2-3.el7.x86_64.rpm
 python2-daiquiri-1.2.1-1.el7.noarch.rpm
 python2-dateutil-2.6.1-1.el7.noarch.rpm
-python2-ddt-1.1.3-1.el7.noarch.rpm
+python2-ddt-1.1.3-2.el7.noarch.rpm
 python2-debtcollector-1.17.1-1.el7.noarch.rpm
 python2-deprecation-1.0-3.el7.noarch.rpm
 python2-designateclient-2.7.0-1.el7.noarch.rpm
@@ -1181,7 +1181,7 @@ python2-hacking-0.13.0-1.el7.noarch.rpm
 python2-idna-2.5-1.el7.noarch.rpm
 python2-imagesize-0.7.1-5.el7.noarch.rpm
 python2-influxdb-4.0.0-1.el7.1.noarch.rpm
-python2-iso8601-0.1.11-7.el7.noarch.rpm
+python2-iso8601-0.1.11-8.el7.noarch.rpm
 python2-jinja2-2.8.1-1.el7.noarch.rpm
 python2-jmespath-0.9.0-5.el7.noarch.rpm
 python2-json-logger-0.1.7-1.el7.noarch.rpm
@@ -1197,9 +1197,9 @@ python2-marathon-0.8.8-1.el7.noarch.rpm
 python2-markupsafe-0.23-16.el7.x86_64.rpm
 python2-matplotlib-2.0.0-1.el7.x86_64.rpm
 python2-matplotlib-tk-2.0.0-1.el7.x86_64.rpm
-python2-mccabe-0.6.1-6.el7.noarch.rpm
+python2-mccabe-0.6.1-7.el7.noarch.rpm
 python2-microversion-parse-0.1.4-2.el7.noarch.rpm
-python2-mimeparse-1.6.0-4.el7.noarch.rpm
+python2-mimeparse-1.6.0-5.el7.noarch.rpm
 python2-mock-2.0.0-1.el7.noarch.rpm
 python2-monascaclient-1.7.1-1.el7.noarch.rpm
 python2-mox3-0.23.0-1.el7.noarch.rpm
@@ -1210,7 +1210,7 @@ python2-numexpr-2.6.1-3.el7.x86_64.rpm
 python2-numpy-1.11.2-2.el7.x86_64.rpm
 python2-oauth2client-4.0.0-2.el7.noarch.rpm
 python2-oauthlib-2.0.1-8.el7.noarch.rpm
-python2-olefile-0.46-1.el7.noarch.rpm
+python2-olefile-0.46-2.el7.noarch.rpm
 python2-openstack-doc-tools-1.3.0-2.el7.noarch.rpm
 python2-os-client-config-1.28.0-1.el7.noarch.rpm
 python2-oslo-cache-1.25.1-1.el7.noarch.rpm
@@ -1261,7 +1261,7 @@ python2-pyasn1-modules-0.1.9-7.el7.noarch.rpm
 python2-pycadf-2.6.0-1.el7.noarch.rpm
 python2-pycodestyle-2.0.0-5.el7.noarch.rpm
 python2-pygments-2.2.0-7.el7.noarch.rpm
-python2-PyMySQL-0.9.2-1.el7.noarch.rpm
+python2-PyMySQL-0.9.2-2.el7.noarch.rpm
 python2-pyngus-2.2.4-1.el7.noarch.rpm
 python2-pyOpenSSL-16.2.0-3.el7.noarch.rpm
 python2-pyOpenSSL-17.3.0-3.el7.noarch.rpm
@@ -1270,7 +1270,7 @@ python2-pyroute2-0.4.19-1.el7.noarch.rpm
 python2-pysaml2-3.0.2-2.el7.noarch.rpm
 python2-pysnmp-4.3.2-3.el7.noarch.rpm
 python2-pytest-3.0.6-2.el7.noarch.rpm
-python2-qpid-proton-0.24.0-2.el7.x86_64.rpm
+python2-qpid-proton-0.26.0-2.el7.x86_64.rpm
 python2-rcssmin-1.0.6-2.el7.x86_64.rpm
 python2-reno-2.5.0-1.el7.noarch.rpm
 python2-requests-2.14.2-1.el7.noarch.rpm
@@ -1279,10 +1279,10 @@ python2-requestsexceptions-1.3.0-1.el7.noarch.rpm
 python2-retryz-0.1.8-1.el7.noarch.rpm
 python2-rfc3986-0.3.1-1.el7.noarch.rpm
 python2-rjsmin-1.0.12-2.el7.x86_64.rpm
-python2-rpm-macros-3-22.el7.noarch.rpm
+python2-rpm-macros-3-23.el7.noarch.rpm
 python2-rsa-3.4.1-1.el7.noarch.rpm
 python2-ruamel-ordereddict-0.4.9-3.el7.x86_64.rpm
-python2-ruamel-yaml-0.13.14-1.el7.x86_64.rpm
+python2-ruamel-yaml-0.13.14-2.el7.x86_64.rpm
 python2-saharaclient-1.3.0-1.el7.noarch.rpm
 python2-scciclient-0.5.0-1.el7.noarch.rpm
 python2-scipy-0.18.0-3.el7.x86_64.rpm
@@ -1494,7 +1494,7 @@ python-requests-2.14.2-1.el7.src.rpm
 python-requests-kerberos-0.8.0-3.el7.noarch.rpm
 python-retrying-1.2.3-4.el7.noarch.rpm
 python-routes-2.4.1-1.el7.noarch.rpm
-python-rpm-macros-3-22.el7.noarch.rpm
+python-rpm-macros-3-23.el7.noarch.rpm
 python-rtslib-2.1.fb63-13.el7.noarch.rpm
 python-schedutils-0.4-6.el7.x86_64.rpm
 python-semantic_version-2.4.2-2.el7.noarch.rpm
@@ -1507,7 +1507,7 @@ python-slip-dbus-0.4.0-4.el7.noarch.rpm
 python-sphinx-locale-1.6.2-3.el7.noarch.rpm
 python-sqlalchemy-utils-0.31.3-2.el7.noarch.rpm
 python-sqlparse-0.1.18-5.el7.noarch.rpm
-python-srpm-macros-3-22.el7.noarch.rpm
+python-srpm-macros-3-23.el7.noarch.rpm
 python-subprocess32-3.2.6-4.el7.x86_64.rpm
 python-subunit-1.0.0-1.el7.noarch.rpm
 python-swift-2.15.1-1.el7.noarch.rpm
@@ -1555,7 +1555,7 @@ pytz-2016.10-2.el7.noarch.rpm
 pyxattr-0.5.1-5.el7.x86_64.rpm
 PyYAML-3.10-11.el7.x86_64.rpm
 qdox-1.12.1-10.el7.noarch.rpm
-qpid-proton-c-0.24.0-2.el7.x86_64.rpm
+qpid-proton-c-0.26.0-2.el7.x86_64.rpm
 qrencode-devel-3.4.1-3.el7.x86_64.rpm
 qrencode-libs-3.4.1-3.el7.x86_64.rpm
 qt-4.8.7-2.el7.x86_64.rpm
