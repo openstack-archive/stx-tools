@@ -121,10 +121,25 @@ if [ ! -d "$logs_dir" ]; then
     mkdir "$logs_dir"
 fi
 
+is_tarball() {
+    tarball_name="$1"
+    mime_type=$(file --mime-type -b $tarball_name | cut -d "/" -f 2)
+    types=("gzip" "x-bzip2" "x-rpm" "x-xz" "x-gzip" "x-tar")
+    FOUND=1
+    for t in "${types[@]}"; do
+        if [ "$mime_type" == "$t" ]; then
+            FOUND=0
+            break;
+        fi
+    done
+    return $FOUND
+}
+
 # Download function using wget command
 
 download_package() {
-    local upstream_url="$1"
+    local tarball_name="$1"
+    local upstream_url="$2"
     local stx_url=""
     local url=""
     local rc=1
@@ -149,10 +164,17 @@ download_package() {
         if [ $? != 0 ]; then
             echo "Warning: '$url' is broken"
         else
-            wget -t 5 --wait=15 "$url"
+            wget -q -t 5 --wait=15 -O "$tarball_name" "$url"
             if [ $? -eq 0 ]; then
-                rc=0
-                break
+                if is_tarball "$tarball_name"; then
+                    echo "Ok: $download_path"
+                    rc=0
+                    break
+                else
+                    echo "Warning: File from '$url' is not a tarball"
+                    \rm "$tarball_name"
+                    rc=1
+                fi
             else
                 echo "Warning: failed to download '$url'"
                 continue
@@ -240,46 +262,46 @@ for line in $(cat $tarball_file); do
 
     if [[ "$line" =~ ^'!' ]]; then
         echo $tarball_name
-        pushd $output_tarball
+        pushd $output_tarball > /dev/null
         if [ "$tarball_name" = "integrity-kmod-e6aef069.tar.gz" ]; then
-            download_package $tarball_url
+            download_package "$tarball_name" "$tarball_url"
             if [ $? -ne 0 ]; then
                 error_count=$((error_count + 1))
-                popd    # pushd $output_tarball
+                popd > /dev/null   # pushd $output_tarball
                 continue
             fi
 
-            tar xf e6aef069b6e97790cb127d5eeb86ae9ff0b7b0e3.tar.gz
+            tar xf "$tarball_name"
+            rm "$tarball_name"
             mv linux-tpmdd-e6aef06/security/integrity/ $directory_name
             tar czvf $tarball_name $directory_name
             rm -rf linux-tpmdd-e6aef06
-            rm e6aef069b6e97790cb127d5eeb86ae9ff0b7b0e3.tar.gz
         elif [ "$tarball_name" = "mariadb-10.1.28.tar.gz" ]; then
-            download_package $tarball_url
+            download_package "$tarball_name" "$tarball_url"
             if [ $? -ne 0 ]; then
                 error_count=$((error_count + 1))
-                popd    # pushd $output_tarball
+                popd > /dev/null   # pushd $output_tarball
                 continue
             fi
 
             mkdir $directory_name
             tar xf $tarball_name --strip-components 1 -C $directory_name
             rm $tarball_name
-            pushd $directory_name
+            pushd $directory_name > /dev/null
             rm -rf storage/tokudb
             rm ./man/tokuft_logdump.1 ./man/tokuftdump.1
             sed -e s/tokuft_logdump.1//g -i man/CMakeLists.txt
             sed -e s/tokuftdump.1//g -i man/CMakeLists.txt
-            popd
+            popd > /dev/null
             tar czvf $tarball_name $directory_name
             rm -rf $directory_name
-            popd    # pushd $directory_name
+            popd > /dev/null   # pushd $directory_name
         elif [[ "$tarball_name" = 'MLNX_OFED_SRC-4.5-1.0.1.0.tgz' ]]; then
             srpm_path="${directory_name}/SRPMS/"
-            download_package "$tarball_url"
+            download_package "$tarball_name" "$tarball_url"
             if [ $? -ne 0 ]; then
                 error_count=$((error_count + 1))
-                popd    # pushd $output_tarball
+                popd > /dev/null   # pushd $output_tarball
                 continue
             fi
 
@@ -293,27 +315,27 @@ for line in $(cat $tarball_file); do
 
             rm -rf "$directory_name"
         elif [ "$tarball_name" = "qat1.7.upstream.l.1.0.3-42.tar.gz" ]; then
-            download_package $tarball_url
+            download_package "$tarball_name" "$tarball_url"
             if [ $? -ne 0 ]; then
                 error_count=$((error_count + 1))
-                popd    # pushd $output_tarball
+                popd > /dev/null  # pushd $output_tarball
                 continue
             fi
 
         elif [ "$tarball_name" = "tpm-kmod-e6aef069.tar.gz" ]; then
-            download_package $tarball_url
+            download_package "$tarball_name" "$tarball_url"
             if [ $? -ne 0 ]; then
                 error_count=$((error_count + 1))
-                popd    # pushd $output_tarball
+                popd > /dev/null  # pushd $output_tarball
                 continue
             fi
 
-            tar xf e6aef069b6e97790cb127d5eeb86ae9ff0b7b0e3.tar.gz
+            tar xf "$tarball_name"
+            rm "$tarball_name"
             mv linux-tpmdd-e6aef06/drivers/char/tpm $directory_name
             tar czvf $tarball_name $directory_name
             rm -rf linux-tpmdd-e6aef06
             rm -rf $directory_name
-            rm e6aef069b6e97790cb127d5eeb86ae9ff0b7b0e3.tar.gz
         elif [ "$tarball_name" = "tss2-930.tar.gz" ]; then
             dest_dir=ibmtpm20tss-tss
             for dl_src in $dl_source; do
@@ -344,21 +366,21 @@ for line in $(cat $tarball_file); do
                 echo "Error: Failed to git clone from '$tarball_url'"
                 echo "$tarball_url" > "$output_log"
                 error_count=$((error_count + 1))
-                popd    # pushd $output_tarball
+                popd > /dev/null # pushd $output_tarball
                 continue
             fi
 
-            pushd $dest_dir
+            pushd $dest_dir > /dev/null
             branch=$util
             git checkout $branch
             rm -rf .git
-            popd
+            popd > /dev/null
             mv ibmtpm20tss-tss $directory_name
             tar czvf $tarball_name $directory_name
             rm -rf $directory_name
-            popd     # pushd $dest_dir
+            popd > /dev/null  # pushd $dest_dir
         fi
-        popd  # pushd $output_tarball
+        popd > /dev/null # pushd $output_tarball
         continue
     fi
 
@@ -381,11 +403,16 @@ for line in $(cat $tarball_file); do
                 ;;
         esac
 
-        download_cmd="wget -t 5 --wait=15 $url -O $download_path"
+        download_cmd="wget -q -t 5 --wait=15 $url -O $download_path"
 
         if $download_cmd ; then
+            if ! is_tarball "$download_path"; then
+                echo "Warning: file from $url is not a tarball."
+                \rm "$download_path"
+                continue
+            fi
             echo "Ok: $download_path"
-            pushd $download_directory
+            pushd $download_directory > /dev/null
             directory_name_original=$(tar -tf $tarball_name | head -1 | cut -f1 -d"/")
             if [ "$directory_name" != "$directory_name_original" ]; then
                 mkdir -p $directory_name
@@ -393,7 +420,7 @@ for line in $(cat $tarball_file); do
                 tar -czf $tarball_name $directory_name
                 rm -r $directory_name
             fi
-            popd
+            popd > /dev/null
             break
         else
             echo "Warning: Failed to download $url" 1>&2
