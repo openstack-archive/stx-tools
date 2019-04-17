@@ -1,8 +1,5 @@
-#!/bin/bash
 #
 # SPDX-License-Identifier: Apache-2.0
-#
-
 #
 # A set of bash utility functions to parse a URL.
 # This script was originated by Scott Little
@@ -16,7 +13,11 @@ url_protocol () {
         return 1
     fi
 
-    echo "$URL" | sed 's#^\(.*\)://.*$#\1#'
+    if echo "$URL" | grep -q '[:][/][/]' ;then
+        echo "$URL" | sed 's#^\(.*\)://.*$#\1#'
+    else
+        echo "http"
+    fi
     return 0
 }
 
