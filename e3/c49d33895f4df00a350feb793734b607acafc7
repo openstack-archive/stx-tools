@@ -1,0 +1,9 @@
+Code-Review+2: Don Penney <don.penney@windriver.com>
+Code-Review+2: Scott Little <scott.little@windriver.com>
+Workflow+1: Scott Little <scott.little@windriver.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Wed, 17 Apr 2019 16:00:16 +0000
+Reviewed-on: https://review.openstack.org/643652
+Project: openstack/stx-tools
+Branch: refs/heads/master
