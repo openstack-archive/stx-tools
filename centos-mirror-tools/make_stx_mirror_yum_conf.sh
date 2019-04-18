@@ -213,7 +213,13 @@ for REPO in $(find "$CENGN_REPOS_DIR" -type f -name '*repo'); do
     #
     for URL in $(grep '^baseurl=' "$REPO" | sed 's#^baseurl=##'); do
         CENGN_URL="$(url_to_stx_mirror_url "$URL" "$DISTRO")"
-        sed "s#^baseurl=$URL\$#baseurl=$CENGN_URL#" -i "$REPO"
+
+        # Test CENGN url
+        wget -q --spider $CENGN_URL
+        if [ $? -eq 0 ]; then
+            # OK, make substitution
+            sed "s#^baseurl=$URL\$#baseurl=$CENGN_URL#" -i "$REPO"
+        fi
     done
 
     #
