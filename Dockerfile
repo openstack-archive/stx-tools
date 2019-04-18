@@ -46,6 +46,7 @@ RUN groupadd -g 751 cgts && \
         yum install -y anaconda \
         anaconda-help \
         anaconda-runtime \
+        autoconf-archive \
         autogen \
         automake \
         bc \
