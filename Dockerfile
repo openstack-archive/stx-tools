@@ -82,6 +82,7 @@ RUN groupadd -g 751 cgts && \
         python-pep8 \
         python-pip \
         python-psutil \
+        python-sphinx \
         python-subunit \
         python-pip \
         python-testrepository \
